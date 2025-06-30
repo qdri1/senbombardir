@@ -151,10 +151,7 @@ class GameViewModel(
                     playerRepository.getPlayers(teamUiModel.id)
                 }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
                     .thenByDescending { it.assists }
-                    .thenByDescending { it.saves }
-                    .thenByDescending { it.dribbles }
-                    .thenByDescending { it.shots }
-                    .thenByDescending { it.passes }
+                    .thenByDescending { it.saves + it.dribbles + it.shots + it.passes }
                     .thenByDescending { it.teamPoints }
                     .thenByDescending { it.teamGoalsDifference }
                     .thenBy { it.teamName }
@@ -1004,10 +1001,7 @@ class GameViewModel(
             playerRepository.getPlayers(teamUiModel.id)
         }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
             .thenByDescending { it.assists }
-            .thenByDescending { it.saves }
-            .thenByDescending { it.dribbles }
-            .thenByDescending { it.shots }
-            .thenByDescending { it.passes }
+            .thenByDescending { it.saves + it.dribbles + it.shots + it.passes }
             .thenByDescending { it.teamPoints }
             .thenByDescending { it.teamGoalsDifference }
             .thenBy { it.teamName }
