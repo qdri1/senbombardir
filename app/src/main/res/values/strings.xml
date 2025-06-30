@@ -1,0 +1,109 @@
+<resources>
+    <string name="app_name">Dop Tep</string>
+
+    <string name="tab_home">Главная</string>
+    <string name="tab_news">Новости</string>
+    <string name="tab_settings">Настройки</string>
+
+    <string name="add_game">Добавить игру</string>
+    <string name="update_game">Редактировать игру</string>
+
+    <string name="game_empty">У вас пока нет игр</string>
+    <string name="game_name">Название игры</string>
+    <string name="game_time">Время матча в минутах</string>
+    <string name="game_format">Формат игры</string>
+
+    <string name="game_rules">Правила игры</string>
+    <string name="game_rule_2_change_side">После каждого тайма меняемся сторонами</string>
+    <string name="game_rule_2_stay_side">Не меняемся сторонами</string>
+    <string name="game_rule_3_only_2_games">Ровно 2 игры</string>
+    <string name="game_rule_3_winner_stay_2">Победивший остается (макс. 2 игры)</string>
+    <string name="game_rule_3_winner_stay_3">Победивший остается (макс. 3 игры)</string>
+    <string name="game_rule_3_winner_stay_4">Победивший остается (макс. 4 игры)</string>
+    <string name="game_rule_3_winner_stay_unlimited">Победивший всегда остается</string>
+    <string name="game_rule_4_only_3_games">Ровно 3 игры</string>
+    <string name="game_rule_4_winner_stay_3">Победивший остается (макс. 3 игры)</string>
+    <string name="game_rule_4_winner_stay_4">Победивший остается (макс. 4 игры)</string>
+    <string name="game_rule_4_winner_stay_5">Победивший остается (макс. 5 игры)</string>
+    <string name="game_rule_4_winner_stay_6">Победивший остается (макс. 6 игры)</string>
+    <string name="game_rule_4_winner_stay_unlimited">Победивший всегда остается</string>
+
+    <string name="game_name_empty_text">Нужно заполнить Название игры</string>
+    <string name="game_time_empty_text">Нужно заполнить Время матча</string>
+    <string name="team_name_empty_text">Нужно заполнить Название команды</string>
+
+
+    <string name="team_quantity">Количество команд</string>
+    <string name="team_number">К-%s</string>
+    <string name="team_name">Название команды</string>
+    <string name="choose_team_color">Выберите цвет</string>
+
+    <string name="player_number">Игрок %s</string>
+    <string name="add_player">Добавить игрока</string>
+
+    <string name="button_yes">Да</string>
+    <string name="button_no">Нет</string>
+
+    <string name="home_game_name">Название:</string>
+    <string name="home_game_format">Формат:</string>
+    <string name="home_game_team_quantity">Команд:</string>
+    <string name="home_game_rule">Правила:</string>
+    <string name="home_game_time">Время тайма:</string>
+
+    <string name="time_in_minutes">%d минут</string>
+
+    <string name="team_result_place">#</string>
+    <string name="team_result_name">Команда</string>
+    <string name="team_result_games">И</string>
+    <string name="team_result_wins">В</string>
+    <string name="team_result_draws">Н</string>
+    <string name="team_result_loses">П</string>
+    <string name="team_result_goals_conceded">+/-</string>
+    <string name="team_result_goals_difference">РГ</string>
+    <string name="team_result_points">ОЧК</string>
+
+    <string name="player_result_place">#</string>
+    <string name="player_result_name">Игрок</string>
+    <string name="player_result_goals">⚽️</string>
+    <string name="player_result_assists">А</string>
+    <string name="player_result_dribbles">Д</string>
+    <string name="player_result_passes">П</string>
+    <string name="player_result_shots">У</string>
+    <string name="player_result_saves">С</string>
+
+    <string name="team_option_goal">Гол ⚽️</string>
+    <string name="team_option_assist">Ассист</string>
+    <string name="team_option_dribble">Дриблинг</string>
+    <string name="team_option_pass">Пас</string>
+    <string name="team_option_shot">Удар</string>
+    <string name="team_option_save">Сейв</string>
+    <string name="team_option_players_title">выберите автора</string>
+    <string name="team_option_players_auto_goal">Автогол</string>
+
+    <string name="text_to_speech_goal">Гол от %s</string>
+    <string name="text_to_speech_assist">Ассист от %s</string>
+    <string name="text_to_speech_dribble">Красивый проход от %s</string>
+    <string name="text_to_speech_pass">Красивый пас от %s</string>
+    <string name="text_to_speech_shot">Мощьный удар от %s</string>
+    <string name="text_to_speech_save">Лучший сейв от %s</string>
+
+    <string name="stay_team_selection_title">Выберите команду которая остается на поле</string>
+    <string name="delete_game_title">Вы точно хотите удалить эту игру?</string>
+    <string name="clear_results_title">Вы точно хотите очистить результаты этой игры?</string>
+    <string name="finish_game_title">Вы точно хотите завершить этот матч?</string>
+    <string name="finish_game_snackbar_text">Нужно завершить матч чтобы очистить результаты этой игры!</string>
+    <string name="delete_game_snackbar_text">Нужно завершить матч чтобы удалить эту игру!</string>
+    <string name="update_game_snackbar_text">Нужно завершить матч чтобы редактировать эту игру!</string>
+    <string name="go_back_title">Вы точно хотите выйти из этой страницы?</string>
+    <string name="game_count">cыграно игр: %s</string>
+
+    <string name="sound_whistle">Свисток</string>
+    <string name="sound_stadium_applause">Стадион\nшапалақ</string>
+    <string name="sound_girls_applause">Қыздар\nшапалақ</string>
+    <string name="sound_bilgenin_istep_jatyr">Білгенін\nістеп жатыр</string>
+    <string name="sound_goal_save">Не деген\nсейв</string>
+    <string name="sound_suiii">Suiii</string>
+    <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
+    <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
+
+</resources>
