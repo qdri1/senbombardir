@@ -111,4 +111,23 @@
     <string name="function_info">Инфо</string>
     <string name="function_remove">Удалить игру</string>
 
+    <string name="live_game_info_replace_teams">Поменять левую и правую команду местами</string>
+    <string name="live_game_info_pause_timer">Остановить таймер</string>
+    <string name="live_game_info_play_timer">Продолжить таймер</string>
+
+    <string name="teams_block_info_games">Игр</string>
+    <string name="teams_block_info_wins">Выигрыши</string>
+    <string name="teams_block_info_draws">Ничьи</string>
+    <string name="teams_block_info_loses">Поражения</string>
+    <string name="teams_block_info_goals_conceded">Количество забитых/пропущенных (+/-) голов</string>
+    <string name="teams_block_info_goals_difference">Разница голов</string>
+    <string name="teams_block_info_points">Количество очков</string>
+
+    <string name="players_block_info_goals">Гол</string>
+    <string name="players_block_info_assists">Ассист</string>
+    <string name="players_block_info_saves">Лучший сейв</string>
+    <string name="players_block_info_dribbles">Красивый проход/дриблинг</string>
+    <string name="players_block_info_shots">Мощьный точный удар</string>
+    <string name="players_block_info_passes">Красивый пас</string>
+
 </resources>

@@ -269,7 +269,7 @@ class GameViewModel(
     }
 
     private fun onInfoClicked() {
-        // TODO
+        setEffectSafely(GameEffect.ShowGameInfoBottomSheet)
     }
 
     private fun onStartFinishButtonClicked() {

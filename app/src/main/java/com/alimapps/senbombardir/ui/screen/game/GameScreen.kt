@@ -53,9 +53,9 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.SoundsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameInfoBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.OptionPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.StayTeamSelectionBottomSheet
-import com.alimapps.senbombardir.ui.utils.parseHexColor
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
@@ -90,6 +90,7 @@ private fun GameScreenContent(
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
     var showFinishGameConfirmation by remember { mutableStateOf(false) }
     var showGoBackConfirmation by remember { mutableStateOf(false) }
+    var showGameInfo by remember { mutableStateOf(false) }
 
     BackHandler {
         onAction(GameAction.OnBackClicked)
@@ -121,6 +122,7 @@ private fun GameScreenContent(
                 is GameEffect.ShowClearResultsConfirmationBottomSheet -> showClearResultsConfirmation = true
                 is GameEffect.ShowFinishGameConfirmationBottomSheet -> showFinishGameConfirmation = true
                 is GameEffect.ShowGoBackConfirmationBottomSheet -> showGoBackConfirmation = true
+                is GameEffect.ShowGameInfoBottomSheet -> showGameInfo = true
                 is GameEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
@@ -269,6 +271,11 @@ private fun GameScreenContent(
                 },
                 onNegativeClicked = { showGoBackConfirmation = false },
                 onDismissed = { showGoBackConfirmation = false },
+            )
+        }
+        showGameInfo -> {
+            GameInfoBottomSheet(
+                onDismissed = { showGameInfo = false },
             )
         }
     }
