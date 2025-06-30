@@ -106,4 +106,9 @@
     <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
     <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
 
+    <string name="function_edit">Редактировать игру</string>
+    <string name="function_clear_result">Сбросить результаты игры</string>
+    <string name="function_info">Инфо</string>
+    <string name="function_remove">Удалить игру</string>
+
 </resources>

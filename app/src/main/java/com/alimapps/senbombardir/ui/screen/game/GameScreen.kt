@@ -46,6 +46,7 @@ import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
 import com.alimapps.senbombardir.ui.screen.add.game.result.UpdateGameResult
 import com.alimapps.senbombardir.ui.screen.game.result.DeleteGameResult
+import com.alimapps.senbombardir.ui.screen.game.widget.block.FunctionsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.GameInfoBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.LiveGameBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
@@ -151,28 +152,6 @@ private fun GameScreenContent(
                         .weight(1f)
                         .padding(start = 4.dp)
                 )
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "GameScreenDeleteIcon",
-                    tint = parseHexColor(TeamColor.Red.hexColor),
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { onAction(GameAction.OnDeleteGameClicked) }
-                )
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "GameScreenEditIcon",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { onAction(GameAction.OnEditGameClicked) }
-                )
-                Icon(
-                    imageVector = Icons.Filled.Refresh,
-                    contentDescription = "GameScreenClearIcon",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { onAction(GameAction.OnClearResultsClicked) }
-                )
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -216,6 +195,12 @@ private fun GameScreenContent(
                 if (uiState.playerUiModelList.isNotEmpty()) {
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
+                    )
+                }
+
+                uiState.gameUiModel?.let {
+                    FunctionsBlock(
+                        onAction = onAction,
                     )
                 }
             }

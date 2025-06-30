@@ -27,6 +27,7 @@ import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
 import com.alimapps.senbombardir.ui.model.toPlayerModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
+import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam4
@@ -100,11 +101,8 @@ class GameViewModel(
         when (action) {
             is GameAction.OnBackClicked -> onBackClicked()
             is GameAction.OnGoBackConfirmationClicked -> setEffectSafely(GameEffect.CloseScreen)
-            is GameAction.OnDeleteGameClicked -> onDeleteGameClicked()
             is GameAction.OnDeleteGameConfirmationClicked -> onDeleteGameConfirmationClicked()
-            is GameAction.OnClearResultsClicked -> onClearResultsClicked()
             is GameAction.OnClearResultsConfirmationClicked -> onClearResultsConfirmationClicked()
-            is GameAction.OnEditGameClicked -> onEditGameClicked()
             is GameAction.OnStartFinishButtonClicked -> onStartFinishButtonClicked()
             is GameAction.OnFinishGameConfirmationClicked -> finishGame()
             is GameAction.OnTimerClicked -> onTimerClicked()
@@ -121,6 +119,7 @@ class GameViewModel(
             is GameAction.OnLeftTeamStayClicked -> onLeftTeamStayClicked()
             is GameAction.OnRightTeamStayClicked -> onRightTeamStayClicked()
             is GameAction.OnSoundClicked -> onSoundClicked(action.sound)
+            is GameAction.OnFunctionClicked -> onFunctionClicked(action.function)
             is GameAction.OnInterceptionNavigationResult -> onInterceptionNavigationResult(action.result)
         }
     }
@@ -267,6 +266,10 @@ class GameViewModel(
             return
         }
         setEffectSafely(GameEffect.OpenUpdateGame(gameId))
+    }
+
+    private fun onInfoClicked() {
+        // TODO
     }
 
     private fun onStartFinishButtonClicked() {
@@ -1114,6 +1117,15 @@ class GameViewModel(
             GameSounds.Suiii -> playSuiiiSound()
             GameSounds.ModrichtynPasy -> playModrichtynPasySound()
             GameSounds.TondyrypTastagan -> playTondyrypTastaganSound()
+        }
+    }
+
+    private fun onFunctionClicked(function: GameFunction) {
+        when (function) {
+            GameFunction.Edit -> onEditGameClicked()
+            GameFunction.ClearResults -> onClearResultsClicked()
+            GameFunction.Info -> onInfoClicked()
+            GameFunction.Delete -> onDeleteGameClicked()
         }
     }
 

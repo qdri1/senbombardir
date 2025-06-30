@@ -1,17 +1,15 @@
 package com.alimapps.senbombardir.ui.screen.game
 
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameSounds
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 
 sealed interface GameAction {
     data object OnBackClicked : GameAction
     data object OnGoBackConfirmationClicked : GameAction
-    data object OnDeleteGameClicked : GameAction
     data object OnDeleteGameConfirmationClicked : GameAction
-    data object OnClearResultsClicked : GameAction
     data object OnClearResultsConfirmationClicked : GameAction
-    data object OnEditGameClicked : GameAction
     data object OnStartFinishButtonClicked : GameAction
     data object OnFinishGameConfirmationClicked : GameAction
     data object OnTimerClicked : GameAction
@@ -39,5 +37,6 @@ sealed interface GameAction {
     data object OnRightTeamStayClicked : GameAction
 
     class OnSoundClicked(val sound: GameSounds) : GameAction
+    class OnFunctionClicked(val function: GameFunction) : GameAction
     class OnInterceptionNavigationResult(val result: Any) : GameAction
 }
