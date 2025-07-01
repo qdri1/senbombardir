@@ -5,7 +5,9 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import com.alimapps.senbombardir.data.model.GameModel
 import com.alimapps.senbombardir.data.model.LiveGameModel
+import com.alimapps.senbombardir.data.model.PlayerHistoryModel
 import com.alimapps.senbombardir.data.model.PlayerModel
+import com.alimapps.senbombardir.data.model.TeamHistoryModel
 import com.alimapps.senbombardir.data.model.TeamModel
 
 @Database(
@@ -14,8 +16,10 @@ import com.alimapps.senbombardir.data.model.TeamModel
         LiveGameModel::class,
         TeamModel::class,
         PlayerModel::class,
+        TeamHistoryModel::class,
+        PlayerHistoryModel::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -24,6 +28,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun liveGameDao(): LiveGameDao
     abstract fun teamDao(): TeamDao
     abstract fun playerDao(): PlayerDao
+    abstract fun teamHistoryDao(): TeamHistoryDao
+    abstract fun playerHistoryDao(): PlayerHistoryDao
 
     companion object {
         val MIGRATIONS = arrayOf<Migration>()

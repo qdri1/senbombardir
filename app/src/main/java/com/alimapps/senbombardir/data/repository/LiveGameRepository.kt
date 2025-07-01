@@ -36,7 +36,7 @@ class LiveGameRepository(
     
     suspend fun saveLiveGame(liveGameModel: LiveGameModel): Long = liveGameDao.insertLiveGame(liveGameModel)
 
-    suspend fun updateLiveGame(liveGameModel: LiveGameModel) = liveGameDao.updateLiveGame(liveGameModel)
+    suspend fun updateLiveGame(liveGameModel: LiveGameModel) { liveGameDao.updateLiveGame(liveGameModel) }
 
     fun saveTimerValue(value: Long) {
         prefs.timerValue = value

@@ -14,6 +14,9 @@ interface PlayerDao {
     @Query("SELECT * FROM players WHERE teamId = :teamId")
     suspend fun getPlayers(teamId: Long): List<PlayerModel>
 
+    @Query("SELECT * FROM players WHERE id = :playerId")
+    suspend fun getPlayer(playerId: Long): PlayerModel?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlayer(playerModel: PlayerModel): Long
 

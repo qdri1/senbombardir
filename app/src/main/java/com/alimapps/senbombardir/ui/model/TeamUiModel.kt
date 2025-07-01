@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.model
 
+import com.alimapps.senbombardir.data.model.TeamHistoryModel
 import com.alimapps.senbombardir.data.model.TeamModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 
@@ -22,6 +23,21 @@ data class TeamUiModel(
 
 fun TeamUiModel.toTeamModel(): TeamModel =
     TeamModel(
+        id = id,
+        gameId = gameId,
+        name = name,
+        color = color.hexColor,
+        games = games,
+        wins = wins,
+        draws = draws,
+        loses = loses,
+        goals = goals,
+        conceded = conceded,
+        points = points,
+    )
+
+fun TeamUiModel.toTeamHistoryModel(): TeamHistoryModel =
+    TeamHistoryModel(
         id = id,
         gameId = gameId,
         name = name,

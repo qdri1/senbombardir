@@ -90,10 +90,12 @@
     <string name="stay_team_selection_title">Выберите команду которая остается на поле</string>
     <string name="delete_game_title">Вы точно хотите удалить эту игру?</string>
     <string name="clear_results_title">Вы точно хотите очистить результаты этой игры?</string>
+    <string name="clear_all_results_title">Вы точно хотите очистить все результаты игры?</string>
     <string name="finish_game_title">Вы точно хотите завершить этот матч?</string>
     <string name="finish_game_snackbar_text">Нужно завершить матч чтобы очистить результаты этой игры!</string>
     <string name="delete_game_snackbar_text">Нужно завершить матч чтобы удалить эту игру!</string>
     <string name="update_game_snackbar_text">Нужно завершить матч чтобы редактировать эту игру!</string>
+    <string name="open_game_results_snackbar_text">Нужно завершить матч чтобы перейти на все результаты!</string>
     <string name="go_back_title">Вы точно хотите выйти из этой страницы?</string>
     <string name="game_count">cыграно игр: %s</string>
 
@@ -109,6 +111,7 @@
     <string name="function_edit">Редактировать игру</string>
     <string name="function_clear_result">Сбросить результаты игры</string>
     <string name="function_info">Инфо</string>
+    <string name="function_all_results">Все результаты игры</string>
     <string name="function_remove">Удалить игру</string>
 
     <string name="live_game_info_replace_teams">Поменять левую и правую команду местами</string>

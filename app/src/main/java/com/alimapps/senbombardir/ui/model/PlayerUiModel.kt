@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.model
 
+import com.alimapps.senbombardir.data.model.PlayerHistoryModel
 import com.alimapps.senbombardir.data.model.PlayerModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 
@@ -21,6 +22,19 @@ data class PlayerUiModel(
 
 fun PlayerUiModel.toPlayerModel(): PlayerModel =
     PlayerModel(
+        id = id,
+        teamId = teamId,
+        name = name,
+        goals = goals,
+        assists = assists,
+        dribbles = dribbles,
+        passes = passes,
+        shots = shots,
+        saves = saves,
+    )
+
+fun PlayerUiModel.toPlayerHistoryModel(): PlayerHistoryModel =
+    PlayerHistoryModel(
         id = id,
         teamId = teamId,
         name = name,

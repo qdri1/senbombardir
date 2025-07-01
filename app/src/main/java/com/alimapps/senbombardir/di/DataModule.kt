@@ -4,14 +4,18 @@ import android.content.Context
 import androidx.room.Room
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
+import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
+import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.data.source.AppDatabase
 import com.alimapps.senbombardir.data.source.GameDao
 import com.alimapps.senbombardir.data.source.LiveGameDao
 import com.alimapps.senbombardir.data.source.PlayerDao
+import com.alimapps.senbombardir.data.source.PlayerHistoryDao
 import com.alimapps.senbombardir.data.source.Prefs
 import com.alimapps.senbombardir.data.source.TeamDao
+import com.alimapps.senbombardir.data.source.TeamHistoryDao
 import org.koin.dsl.module
 
 val dataModule = module {
@@ -32,6 +36,8 @@ val dataModule = module {
     single<LiveGameDao> { get<AppDatabase>().liveGameDao() }
     single<TeamDao> { get<AppDatabase>().teamDao() }
     single<PlayerDao> { get<AppDatabase>().playerDao() }
+    single<TeamHistoryDao> { get<AppDatabase>().teamHistoryDao() }
+    single<PlayerHistoryDao> { get<AppDatabase>().playerHistoryDao() }
 
     single { Prefs(preferences = get<Context>().getSharedPreferences("PREFS", Context.MODE_PRIVATE)) }
 
@@ -48,6 +54,14 @@ val dataModule = module {
     }
 
     single {
+        TeamHistoryRepository(teamHistoryDao = get())
+    }
+
+    single {
         PlayerRepository(teamDao = get(), playerDao = get())
+    }
+
+    single {
+        PlayerHistoryRepository(teamHistoryDao = get(), playerHistoryDao = get())
     }
 }

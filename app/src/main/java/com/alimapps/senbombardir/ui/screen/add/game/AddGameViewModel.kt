@@ -10,17 +10,22 @@ import androidx.lifecycle.viewModelScope
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.model.GameModel
 import com.alimapps.senbombardir.data.model.LiveGameModel
+import com.alimapps.senbombardir.data.model.PlayerHistoryModel
 import com.alimapps.senbombardir.data.model.PlayerModel
 import com.alimapps.senbombardir.data.model.TeamModel
+import com.alimapps.senbombardir.data.model.toPlayerHistoryModel
+import com.alimapps.senbombardir.data.model.toTeamHistoryModel
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
+import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
+import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toGameModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
-import com.alimapps.senbombardir.ui.model.toPlayerModel
+import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
 import com.alimapps.senbombardir.ui.model.types.GameFormat
 import com.alimapps.senbombardir.ui.model.types.GameRule
@@ -48,7 +53,9 @@ class AddGameViewModel(
     private val gameRepository: GameRepository,
     private val liveGameRepository: LiveGameRepository,
     private val teamRepository: TeamRepository,
+    private val teamHistoryRepository: TeamHistoryRepository,
     private val playerRepository: PlayerRepository,
+    private val playerHistoryRepository: PlayerHistoryRepository,
 ) : ViewModel() {
 
     private val _screenStateType = mutableStateOf(ScreenStateType.Add)
@@ -223,6 +230,7 @@ class AddGameViewModel(
                 points = 0,
             )
             val teamId = teamRepository.saveTeam(teamModel)
+            teamHistoryRepository.saveTeamHistory(teamModel.toTeamHistoryModel(teamId))
 
             playersTextFields.getOrNull(index)?.let { players ->
                 players.filter { it.isNotEmpty() }.map { playerNameValue ->
@@ -237,7 +245,8 @@ class AddGameViewModel(
                         saves = 0,
                     )
                 }.forEach { playerModel ->
-                    playerRepository.savePlayer(playerModel)
+                    val playerId = playerRepository.savePlayer(playerModel)
+                    playerHistoryRepository.savePlayerHistory(playerModel.toPlayerHistoryModel(playerId))
                 }
             }
         }
@@ -283,18 +292,69 @@ class AddGameViewModel(
                 )?.let { teamModel ->
                     teamRepository.updateTeam(teamModel)
 
+                    teamHistoryRepository.getTeamHistory(teamModel.id)?.let { teamHistoryUiModel ->
+                        val copyTeamHistoryModel = teamHistoryUiModel.toTeamHistoryModel().copy(
+                            name = teamModel.name,
+                            color = teamModel.color,
+                        )
+                        teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+                    }
+
                     playersTextFields.getOrNull(index)?.let { playerNameValues ->
                         val playerUiModelList = playerRepository.getPlayers(teamModel.id)
                         playerNameValues.forEachIndexed { index, playerNameValue ->
-                            val playerModel = playerUiModelList.getOrNull(index)
-                                ?.toPlayerModel()
-                                ?.copy(name = playerNameValue.trim())
+                            val playerUiModel = playerUiModelList.getOrNull(index)
 
-                            if (playerModel != null) {
+                            if (playerUiModel != null) {
                                 if (playerNameValue.isNotEmpty()) {
-                                    playerRepository.updatePlayer(playerModel)
+                                    if (playerNameValue != playerUiModel.name) {
+                                        playerRepository.deletePlayer(playerUiModel.id)
+                                        val newPlayerModel = PlayerModel(
+                                            teamId = teamModel.id,
+                                            name = playerNameValue.trim(),
+                                            goals = playerUiModel.goals,
+                                            assists = playerUiModel.assists,
+                                            dribbles = playerUiModel.dribbles,
+                                            passes = playerUiModel.passes,
+                                            shots = playerUiModel.shots,
+                                            saves = playerUiModel.saves,
+                                        )
+                                        val playerId = playerRepository.savePlayer(newPlayerModel)
+
+                                        val playerHistoryUiModel = playerHistoryRepository.getPlayerHistory(
+                                            teamId = newPlayerModel.teamId,
+                                            playerName = newPlayerModel.name,
+                                        )
+                                        val playerHistoryModel = if (playerHistoryUiModel != null) {
+                                            playerHistoryRepository.deletePlayerHistory(playerHistoryUiModel.id)
+                                            PlayerHistoryModel(
+                                                id = playerId,
+                                                teamId = newPlayerModel.teamId,
+                                                name = newPlayerModel.name,
+                                                goals = playerHistoryUiModel.goals,
+                                                assists = playerHistoryUiModel.assists,
+                                                dribbles = playerHistoryUiModel.dribbles,
+                                                passes = playerHistoryUiModel.passes,
+                                                shots = playerHistoryUiModel.shots,
+                                                saves = playerHistoryUiModel.saves,
+                                            )
+                                        } else {
+                                            PlayerHistoryModel(
+                                                id = playerId,
+                                                teamId = newPlayerModel.teamId,
+                                                name = newPlayerModel.name,
+                                                goals = 0,
+                                                assists = 0,
+                                                dribbles = 0,
+                                                passes = 0,
+                                                shots = 0,
+                                                saves = 0,
+                                            )
+                                        }
+                                        playerHistoryRepository.savePlayerHistory(playerHistoryModel)
+                                    }
                                 } else {
-                                    playerRepository.deletePlayer(playerModel.id)
+                                    playerRepository.deletePlayer(playerUiModel.id)
                                 }
                             } else if (playerNameValue.isNotEmpty()) {
                                 val newPlayerModel = PlayerModel(
@@ -307,7 +367,39 @@ class AddGameViewModel(
                                     shots = 0,
                                     saves = 0,
                                 )
-                                playerRepository.savePlayer(newPlayerModel)
+                                val playerId = playerRepository.savePlayer(newPlayerModel)
+
+                                val playerHistoryUiModel = playerHistoryRepository.getPlayerHistory(
+                                    teamId = newPlayerModel.teamId,
+                                    playerName = newPlayerModel.name,
+                                )
+                                val playerHistoryModel = if (playerHistoryUiModel != null) {
+                                    playerHistoryRepository.deletePlayerHistory(playerHistoryUiModel.id)
+                                    PlayerHistoryModel(
+                                        id = playerId,
+                                        teamId = newPlayerModel.teamId,
+                                        name = newPlayerModel.name,
+                                        goals = playerHistoryUiModel.goals,
+                                        assists = playerHistoryUiModel.assists,
+                                        dribbles = playerHistoryUiModel.dribbles,
+                                        passes = playerHistoryUiModel.passes,
+                                        shots = playerHistoryUiModel.shots,
+                                        saves = playerHistoryUiModel.saves,
+                                    )
+                                } else {
+                                    PlayerHistoryModel(
+                                        id = playerId,
+                                        teamId = newPlayerModel.teamId,
+                                        name = newPlayerModel.name,
+                                        goals = 0,
+                                        assists = 0,
+                                        dribbles = 0,
+                                        passes = 0,
+                                        shots = 0,
+                                        saves = 0,
+                                    )
+                                }
+                                playerHistoryRepository.savePlayerHistory(playerHistoryModel)
                             }
                         }
                     }

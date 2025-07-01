@@ -5,6 +5,7 @@ import com.alimapps.senbombardir.data.source.PlayerDao
 import com.alimapps.senbombardir.data.source.TeamDao
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
+import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.utils.orDefault
 
 class PlayerRepository(
@@ -35,6 +36,28 @@ class PlayerRepository(
         }
 
         return players
+    }
+
+    suspend fun getPlayer(playerId: Long): PlayerUiModel? {
+        val playerModel = playerDao.getPlayer(playerId)
+
+        return playerModel?.let {
+            PlayerUiModel(
+                id = it.id,
+                teamId = it.teamId,
+                teamColor = TeamColor.Red,
+                teamName = String.empty,
+                teamPoints = 0,
+                teamGoalsDifference = 0,
+                name = it.name,
+                goals = it.goals,
+                assists = it.assists,
+                dribbles = it.dribbles,
+                passes = it.passes,
+                shots = it.shots,
+                saves = it.saves,
+            )
+        }
     }
     
     suspend fun savePlayer(playerModel: PlayerModel): Long = playerDao.insertPlayer(playerModel)

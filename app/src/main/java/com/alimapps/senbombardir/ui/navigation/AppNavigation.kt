@@ -22,9 +22,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameScreen
+import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameScreen
+import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeScreen
 import com.alimapps.senbombardir.ui.screen.news.NewsScreen
+import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
+import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import com.alimapps.senbombardir.ui.screen.settings.SettingsScreen
 import com.alimapps.senbombardir.utils.orDefault
 import org.koin.androidx.compose.koinViewModel
@@ -108,14 +112,21 @@ fun AppNavigation() {
                     val gameId = backStackEntry.arguments?.getString("gameId")?.toLongOrNull()
                     AddGameScreen(
                         navController = navController,
-                        viewModel = koinViewModel { parametersOf(gameId) }
+                        viewModel = koinViewModel<AddGameViewModel> { parametersOf(gameId) }
                     )
                 }
                 composable(NavigationItem.Game.route) { backStackEntry ->
                     val gameId = backStackEntry.arguments?.getString("gameId")?.toLongOrNull().orDefault()
                     GameScreen(
                         navController = navController,
-                        viewModel = koinViewModel { parametersOf(gameId) }
+                        viewModel = koinViewModel<GameViewModel> { parametersOf(gameId) }
+                    )
+                }
+                composable(NavigationItem.GameResults.route) { backStackEntry ->
+                    val gameId = backStackEntry.arguments?.getString("gameId")?.toLongOrNull().orDefault()
+                    GameResultsScreen(
+                        navController = navController,
+                        viewModel = koinViewModel<GameResultsViewModel> { parametersOf(gameId) }
                     )
                 }
             }

@@ -5,6 +5,7 @@ import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeViewModel
+import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -28,7 +29,9 @@ val uiModule = module {
             gameRepository = get(),
             liveGameRepository = get(),
             teamRepository = get(),
+            teamHistoryRepository = get(),
             playerRepository = get(),
+            playerHistoryRepository = get(),
         )
     }
 
@@ -38,8 +41,19 @@ val uiModule = module {
             gameRepository = get(),
             liveGameRepository = get(),
             teamRepository = get(),
+            teamHistoryRepository = get(),
             playerRepository = get(),
+            playerHistoryRepository = get(),
             context = get(),
+        )
+    }
+
+    viewModel { (gameId: Long) ->
+        GameResultsViewModel(
+            gameId = gameId,
+            teamHistoryRepository = get(),
+            playerHistoryRepository = get(),
+            playerRepository = get(),
         )
     }
 }

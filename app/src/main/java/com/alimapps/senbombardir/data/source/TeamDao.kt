@@ -17,8 +17,8 @@ interface TeamDao {
     suspend fun getTeam(teamId: Long): TeamModel?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTeam(team: TeamModel): Long
+    suspend fun insertTeam(teamModel: TeamModel): Long
 
     @Update
-    suspend fun updateTeam(team: TeamModel)
+    suspend fun updateTeam(teamModel: TeamModel)
 }

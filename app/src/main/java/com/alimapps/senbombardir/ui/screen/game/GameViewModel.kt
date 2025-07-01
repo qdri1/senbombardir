@@ -17,7 +17,9 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
+import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
+import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
@@ -25,7 +27,9 @@ import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
+import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toPlayerModel
+import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
 import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
@@ -55,7 +59,9 @@ class GameViewModel(
     private val gameRepository: GameRepository,
     private val liveGameRepository: LiveGameRepository,
     private val teamRepository: TeamRepository,
+    private val teamHistoryRepository: TeamHistoryRepository,
     private val playerRepository: PlayerRepository,
+    private val playerHistoryRepository: PlayerHistoryRepository,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
 
@@ -269,6 +275,14 @@ class GameViewModel(
         setEffectSafely(GameEffect.ShowGameInfoBottomSheet)
     }
 
+    private fun onAllResultsClicked() {
+        if (isLive) {
+            setEffectSafely(GameEffect.ShowSnackbar(R.string.open_game_results_snackbar_text))
+            return
+        }
+        setEffectSafely(GameEffect.OpenGameResultsScreen(gameId))
+    }
+
     private fun onStartFinishButtonClicked() {
         uiState.value.liveGameUiModel?.let { liveGameUiModel ->
             if (liveGameUiModel.isLive.not()) {
@@ -458,6 +472,14 @@ class GameViewModel(
                 }
                 val copyPlayerUiModel = playerUiModel.copy(goals = playerUiModel.goals + 1)
                 playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        goals = playerHistoryUiModel.goals + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
                 speak(
                     text = context.getString(R.string.text_to_speech_goal, playerUiModel.name),
                     onComplete = { playGoalSound() },
@@ -466,6 +488,14 @@ class GameViewModel(
             TeamOption.Assist -> {
                 val copyPlayerUiModel = playerUiModel.copy(assists = playerUiModel.assists + 1)
                 playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        assists = playerHistoryUiModel.assists + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
                 speak(
                     text = context.getString(R.string.text_to_speech_assist, playerUiModel.name),
                     onComplete = { playGirlsApplauseSound() },
@@ -474,6 +504,14 @@ class GameViewModel(
             TeamOption.Dribble -> {
                 val copyPlayerUiModel = playerUiModel.copy(dribbles = playerUiModel.dribbles + 1)
                 playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        dribbles = playerHistoryUiModel.dribbles + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
                 speak(
                     text = context.getString(R.string.text_to_speech_dribble, playerUiModel.name),
                     onComplete = { playBilgeninIstepJatyrSound() },
@@ -482,6 +520,14 @@ class GameViewModel(
             TeamOption.Pass -> {
                 val copyPlayerUiModel = playerUiModel.copy(passes = playerUiModel.passes + 1)
                 playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        passes = playerHistoryUiModel.passes + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
                 speak(
                     text = context.getString(R.string.text_to_speech_pass, playerUiModel.name),
                     onComplete = { playStadiumApplauseSound() },
@@ -490,6 +536,14 @@ class GameViewModel(
             TeamOption.Shot -> {
                 val copyPlayerUiModel = playerUiModel.copy(shots = playerUiModel.shots + 1)
                 playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        shots = playerHistoryUiModel.shots + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
                 speak(
                     text = context.getString(R.string.text_to_speech_shot, playerUiModel.name),
                     onComplete = { playSuiiiSound() },
@@ -498,6 +552,14 @@ class GameViewModel(
             TeamOption.Save -> {
                 val copyPlayerUiModel = playerUiModel.copy(saves = playerUiModel.saves + 1)
                 playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        saves = playerHistoryUiModel.saves + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
                     onComplete = { playGoalSaveSound() },
@@ -925,6 +987,17 @@ class GameViewModel(
                 points = winnerTeam.points + 3,
             )
             teamRepository.updateTeam(team.toTeamModel())
+
+            teamHistoryRepository.getTeamHistory(winnerTeam.id)?.let { teamHistoryUiModel ->
+                val copyTeamHistoryModel = teamHistoryUiModel.copy(
+                    games = teamHistoryUiModel.games + 1,
+                    wins = teamHistoryUiModel.wins + 1,
+                    goals = teamHistoryUiModel.goals + liveGameUiModel.leftTeamGoals,
+                    conceded = teamHistoryUiModel.conceded + liveGameUiModel.rightTeamGoals,
+                    points = teamHistoryUiModel.points + 3,
+                ).toTeamHistoryModel()
+                teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+            }
         }
         uiState.value.teamUiModelList.find { it.id == liveGameUiModel.rightTeamId }?.let { loserTeam ->
             val team = loserTeam.copy(
@@ -934,6 +1007,16 @@ class GameViewModel(
                 conceded = loserTeam.conceded + liveGameUiModel.leftTeamGoals,
             )
             teamRepository.updateTeam(team.toTeamModel())
+
+            teamHistoryRepository.getTeamHistory(loserTeam.id)?.let { teamHistoryUiModel ->
+                val copyTeamHistoryModel = teamHistoryUiModel.copy(
+                    games = teamHistoryUiModel.games + 1,
+                    loses = teamHistoryUiModel.loses + 1,
+                    goals = teamHistoryUiModel.goals + liveGameUiModel.rightTeamGoals,
+                    conceded = teamHistoryUiModel.conceded + liveGameUiModel.leftTeamGoals,
+                ).toTeamHistoryModel()
+                teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+            }
         }
     }
 
@@ -947,6 +1030,17 @@ class GameViewModel(
                 points = winnerTeam.points + 3,
             )
             teamRepository.updateTeam(team.toTeamModel())
+
+            teamHistoryRepository.getTeamHistory(winnerTeam.id)?.let { teamHistoryUiModel ->
+                val copyTeamHistoryModel = teamHistoryUiModel.copy(
+                    games = teamHistoryUiModel.games + 1,
+                    wins = teamHistoryUiModel.wins + 1,
+                    goals = teamHistoryUiModel.goals + liveGameUiModel.rightTeamGoals,
+                    conceded = teamHistoryUiModel.conceded + liveGameUiModel.leftTeamGoals,
+                    points = teamHistoryUiModel.points + 3,
+                ).toTeamHistoryModel()
+                teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+            }
         }
         uiState.value.teamUiModelList.find { it.id == liveGameUiModel.leftTeamId }?.let { loserTeam ->
             val team = loserTeam.copy(
@@ -956,6 +1050,16 @@ class GameViewModel(
                 conceded = loserTeam.conceded + liveGameUiModel.rightTeamGoals,
             )
             teamRepository.updateTeam(team.toTeamModel())
+
+            teamHistoryRepository.getTeamHistory(loserTeam.id)?.let { teamHistoryUiModel ->
+                val copyTeamHistoryModel = teamHistoryUiModel.copy(
+                    games = teamHistoryUiModel.games + 1,
+                    loses = teamHistoryUiModel.loses + 1,
+                    goals = teamHistoryUiModel.goals + liveGameUiModel.leftTeamGoals,
+                    conceded = teamHistoryUiModel.conceded + liveGameUiModel.rightTeamGoals,
+                ).toTeamHistoryModel()
+                teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+            }
         }
     }
 
@@ -969,6 +1073,17 @@ class GameViewModel(
                 points = drawerTeam.points + 1,
             )
             teamRepository.updateTeam(team.toTeamModel())
+
+            teamHistoryRepository.getTeamHistory(drawerTeam.id)?.let { teamHistoryUiModel ->
+                val copyTeamHistoryModel = teamHistoryUiModel.copy(
+                    games = teamHistoryUiModel.games + 1,
+                    draws = teamHistoryUiModel.draws + 1,
+                    goals = teamHistoryUiModel.goals + liveGameUiModel.leftTeamGoals,
+                    conceded = teamHistoryUiModel.conceded + liveGameUiModel.rightTeamGoals,
+                    points = teamHistoryUiModel.points + 1,
+                ).toTeamHistoryModel()
+                teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+            }
         }
         uiState.value.teamUiModelList.find { it.id == liveGameUiModel.rightTeamId }?.let { drawerTeam ->
             val team = drawerTeam.copy(
@@ -979,6 +1094,17 @@ class GameViewModel(
                 points = drawerTeam.points + 1,
             )
             teamRepository.updateTeam(team.toTeamModel())
+
+            teamHistoryRepository.getTeamHistory(drawerTeam.id)?.let { teamHistoryUiModel ->
+                val copyTeamHistoryModel = teamHistoryUiModel.copy(
+                    games = teamHistoryUiModel.games + 1,
+                    draws = teamHistoryUiModel.draws + 1,
+                    goals = teamHistoryUiModel.goals + liveGameUiModel.rightTeamGoals,
+                    conceded = teamHistoryUiModel.conceded + liveGameUiModel.leftTeamGoals,
+                    points = teamHistoryUiModel.points + 1,
+                ).toTeamHistoryModel()
+                teamHistoryRepository.updateTeamHistory(copyTeamHistoryModel)
+            }
         }
     }
 
@@ -1119,6 +1245,7 @@ class GameViewModel(
             GameFunction.Edit -> onEditGameClicked()
             GameFunction.ClearResults -> onClearResultsClicked()
             GameFunction.Info -> onInfoClicked()
+            GameFunction.AllResults -> onAllResultsClicked()
             GameFunction.Delete -> onDeleteGameClicked()
         }
     }

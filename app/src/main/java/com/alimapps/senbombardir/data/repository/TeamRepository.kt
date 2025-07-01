@@ -29,7 +29,7 @@ class TeamRepository(
         return teams
     }
     
-    suspend fun saveTeam(team: TeamModel): Long = teamDao.insertTeam(team)
+    suspend fun saveTeam(teamModel: TeamModel): Long = teamDao.insertTeam(teamModel)
 
-    suspend fun updateTeam(team: TeamModel) = teamDao.updateTeam(team)
+    suspend fun updateTeam(teamModel: TeamModel) { teamDao.updateTeam(teamModel) }
 }

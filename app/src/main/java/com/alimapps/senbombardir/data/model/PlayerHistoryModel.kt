@@ -6,10 +6,10 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "players",
+    tableName = "players_history",
     foreignKeys = [
         ForeignKey(
-            entity = TeamModel::class,
+            entity = TeamHistoryModel::class,
             parentColumns = ["id"],
             childColumns = ["teamId"],
             onDelete = ForeignKey.CASCADE,
@@ -19,9 +19,9 @@ import androidx.room.PrimaryKey
         Index(value = ["teamId"]),
     ]
 )
-data class PlayerModel(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0L,
+data class PlayerHistoryModel(
+    @PrimaryKey
+    val id: Long,
     val teamId: Long,
     val name: String,
     val goals: Int,
@@ -31,16 +31,3 @@ data class PlayerModel(
     val shots: Int,
     val saves: Int,
 )
-
-fun PlayerModel.toPlayerHistoryModel(playerId: Long): PlayerHistoryModel =
-    PlayerHistoryModel(
-        id = playerId,
-        teamId = teamId,
-        name = name,
-        goals = goals,
-        assists = assists,
-        dribbles = dribbles,
-        passes = passes,
-        shots = shots,
-        saves = saves,
-    )

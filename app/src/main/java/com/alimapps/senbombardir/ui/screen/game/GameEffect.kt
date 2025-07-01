@@ -7,6 +7,7 @@ sealed interface GameEffect : DebounceEffect {
     data object CloseScreen : GameEffect
     data object CloseScreenWithResult : GameEffect
     class OpenUpdateGame(val gameId: Long) : GameEffect
+    class OpenGameResultsScreen(val gameId: Long) : GameEffect
     class ShowOptionPlayersBottomSheet(val optionPlayersUiModel: OptionPlayersUiModel) : GameEffect
     data object ShowStayTeamSelectionBottomSheet : GameEffect
     data object ShowDeleteGameConfirmationBottomSheet : GameEffect

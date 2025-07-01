@@ -116,6 +116,7 @@ private fun GameScreenContent(
                     navController.navigateUp()
                 }
                 is GameEffect.OpenUpdateGame -> navController.navigate(NavigationItem.AddGame.createRoute(effect.gameId))
+                is GameEffect.OpenGameResultsScreen -> navController.navigate(NavigationItem.GameResults.createRoute(effect.gameId))
                 is GameEffect.ShowOptionPlayersBottomSheet -> optionPlayersUiModel = effect.optionPlayersUiModel
                 is GameEffect.ShowStayTeamSelectionBottomSheet -> showStayTeamSelection = true
                 is GameEffect.ShowDeleteGameConfirmationBottomSheet -> showDeleteGameConfirmation = true
