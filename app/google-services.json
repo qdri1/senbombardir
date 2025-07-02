@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97359475038",
+    "project_id": "dop-tep",
+    "storage_bucket": "dop-tep.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97359475038:android:1699f77dd6090f66335fcf",
+        "android_client_info": {
+          "package_name": "com.alimapps.senbombardir"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsDqCwMKVOs49XEvLUxM59oI77vXLmEyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
