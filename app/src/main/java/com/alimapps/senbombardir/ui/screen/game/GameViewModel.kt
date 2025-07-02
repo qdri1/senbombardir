@@ -498,7 +498,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_assist, playerUiModel.name),
-                    onComplete = { playGirlsApplauseSound() },
+                    onComplete = { playMedia(resId = R.raw.girls_applause) },
                 )
             }
             TeamOption.Dribble -> {
@@ -514,7 +514,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_dribble, playerUiModel.name),
-                    onComplete = { playBilgeninIstepJatyrSound() },
+                    onComplete = { playMedia(resId = R.raw.bilgenin_istep_jatyr) },
                 )
             }
             TeamOption.Pass -> {
@@ -530,7 +530,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_pass, playerUiModel.name),
-                    onComplete = { playStadiumApplauseSound() },
+                    onComplete = { playMedia(resId = R.raw.stadium_applause) },
                 )
             }
             TeamOption.Shot -> {
@@ -546,7 +546,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_shot, playerUiModel.name),
-                    onComplete = { playSuiiiSound() },
+                    onComplete = { playMedia(resId = R.raw.suiiiii) },
                 )
             }
             TeamOption.Save -> {
@@ -562,7 +562,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
-                    onComplete = { playGoalSaveSound() },
+                    onComplete = { playMedia(resId = R.raw.goal_save) },
                 )
             }
         }
@@ -592,7 +592,7 @@ class GameViewModel(
     }
 
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
-        playStartMatchSound()
+        playMedia(resId = R.raw.start_match)
         startTimer()
         viewModelScope.launch {
             val copyLiveGameUiModel = liveGameUiModel.copy(isLive = true)
@@ -602,7 +602,7 @@ class GameViewModel(
     }
 
     private fun finishGame() {
-        playFinishSound()
+        playMedia(resId = R.raw.finish)
         resetTimer()
         uiState.value.gameUiModel?.let { gameUiModel ->
             uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -1147,8 +1147,8 @@ class GameViewModel(
         timer = object : CountDownTimer(timerValue, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 when (millisUntilFinished) {
-                    in 60000L..60999L -> playMinutaSound()
-                    in 10000L..10999L -> playDoAutaSound()
+                    in 60000L..60999L -> playMedia(resId = R.raw.minuta)
+                    in 10000L..10999L -> playMedia(resId = R.raw.do_auta)
                 }
                 timerValue = millisUntilFinished
                 _timerValueState.value = millisUntilFinished.toStringTime()
@@ -1179,65 +1179,8 @@ class GameViewModel(
         }
     }
 
-    private fun playStartMatchSound() {
-        playMedia(resId = R.raw.start_match)
-    }
-
-    private fun playFinishSound() {
-        playMedia(resId = R.raw.finish)
-    }
-
-    private fun playMinutaSound() {
-        playMedia(resId = R.raw.minuta)
-    }
-
-    private fun playDoAutaSound() {
-        playMedia(resId = R.raw.do_auta)
-    }
-
-    private fun playGirlsApplauseSound() {
-        playMedia(resId = R.raw.girls_applause)
-    }
-
-    private fun playStadiumApplauseSound() {
-        playMedia(resId = R.raw.stadium_applause)
-    }
-
-    private fun playBilgeninIstepJatyrSound() {
-        playMedia(resId = R.raw.bilgenin_istep_jatyr)
-    }
-
-    private fun playGoalSaveSound() {
-        playMedia(resId = R.raw.goal_save)
-    }
-
-    private fun playModrichtynPasySound() {
-        playMedia(resId = R.raw.modrichtyn_pasy)
-    }
-
-    private fun playTondyrypTastaganSound() {
-        playMedia(resId = R.raw.tondyryp_tastagan)
-    }
-
-    private fun playSuiiiSound() {
-        playMedia(resId = R.raw.suiiiii)
-    }
-
-    private fun playWhistle() {
-        playMedia(resId = R.raw.whistle)
-    }
-
     private fun onSoundClicked(sound: GameSounds) {
-        when (sound) {
-            GameSounds.Whistle -> playWhistle()
-            GameSounds.StadiumApplause -> playStadiumApplauseSound()
-            GameSounds.GirlsApplause -> playGirlsApplauseSound()
-            GameSounds.BilgeninIstepJatyr -> playBilgeninIstepJatyrSound()
-            GameSounds.GoalSave -> playGoalSaveSound()
-            GameSounds.Suiii -> playSuiiiSound()
-            GameSounds.ModrichtynPasy -> playModrichtynPasySound()
-            GameSounds.TondyrypTastagan -> playTondyrypTastaganSound()
-        }
+        playMedia(resId = sound.rawRes)
     }
 
     private fun onFunctionClicked(function: GameFunction) {
