@@ -26,7 +26,6 @@ import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameScreen
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeScreen
-import com.alimapps.senbombardir.ui.screen.news.NewsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import com.alimapps.senbombardir.ui.screen.settings.SettingsScreen
@@ -41,7 +40,6 @@ fun AppNavigation() {
     val currentRoute = navBackStackEntry?.destination?.route
     val bottomNavItems = listOf(
         BottomNavItem.Home,
-        BottomNavItem.News,
         BottomNavItem.Settings,
     )
 
@@ -88,15 +86,6 @@ fun AppNavigation() {
                     popExitTransition = { fadeOut(tween(300)) },
                 ) {
                     HomeScreen(navController = navController)
-                }
-                composable(
-                    route = BottomNavItem.News.route,
-                    enterTransition = { fadeIn(tween(300)) },
-                    exitTransition = { fadeOut(tween(300)) },
-                    popEnterTransition = { fadeIn(tween(300)) },
-                    popExitTransition = { fadeOut(tween(300)) },
-                ) {
-                    NewsScreen(navController = navController)
                 }
                 composable(
                     route = BottomNavItem.Settings.route,
