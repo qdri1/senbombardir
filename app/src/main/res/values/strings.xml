@@ -134,4 +134,10 @@
     <string name="players_block_info_shots">Мощьный точный удар</string>
     <string name="players_block_info_passes">Красивый пас</string>
 
+    <string name="settings_item_share">Поделиться</string>
+    <string name="settings_item_star">Оценить</string>
+    <string name="settings_item_telegram">Telegram группа</string>
+
+    <string name="telegram_not_installed">У Вас не установлен Telegram!</string>
+
 </resources>

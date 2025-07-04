@@ -6,6 +6,7 @@ import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeViewModel
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
+import com.alimapps.senbombardir.ui.screen.settings.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -21,6 +22,10 @@ val uiModule = module {
             teamRepository = get(),
             playerRepository = get(),
         )
+    }
+
+    viewModel {
+        SettingsViewModel()
     }
 
     viewModel { (gameId: Long?) ->
