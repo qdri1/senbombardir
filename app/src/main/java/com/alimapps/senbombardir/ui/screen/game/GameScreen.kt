@@ -224,9 +224,9 @@ private fun GameScreenContent(
         playerResultUiModel != null -> playerResultUiModel?.let {
             PlayerResultBottomSheet(
                 playerResultUiModel = it,
-                onAction = { action ->
+                onSavePlayerResultClicked = { p1, p2 ->
                     playerResultUiModel = null
-                    onAction(action)
+                    onAction(GameAction.OnSavePlayerResultClicked(playerResultUiModel = p1, playerResultValue = p2))
                 },
                 onDismissed = { playerResultUiModel = null },
             )

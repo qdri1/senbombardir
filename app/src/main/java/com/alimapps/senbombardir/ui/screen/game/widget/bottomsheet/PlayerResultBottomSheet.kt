@@ -31,13 +31,12 @@ import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamOption
-import com.alimapps.senbombardir.ui.screen.game.GameAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerResultBottomSheet(
     playerResultUiModel: PlayerResultUiModel,
-    onAction: (GameAction) -> Unit,
+    onSavePlayerResultClicked: (PlayerResultUiModel, Int) -> Unit,
     onDismissed: () -> Unit,
 ) {
     val currentPlayerResult = when (playerResultUiModel.option) {
@@ -65,7 +64,7 @@ fun PlayerResultBottomSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
@@ -92,7 +91,7 @@ fun PlayerResultBottomSheet(
         Button(
             onClick = {
                 if (currentPlayerResult != playerResultValue) {
-                    onAction(GameAction.OnSavePlayerResultClicked(playerResultUiModel, playerResultValue))
+                    onSavePlayerResultClicked(playerResultUiModel, playerResultValue)
                 } else {
                     onDismissed()
                 }
@@ -103,7 +102,7 @@ fun PlayerResultBottomSheet(
             ),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 4.dp)
+                .padding(top = 12.dp)
                 .padding(bottom = 16.dp)
         ) {
             Text(text = stringResource(id = R.string.save))

@@ -2,13 +2,16 @@ package com.alimapps.senbombardir.ui.screen.results
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
+import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
+import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -39,6 +42,7 @@ class GameResultsViewModel(
             is GameResultsAction.OnBackClicked -> setEffectSafely(GameResultsEffect.CloseScreen)
             is GameResultsAction.OnClearResultsClicked -> setEffectSafely(GameResultsEffect.ShowClearResultsConfirmationBottomSheet)
             is GameResultsAction.OnClearResultsConfirmationClicked -> onClearResultsConfirmationClicked()
+            is GameResultsAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
         }
     }
 
@@ -97,6 +101,26 @@ class GameResultsViewModel(
             }
         }
         fetchGameHistory()
+    }
+
+    private fun onSavePlayerResultClicked(
+        playerResultUiModel: PlayerResultUiModel,
+        playerResultValue: Int,
+    ) {
+        val playerUiModel = when (playerResultUiModel.option) {
+            TeamOption.Goal -> playerResultUiModel.playerUiModel.copy(goals = playerResultValue)
+            TeamOption.Assist -> playerResultUiModel.playerUiModel.copy(assists = playerResultValue)
+            TeamOption.Save -> playerResultUiModel.playerUiModel.copy(saves = playerResultValue)
+            TeamOption.Dribble -> playerResultUiModel.playerUiModel.copy(dribbles = playerResultValue)
+            TeamOption.Shot -> playerResultUiModel.playerUiModel.copy(shots = playerResultValue)
+            TeamOption.Pass -> playerResultUiModel.playerUiModel.copy(passes = playerResultValue)
+        }
+
+        viewModelScope.launch {
+            playerHistoryRepository.updatePlayerHistory(playerUiModel.toPlayerHistoryModel())
+            fetchGameHistory()
+            setEffect(GameResultsEffect.ShowSnackbar(R.string.save_success))
+        }
     }
 
     private fun setState(state: GameResultsUiState) {

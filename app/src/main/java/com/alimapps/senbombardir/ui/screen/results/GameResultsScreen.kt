@@ -18,6 +18,8 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,14 +30,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -57,14 +62,20 @@ private fun GameResultsScreenContent(
     onAction: (GameResultsAction) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
 
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
+    var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is GameResultsEffect.CloseScreen -> navController.navigateUp()
                 is GameResultsEffect.ShowClearResultsConfirmationBottomSheet -> showClearResultsConfirmation = true
+                is GameResultsEffect.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
+                }
             }
         }
     }
@@ -102,6 +113,7 @@ private fun GameResultsScreenContent(
                 )
             }
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
         Box(
             modifier = Modifier
@@ -124,6 +136,7 @@ private fun GameResultsScreenContent(
                 if (uiState.playerUiModelList.isNotEmpty()) {
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
+                        onPlayerResultClicked = { playerResultUiModel = it },
                     )
                 }
             }
@@ -131,6 +144,16 @@ private fun GameResultsScreenContent(
     }
 
     when {
+        playerResultUiModel != null -> playerResultUiModel?.let {
+            PlayerResultBottomSheet(
+                playerResultUiModel = it,
+                onSavePlayerResultClicked = { p1, p2 ->
+                    playerResultUiModel = null
+                    onAction(GameResultsAction.OnSavePlayerResultClicked(playerResultUiModel = p1, playerResultValue = p2))
+                },
+                onDismissed = { playerResultUiModel = null },
+            )
+        }
         showClearResultsConfirmation -> {
             ConfirmationBottomSheet(
                 title = stringResource(id = R.string.clear_all_results_title),
