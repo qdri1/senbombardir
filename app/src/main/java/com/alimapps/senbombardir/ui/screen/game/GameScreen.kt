@@ -15,9 +15,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,7 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
-import com.alimapps.senbombardir.ui.model.types.TeamColor
+import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
@@ -55,6 +52,7 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameInfoBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.OptionPlayersBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.StayTeamSelectionBottomSheet
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
@@ -91,6 +89,7 @@ private fun GameScreenContent(
     var showFinishGameConfirmation by remember { mutableStateOf(false) }
     var showGoBackConfirmation by remember { mutableStateOf(false) }
     var showGameInfo by remember { mutableStateOf(false) }
+    var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
 
     BackHandler {
         onAction(GameAction.OnBackClicked)
@@ -198,6 +197,7 @@ private fun GameScreenContent(
                 if (uiState.playerUiModelList.isNotEmpty()) {
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
+                        onPlayerResultClicked = { playerResultUiModel = it },
                     )
                 }
 
@@ -219,6 +219,16 @@ private fun GameScreenContent(
                     onAction(action)
                 },
                 onDismissed = { optionPlayersUiModel = null },
+            )
+        }
+        playerResultUiModel != null -> playerResultUiModel?.let {
+            PlayerResultBottomSheet(
+                playerResultUiModel = it,
+                onAction = { action ->
+                    playerResultUiModel = null
+                    onAction(action)
+                },
+                onDismissed = { playerResultUiModel = null },
             )
         }
         showStayTeamSelection -> uiState.liveGameUiModel?.let {

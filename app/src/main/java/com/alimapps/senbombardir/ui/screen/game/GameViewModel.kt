@@ -24,6 +24,7 @@ import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
+import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
@@ -43,6 +44,7 @@ import com.alimapps.senbombardir.ui.utils.debounceEffect
 import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.utils.orDefault
 import com.alimapps.senbombardir.utils.toMillis
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -127,6 +129,7 @@ class GameViewModel(
             is GameAction.OnSoundClicked -> onSoundClicked(action.sound)
             is GameAction.OnFunctionClicked -> onFunctionClicked(action.function)
             is GameAction.OnInterceptionNavigationResult -> onInterceptionNavigationResult(action.result)
+            is GameAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
         }
     }
 
@@ -1140,6 +1143,82 @@ class GameViewModel(
         when (result) {
             is UpdateGameResult -> fetchGame()
         }
+    }
+
+    private fun onSavePlayerResultClicked(
+        playerResultUiModel: PlayerResultUiModel,
+        playerResultValue: Int,
+    ) = viewModelScope.launch {
+        when (playerResultUiModel.option) {
+            TeamOption.Goal -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(goals = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.goals
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(goals = playerHistoryUiModel.goals.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.Assist -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(assists = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.assists
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(assists = playerHistoryUiModel.assists.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.Save -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(saves = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.saves
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(saves = playerHistoryUiModel.saves.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.Dribble -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(dribbles = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.dribbles
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(dribbles = playerHistoryUiModel.dribbles.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.Shot -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(shots = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.shots
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(shots = playerHistoryUiModel.shots.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.Pass -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(passes = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.passes
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(passes = playerHistoryUiModel.passes.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+        }
+        updatePlayersBlock()
+        setEffect(GameEffect.ShowSnackbar(R.string.save_success))
     }
 
     private fun startTimer() {

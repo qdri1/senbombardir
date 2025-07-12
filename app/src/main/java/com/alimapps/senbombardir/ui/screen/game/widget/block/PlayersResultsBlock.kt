@@ -1,6 +1,8 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.block
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,12 +22,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @Composable
 fun PlayersResultsBlock(
     playerUiModelList: List<PlayerUiModel>,
+    onPlayerResultClicked: (PlayerResultUiModel) -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -111,6 +117,12 @@ fun PlayersResultsBlock(
                         text = playerUiModel.goals.toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Goal)) }
+                            )
                     )
                 }
             }
@@ -129,6 +141,12 @@ fun PlayersResultsBlock(
                         text = playerUiModel.assists.toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Assist)) }
+                            )
                     )
                 }
             }
@@ -147,6 +165,12 @@ fun PlayersResultsBlock(
                         text = playerUiModel.saves.toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Save)) }
+                            )
                     )
                 }
             }
@@ -165,6 +189,12 @@ fun PlayersResultsBlock(
                         text = playerUiModel.dribbles.toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Dribble)) }
+                            )
                     )
                 }
             }
@@ -183,6 +213,12 @@ fun PlayersResultsBlock(
                         text = playerUiModel.shots.toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Shot)) }
+                            )
                     )
                 }
             }
@@ -201,6 +237,12 @@ fun PlayersResultsBlock(
                         text = playerUiModel.passes.toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Pass)) }
+                            )
                     )
                 }
             }

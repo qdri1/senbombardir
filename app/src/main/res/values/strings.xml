@@ -39,6 +39,8 @@
 
     <string name="player_number">Игрок %s</string>
     <string name="add_player">Добавить игрока</string>
+    <string name="save">Сохранить</string>
+    <string name="save_success">Сохранено</string>
 
     <string name="button_yes">Да</string>
     <string name="button_no">Нет</string>

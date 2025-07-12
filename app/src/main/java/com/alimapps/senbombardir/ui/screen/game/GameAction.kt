@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.screen.game
 
+import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameSounds
@@ -39,4 +40,6 @@ sealed interface GameAction {
     class OnSoundClicked(val sound: GameSounds) : GameAction
     class OnFunctionClicked(val function: GameFunction) : GameAction
     class OnInterceptionNavigationResult(val result: Any) : GameAction
+
+    class OnSavePlayerResultClicked(val playerResultUiModel: PlayerResultUiModel, val playerResultValue: Int) : GameAction
 }
