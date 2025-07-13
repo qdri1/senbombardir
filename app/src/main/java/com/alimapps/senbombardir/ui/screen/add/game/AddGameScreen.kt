@@ -478,6 +478,7 @@ private fun TeamColorsBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Text(
             text = stringResource(id = R.string.choose_team_color),

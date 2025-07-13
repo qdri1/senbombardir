@@ -32,7 +32,7 @@ fun GameInfoBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp),

@@ -29,7 +29,7 @@ fun StayTeamSelectionBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onAction(GameAction.OnStayTeamSelectionBottomSheetDismissed) },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Text(
             text = stringResource(id = R.string.stay_team_selection_title),

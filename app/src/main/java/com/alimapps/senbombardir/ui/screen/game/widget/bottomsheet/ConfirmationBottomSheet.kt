@@ -33,7 +33,7 @@ fun ConfirmationBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Text(
             text = title,

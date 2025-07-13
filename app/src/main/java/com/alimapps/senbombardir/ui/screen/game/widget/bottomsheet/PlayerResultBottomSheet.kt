@@ -52,7 +52,7 @@ fun PlayerResultBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Text(
             text = "${playerResultUiModel.playerUiModel.name} - ${stringResource(id = playerResultUiModel.option.stringRes)}",

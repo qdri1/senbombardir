@@ -31,7 +31,7 @@ fun OptionPlayersBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Text(
             text = "${stringResource(id = optionPlayersUiModel.option.stringRes)} - ${stringResource(id = R.string.team_option_players_title)}",
