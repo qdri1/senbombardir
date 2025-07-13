@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.screen.game.GameAction
@@ -117,6 +118,18 @@ fun LiveGameBlock(
                     text = liveGameUiModel.leftTeamGoals.toString(),
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                val liveGameResultUiModel = LiveGameResultUiModel(
+                                    liveGameUiModel = liveGameUiModel,
+                                    isLeftTeam = true,
+                                )
+                                onAction(GameAction.OnLiveGameResultClicked(liveGameResultUiModel))
+                            }
+                        )
                 )
                 Text(
                     text = "-",
@@ -127,6 +140,18 @@ fun LiveGameBlock(
                     text = liveGameUiModel.rightTeamGoals.toString(),
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = {
+                                val liveGameResultUiModel = LiveGameResultUiModel(
+                                    liveGameUiModel = liveGameUiModel,
+                                    isLeftTeam = false,
+                                )
+                                onAction(GameAction.OnLiveGameResultClicked(liveGameResultUiModel))
+                            }
+                        )
                 )
                 Box(
                     modifier = Modifier

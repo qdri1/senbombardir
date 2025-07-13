@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.screen.game
 
+import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.types.GameFunction
@@ -41,5 +42,15 @@ sealed interface GameAction {
     class OnFunctionClicked(val function: GameFunction) : GameAction
     class OnInterceptionNavigationResult(val result: Any) : GameAction
 
-    class OnSavePlayerResultClicked(val playerResultUiModel: PlayerResultUiModel, val playerResultValue: Int) : GameAction
+    class OnPlayerResultClicked(val playerResultUiModel: PlayerResultUiModel) : GameAction
+    class OnSavePlayerResultClicked(
+        val playerResultUiModel: PlayerResultUiModel,
+        val playerResultValue: Int,
+    ) : GameAction
+
+    class OnLiveGameResultClicked(val liveGameResultUiModel: LiveGameResultUiModel) : GameAction
+    class OnSaveLiveGameResultClicked(
+        val liveGameResultUiModel: LiveGameResultUiModel,
+        val teamGoalsValue: Int,
+    ) : GameAction
 }

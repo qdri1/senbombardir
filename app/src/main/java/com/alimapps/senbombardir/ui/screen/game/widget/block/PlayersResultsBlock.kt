@@ -30,7 +30,7 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 @Composable
 fun PlayersResultsBlock(
     playerUiModelList: List<PlayerUiModel>,
-    onPlayerResultClicked: (PlayerResultUiModel) -> Unit = {},
+    onPlayerResultClicked: (PlayerResultUiModel) -> Unit,
 ) {
     Column(
         modifier = Modifier

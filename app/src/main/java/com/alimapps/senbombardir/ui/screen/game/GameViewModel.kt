@@ -22,6 +22,7 @@ import com.alimapps.senbombardir.data.repository.PlayerRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.GameUiModel
+import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
@@ -129,7 +130,10 @@ class GameViewModel(
             is GameAction.OnSoundClicked -> onSoundClicked(action.sound)
             is GameAction.OnFunctionClicked -> onFunctionClicked(action.function)
             is GameAction.OnInterceptionNavigationResult -> onInterceptionNavigationResult(action.result)
+            is GameAction.OnPlayerResultClicked -> setEffectSafely(GameEffect.ShowPlayerResultBottomSheet(action.playerResultUiModel))
             is GameAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
+            is GameAction.OnLiveGameResultClicked -> onLiveGameResultClicked(action.liveGameResultUiModel)
+            is GameAction.OnSaveLiveGameResultClicked -> onSaveLiveGameResultClicked(action.liveGameResultUiModel, action.teamGoalsValue)
         }
     }
 
@@ -1142,6 +1146,29 @@ class GameViewModel(
     private fun onInterceptionNavigationResult(result: Any) {
         when (result) {
             is UpdateGameResult -> fetchGame()
+        }
+    }
+
+    private fun onLiveGameResultClicked(liveGameResultUiModel: LiveGameResultUiModel) {
+        if (isLive) {
+            setEffectSafely(GameEffect.ShowLiveGameResultBottomSheet(liveGameResultUiModel))
+        }
+    }
+
+    private fun onSaveLiveGameResultClicked(
+        liveGameResultUiModel: LiveGameResultUiModel,
+        teamGoalsValue: Int,
+    ) {
+        val copyLiveGameUiModel = if (liveGameResultUiModel.isLeftTeam) {
+            liveGameResultUiModel.liveGameUiModel.copy(leftTeamGoals = teamGoalsValue)
+        } else {
+            liveGameResultUiModel.liveGameUiModel.copy(rightTeamGoals = teamGoalsValue)
+        }
+        setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
+
+        viewModelScope.launch {
+            liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+            setEffect(GameEffect.ShowSnackbar(R.string.save_success))
         }
     }
 
