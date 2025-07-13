@@ -111,6 +111,14 @@ fun LiveGameResultBottomSheet(
         ) {
             Text(text = stringResource(id = R.string.save))
         }
+        Text(
+            text = stringResource(id = R.string.result_correction_text),
+            color = MaterialTheme.colorScheme.outline,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .padding(horizontal = 16.dp)
+        )
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
