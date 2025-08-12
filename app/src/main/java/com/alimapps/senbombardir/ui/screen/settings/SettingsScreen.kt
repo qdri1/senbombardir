@@ -31,6 +31,7 @@ import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.types.SettingsItemType
 import com.alimapps.senbombardir.utils.empty
+import com.alimapps.senbombardir.BuildConfig
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 
@@ -98,6 +99,15 @@ private fun SettingsScreenContent(
                 )
             }
         }
+
+        Text(
+            text = "${stringResource(id = R.string.settings_version)}: ${BuildConfig.VERSION_NAME} - ${BuildConfig.BUILD_TYPE}",
+            color = MaterialTheme.colorScheme.outline,
+            style = MaterialTheme.typography.labelSmall,
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .align(Alignment.CenterHorizontally)
+        )
     }
 }
 

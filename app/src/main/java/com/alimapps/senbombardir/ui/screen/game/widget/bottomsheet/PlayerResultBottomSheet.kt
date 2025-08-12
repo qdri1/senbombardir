@@ -109,7 +109,7 @@ fun PlayerResultBottomSheet(
         }
         Text(
             text = stringResource(id = R.string.result_correction_text),
-            color = MaterialTheme.colorScheme.outline,
+            color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .padding(vertical = 8.dp)
