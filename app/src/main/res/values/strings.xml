@@ -101,6 +101,10 @@
     <string name="go_back_title">Вы точно хотите выйти из этой страницы?</string>
     <string name="game_count">cыграно игр: %s</string>
 
+    <string name="sound_league_chemp">Лига\nЧемпионов</string>
+    <string name="sound_goal_fans">Стадион\nГоооооол</string>
+    <string name="sound_anarbekov">Темирлан\nАнарбеков</string>
+    <string name="sound_uo_uo_uo">UO UO UO</string>
     <string name="sound_whistle">Свисток</string>
     <string name="sound_stadium_applause">Стадион\nшапалақ</string>
     <string name="sound_girls_applause">Қыздар\nшапалақ</string>
