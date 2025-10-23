@@ -6,7 +6,7 @@ enum class GameSounds(val stringRes: Int, val rawRes: Int) {
     Whistle(stringRes = R.string.sound_whistle, rawRes = R.raw.whistle),
     LeagueChemp(stringRes = R.string.sound_league_chemp, rawRes = R.raw.sound_league_chemp),
     GoalFans(stringRes = R.string.sound_goal_fans, rawRes = R.raw.sound_goal_fans),
-//    Anarbekov(stringRes = R.string.sound_anarbekov, rawRes = R.raw.sound_anarbekov),
+    Anarbekov(stringRes = R.string.sound_anarbekov, rawRes = R.raw.sound_anarbekov),
     UoUoUo(stringRes = R.string.sound_uo_uo_uo, rawRes = R.raw.sound_uo_uo_uo),
     StadiumApplause(stringRes = R.string.sound_stadium_applause, rawRes = R.raw.stadium_applause),
     GirlsApplause(stringRes = R.string.sound_girls_applause, rawRes = R.raw.girls_applause),
