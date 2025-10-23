@@ -20,7 +20,7 @@ import com.alimapps.senbombardir.data.model.TeamModel
         PlayerHistoryModel::class,
     ],
     version = 2,
-    exportSchema = false
+    exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
 
