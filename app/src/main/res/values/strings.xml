@@ -82,6 +82,21 @@
     <string name="team_option_players_title">выберите автора</string>
     <string name="team_option_players_auto_goal">Автогол</string>
 
+    <string name="best_player_option_best_player">Лучший игрок</string>
+    <string name="best_player_option_goals">Лучший бомбардир️</string>
+    <string name="best_player_option_assists">Лучший ассист️</string>
+    <string name="best_player_option_saves">Лучший сейв</string>
+    <string name="best_player_option_dribbles">Лучший дриблинг</string>
+    <string name="best_player_option_passes">Лучший пас</string>
+    <string name="best_player_option_shots">Лучший удар</string>
+
+    <string name="text_goal">гол</string>
+    <string name="text_assist">ассист</string>
+    <string name="text_dribble">дриблинг</string>
+    <string name="text_pass">пас</string>
+    <string name="text_shot">удар</string>
+    <string name="text_save">сейв</string>
+
     <string name="text_to_speech_goal">Гол от %s</string>
     <string name="text_to_speech_assist">Ассист от %s</string>
     <string name="text_to_speech_dribble">Красивый проход от %s</string>
@@ -116,6 +131,7 @@
     <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
     <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
 
+    <string name="function_best_players">Лучшие игроки</string>
     <string name="function_edit">Редактировать игру</string>
     <string name="function_clear_result">Сбросить результаты этой игры</string>
     <string name="function_info">Инфо</string>

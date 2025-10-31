@@ -21,6 +21,7 @@ import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
+import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
@@ -33,6 +34,7 @@ import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toPlayerModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
+import com.alimapps.senbombardir.ui.model.types.BestPlayerOption
 import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
@@ -164,7 +166,8 @@ class GameViewModel(
                     playerRepository.getPlayers(teamUiModel.id)
                 }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
                     .thenByDescending { it.assists }
-                    .thenByDescending { it.saves + it.dribbles + it.shots + it.passes }
+                    .thenByDescending { it.saves }
+                    .thenByDescending { it.dribbles + it.shots + it.passes }
                     .thenByDescending { it.teamPoints }
                     .thenByDescending { it.teamGoalsDifference }
                     .thenBy { it.teamName }
@@ -268,6 +271,44 @@ class GameViewModel(
         }
 
         fetchGame()
+    }
+
+    private fun onBestPlayersClicked() {
+        val bestPlayers = mutableListOf<BestPlayerUiModel>()
+        val playerList = uiState.value.playerUiModelList
+
+        playerList.maxByOrNull {
+            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots
+        }?.let { best ->
+            bestPlayers.add(
+                BestPlayerUiModel(
+                    option = BestPlayerOption.BestPlayer,
+                    playerUiModel = best
+                )
+            )
+        }
+
+        val statOptions = listOf(
+            Triple(BestPlayerOption.Goals, { it: PlayerUiModel -> it.goals > 0 }, { it: PlayerUiModel -> it.goals }),
+            Triple(BestPlayerOption.Assists, { it: PlayerUiModel -> it.assists > 0 }, { it: PlayerUiModel -> it.assists }),
+            Triple(BestPlayerOption.Saves, { it: PlayerUiModel -> it.saves > 0 }, { it: PlayerUiModel -> it.saves }),
+            Triple(BestPlayerOption.Dribbles, { it: PlayerUiModel -> it.dribbles > 0 }, { it: PlayerUiModel -> it.dribbles }),
+            Triple(BestPlayerOption.Passes, { it: PlayerUiModel -> it.passes > 0 }, { it: PlayerUiModel -> it.passes }),
+            Triple(BestPlayerOption.Shots, { it: PlayerUiModel -> it.shots > 0 }, { it: PlayerUiModel -> it.shots }),
+        )
+
+        statOptions.forEach { (option, filter, selector) ->
+            playerList.filter(filter).maxByOrNull(selector)?.let { best ->
+                bestPlayers.add(
+                    BestPlayerUiModel(
+                        option = option,
+                        playerUiModel = best
+                    )
+                )
+            }
+        }
+
+        setEffectSafely(GameEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
     }
 
     private fun onEditGameClicked() {
@@ -1134,7 +1175,8 @@ class GameViewModel(
             playerRepository.getPlayers(teamUiModel.id)
         }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
             .thenByDescending { it.assists }
-            .thenByDescending { it.saves + it.dribbles + it.shots + it.passes }
+            .thenByDescending { it.saves }
+            .thenByDescending { it.dribbles + it.shots + it.passes }
             .thenByDescending { it.teamPoints }
             .thenByDescending { it.teamGoalsDifference }
             .thenBy { it.teamName }
@@ -1291,6 +1333,7 @@ class GameViewModel(
 
     private fun onFunctionClicked(function: GameFunction) {
         when (function) {
+            GameFunction.BestPlayers -> onBestPlayersClicked()
             GameFunction.Edit -> onEditGameClicked()
             GameFunction.ClearResults -> onClearResultsClicked()
             GameFunction.Info -> onInfoClicked()

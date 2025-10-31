@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
@@ -50,6 +51,7 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.LiveGameBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.SoundsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameInfoBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.LiveGameResultBottomSheet
@@ -91,6 +93,7 @@ private fun GameScreenContent(
     var showFinishGameConfirmation by remember { mutableStateOf(false) }
     var showGoBackConfirmation by remember { mutableStateOf(false) }
     var showGameInfo by remember { mutableStateOf(false) }
+    var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
     var liveGameResultUiModel by remember { mutableStateOf<LiveGameResultUiModel?>(null) }
 
@@ -128,6 +131,7 @@ private fun GameScreenContent(
                 is GameEffect.ShowFinishGameConfirmationBottomSheet -> showFinishGameConfirmation = true
                 is GameEffect.ShowGoBackConfirmationBottomSheet -> showGoBackConfirmation = true
                 is GameEffect.ShowGameInfoBottomSheet -> showGameInfo = true
+                is GameEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
                 is GameEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
@@ -302,6 +306,12 @@ private fun GameScreenContent(
         showGameInfo -> {
             GameInfoBottomSheet(
                 onDismissed = { showGameInfo = false },
+            )
+        }
+        bestPlayers.isNotEmpty() -> {
+            BestPlayersBottomSheet(
+                bestPlayers = bestPlayers,
+                onDismissed = { bestPlayers = emptyList() },
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.screen.game
 
+import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
@@ -19,5 +20,6 @@ sealed interface GameEffect : DebounceEffect {
     data object ShowFinishGameConfirmationBottomSheet : GameEffect
     data object ShowGoBackConfirmationBottomSheet : GameEffect
     data object ShowGameInfoBottomSheet : GameEffect
+    class ShowBestPlayersBottomSheet(val bestPlayers: List<BestPlayerUiModel>) : GameEffect
     class ShowSnackbar(val stringRes: Int) : GameEffect
 }
