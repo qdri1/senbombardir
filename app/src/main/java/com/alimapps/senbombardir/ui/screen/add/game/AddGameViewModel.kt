@@ -1,10 +1,11 @@
 package com.alimapps.senbombardir.ui.screen.add.game
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alimapps.senbombardir.R
@@ -76,18 +77,28 @@ class AddGameViewModel(
     private val _gameRuleState = mutableStateOf<GameRule>(GameRuleTeam3.ONLY_2_GAMES)
     val gameRuleState: State<GameRule> = _gameRuleState
 
-    private val _selectedTeamTabIndex = mutableStateOf(DEFAULT_TAB_INDEX)
+    private val _selectedTeamTabIndex = mutableIntStateOf(DEFAULT_TAB_INDEX)
     val selectedTeamTabIndex: State<Int> = _selectedTeamTabIndex
 
-    var teamColors: List<MutableState<TeamColor>> = List(teamQuantityState.value.quantity) { index ->
-        mutableStateOf(TeamColor.entries[index])
-    }
-    var teamNameFields: List<MutableState<String>> = List(teamQuantityState.value.quantity) {
-        mutableStateOf(String.empty)
-    }
-    var playersTextFields: List<SnapshotStateList<String>> = List(teamQuantityState.value.quantity) {
-        mutableStateListOf<String>().apply { repeat(gameFormatState.value.playerQuantity) { add(String.empty) } }
-    }
+    var teamColors by mutableStateOf(
+        List(teamQuantityState.value.quantity) { index ->
+            mutableStateOf(TeamColor.entries[index])
+        }
+    )
+    var teamNameFields by mutableStateOf(
+        List(teamQuantityState.value.quantity) {
+            mutableStateOf(String.empty)
+        }
+    )
+    var playersTextFields by mutableStateOf(
+        List(teamQuantityState.value.quantity) {
+            mutableStateListOf<String>().apply {
+                repeat(gameFormatState.value.playerQuantity) {
+                    add(String.empty)
+                }
+            }
+        }
+    )
 
     private val _effect = MutableSharedFlow<AddGameEffect>()
     val effect: Flow<AddGameEffect> get() = _effect.debounceEffect()
@@ -108,7 +119,7 @@ class AddGameViewModel(
             is AddGameAction.OnGameFormatSelected -> onGameFormatSelected(action.format)
             is AddGameAction.OnTeamQuantitySelected -> onTeamQuantitySelected(action.teamQuantity)
             is AddGameAction.OnGameRuleSelected -> _gameRuleState.value = action.rule
-            is AddGameAction.OnTeamTabClicked -> _selectedTeamTabIndex.value = action.tabIndex
+            is AddGameAction.OnTeamTabClicked -> _selectedTeamTabIndex.intValue = action.tabIndex
             is AddGameAction.OnTeamColorClicked -> setEffectSafely(AddGameEffect.ShowColorsBottomSheet)
             is AddGameAction.OnTeamColorSelected -> onTeamColorSelected(action.color)
             is AddGameAction.OnTeamNameValueChanged -> onTeamNameValueChanged(action.tabIndex, action.value)
@@ -155,7 +166,7 @@ class AddGameViewModel(
 
     private fun onTeamQuantitySelected(teamQuantity: TeamQuantity) {
         if (selectedTeamTabIndex.value >= teamQuantity.quantity ) {
-            _selectedTeamTabIndex.value = DEFAULT_TAB_INDEX
+            _selectedTeamTabIndex.intValue = DEFAULT_TAB_INDEX
         }
         _teamQuantityState.value = teamQuantity
 
