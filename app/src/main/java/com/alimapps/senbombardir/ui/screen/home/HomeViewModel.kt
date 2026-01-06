@@ -3,8 +3,6 @@ package com.alimapps.senbombardir.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alimapps.senbombardir.data.repository.GameRepository
-import com.alimapps.senbombardir.data.repository.PlayerRepository
-import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.screen.game.result.DeleteGameResult
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import kotlinx.coroutines.delay
@@ -17,8 +15,6 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val gameRepository: GameRepository,
-    private val teamRepository: TeamRepository,
-    private val playerRepository: PlayerRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())

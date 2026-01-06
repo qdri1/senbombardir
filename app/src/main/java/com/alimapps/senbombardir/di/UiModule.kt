@@ -19,8 +19,6 @@ val uiModule = module {
     viewModel {
         HomeViewModel(
             gameRepository = get(),
-            teamRepository = get(),
-            playerRepository = get(),
         )
     }
 
