@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
@@ -124,82 +127,90 @@ private fun HomeScreenContent(
                                     .background(MaterialTheme.colorScheme.surface)
                                     .clickable { onAction(HomeAction.OnGameCardClicked(gameId = item.id)) }
                                     .padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(12.dp),
                             ) {
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
-                                    Text(
-                                        text = stringResource(id = R.string.home_game_name),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelMedium,
-                                    )
                                     Text(
                                         text = item.name,
                                         color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelSmall,
+                                        style = MaterialTheme.typography.displayLarge,
+                                        fontSize = 32.sp,
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(1.dp)
+                                            .background(MaterialTheme.colorScheme.background)
                                     )
                                 }
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(6.dp),
                                 ) {
-                                    Text(
-                                        text = stringResource(id = R.string.home_game_format),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelMedium,
-                                    )
-                                    Text(
-                                        text = item.gameFormat.format,
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
-                                }
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.home_game_team_quantity),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelMedium,
-                                    )
-                                    Text(
-                                        text = item.teamQuantity.quantity.toString(),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
-                                }
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.home_game_time),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelMedium,
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.time_in_minutes, item.timeInMinutes),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
-                                }
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.home_game_rule),
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelMedium,
-                                    )
-                                    Text(
-                                        text = when (val gameRule = item.gameRule) {
-                                            is GameRuleTeam2 -> stringResource(id = gameRule.stringRes)
-                                            is GameRuleTeam3 -> stringResource(id = gameRule.stringRes)
-                                            is GameRuleTeam4 -> stringResource(id = gameRule.stringRes)
-                                            else -> String.empty
-                                        },
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.labelSmall,
-                                    )
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.home_game_format),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelMedium,
+                                        )
+                                        Text(
+                                            text = item.gameFormat.format,
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelSmall,
+                                        )
+                                    }
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.home_game_team_quantity),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelMedium,
+                                        )
+                                        Text(
+                                            text = item.teamQuantity.quantity.toString(),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelSmall,
+                                        )
+                                    }
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.home_game_time),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelMedium,
+                                        )
+                                        Text(
+                                            text = stringResource(id = R.string.time_in_minutes, item.timeInMinutes),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelSmall,
+                                        )
+                                    }
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.home_game_rule),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelMedium,
+                                        )
+                                        Text(
+                                            text = when (val gameRule = item.gameRule) {
+                                                is GameRuleTeam2 -> stringResource(id = gameRule.stringRes)
+                                                is GameRuleTeam3 -> stringResource(id = gameRule.stringRes)
+                                                is GameRuleTeam4 -> stringResource(id = gameRule.stringRes)
+                                                else -> String.empty
+                                            },
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelSmall,
+                                        )
+                                    }
                                 }
                             }
                         }
