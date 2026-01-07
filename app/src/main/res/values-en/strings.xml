@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Dop Tep</string>
+
+    <string name="tab_home">Home</string>
+    <string name="tab_settings">Settings</string>
+
+    <string name="add_game">Add game</string>
+    <string name="update_game">Edit game</string>
+
+    <string name="game_empty">You do not have any games yet</string>
+    <string name="game_name">Game name</string>
+    <string name="game_time">Match time (minutes)</string>
+    <string name="game_format">Game format</string>
+
+    <string name="game_rules">Game rules</string>
+    <string name="game_rule_2_change_side">Change sides after each half</string>
+    <string name="game_rule_2_stay_side">Do not change sides</string>
+    <string name="game_rule_3_only_2_games">Exactly 2 games</string>
+    <string name="game_rule_3_winner_stay_2">Winner stays (max. 2 games)</string>
+    <string name="game_rule_3_winner_stay_3">Winner stays (max. 3 games)</string>
+    <string name="game_rule_3_winner_stay_4">Winner stays (max. 4 games)</string>
+    <string name="game_rule_3_winner_stay_unlimited">Winner always stays</string>
+    <string name="game_rule_4_only_3_games">Exactly 3 games</string>
+    <string name="game_rule_4_winner_stay_3">Winner stays (max. 3 games)</string>
+    <string name="game_rule_4_winner_stay_4">Winner stays (max. 4 games)</string>
+    <string name="game_rule_4_winner_stay_5">Winner stays (max. 5 games)</string>
+    <string name="game_rule_4_winner_stay_6">Winner stays (max. 6 games)</string>
+    <string name="game_rule_4_winner_stay_unlimited">Winner always stays</string>
+
+    <string name="game_name_empty_text">Game name is required</string>
+    <string name="game_time_empty_text">Match time is required</string>
+    <string name="team_name_empty_text">Team name is required</string>
+
+    <string name="team_quantity">Number of teams</string>
+    <string name="team_number">T-%s</string>
+    <string name="team_name">Team name</string>
+    <string name="choose_team_color">Choose color</string>
+
+    <string name="player_number">Player %s</string>
+    <string name="add_player">Add player</string>
+    <string name="save">Save</string>
+    <string name="save_success">Saved</string>
+
+    <string name="result_correction_text">Attention! This section is intended for correcting incorrect results. To add a new result, tap the left or right team name during the game.</string>
+
+    <string name="button_yes">Yes</string>
+    <string name="button_no">No</string>
+
+    <string name="home_game_name">Name:</string>
+    <string name="home_game_format">Format:</string>
+    <string name="home_game_team_quantity">Teams:</string>
+    <string name="home_game_rule">Rule:</string>
+    <string name="home_game_time">Time:</string>
+
+    <string name="time_in_minutes">%d minutes</string>
+
+    <string name="team_result_place">#</string>
+    <string name="team_result_name">Team</string>
+    <string name="team_result_games">G</string>
+    <string name="team_result_wins">W</string>
+    <string name="team_result_draws">D</string>
+    <string name="team_result_loses">L</string>
+    <string name="team_result_goals_conceded">+/-</string>
+    <string name="team_result_goals_difference">GD</string>
+    <string name="team_result_points">PTS</string>
+
+    <string name="player_result_place">#</string>
+    <string name="player_result_name">Player</string>
+    <string name="player_result_goals">⚽️</string>
+    <string name="player_result_assists">A</string>
+    <string name="player_result_dribbles">D</string>
+    <string name="player_result_passes">P</string>
+    <string name="player_result_shots">SH</string>
+    <string name="player_result_saves">SV</string>
+
+    <string name="team_option_goal">Goal ⚽️</string>
+    <string name="team_option_assist">Assist</string>
+    <string name="team_option_dribble">Dribble</string>
+    <string name="team_option_pass">Pass</string>
+    <string name="team_option_shot">Shot</string>
+    <string name="team_option_save">Save</string>
+    <string name="team_option_players_title">Select player</string>
+    <string name="team_option_players_auto_goal">Own goal</string>
+
+    <string name="best_player_option_best_player">Best player 🔥</string>
+    <string name="best_player_option_goals">Top scorer ⚽️</string>
+    <string name="best_player_option_assists">Best assists</string>
+    <string name="best_player_option_saves">Best saves</string>
+    <string name="best_player_option_dribbles">Best dribbles</string>
+    <string name="best_player_option_passes">Best passes</string>
+    <string name="best_player_option_shots">Best shots</string>
+
+    <string name="text_goal">goal</string>
+    <string name="text_assist">assist</string>
+    <string name="text_dribble">dribble</string>
+    <string name="text_pass">pass</string>
+    <string name="text_shot">shot</string>
+    <string name="text_save">save</string>
+
+    <string name="text_to_speech_goal">Goal by %s</string>
+    <string name="text_to_speech_assist">Assist by %s</string>
+    <string name="text_to_speech_dribble">Nice dribble by %s</string>
+    <string name="text_to_speech_pass">Great pass by %s</string>
+    <string name="text_to_speech_shot">Powerful shot by %s</string>
+    <string name="text_to_speech_save">Great save by %s</string>
+
+    <string name="stay_team_selection_title">Select the team that stays on the field</string>
+    <string name="delete_game_title">Are you sure you want to delete this game?</string>
+    <string name="clear_results_title">Are you sure you want to clear the results of this game?</string>
+    <string name="clear_all_results_title">Are you sure you want to clear all game results?</string>
+    <string name="finish_game_title">Are you sure you want to finish this match?</string>
+    <string name="finish_game_snackbar_text">You must finish the match to clear the results!</string>
+    <string name="delete_game_snackbar_text">You must finish the match to delete the game!</string>
+    <string name="update_game_snackbar_text">You must finish the match to edit the game!</string>
+    <string name="open_game_results_snackbar_text">You must finish the match to view all results!</string>
+    <string name="go_back_title">Are you sure you want to leave this page?</string>
+    <string name="game_count">games played: %s</string>
+
+    <string name="sound_league_chemp">Champions\nLeague</string>
+    <string name="sound_goal_fans">Stadium\nGooooal</string>
+    <string name="sound_anarbekov">Temirlan\nAnarbekov</string>
+    <string name="sound_uo_uo_uo">UO UO UO</string>
+    <string name="sound_whistle">Whistle</string>
+    <string name="sound_stadium_applause">Stadium\napplause</string>
+    <string name="sound_girls_applause">Girls\napplause</string>
+    <string name="sound_bilgenin_istep_jatyr">Білгенін\nістеп жатыр</string>
+    <string name="sound_goal_save">Не деген\nсейв</string>
+    <string name="sound_suiii">Suiii</string>
+    <string name="sound_suiii_full">Suiiiii\nFull</string>
+    <string name="sound_goal_goal_goal">Goal Goal\nGoal</string>
+    <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
+    <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
+
+    <string name="function_best_players">Best players</string>
+    <string name="function_edit">Edit game</string>
+    <string name="function_clear_result">Clear this game results</string>
+    <string name="function_info">Info</string>
+    <string name="function_all_results">All games results</string>
+    <string name="function_remove">Delete game</string>
+
+    <string name="live_game_info_replace_teams">Swap left and right teams</string>
+    <string name="live_game_info_pause_timer">Pause timer</string>
+    <string name="live_game_info_play_timer">Resume timer</string>
+
+    <string name="teams_block_info_games">Games</string>
+    <string name="teams_block_info_wins">Wins</string>
+    <string name="teams_block_info_draws">Draws</string>
+    <string name="teams_block_info_loses">Losses</string>
+    <string name="teams_block_info_goals_conceded">Goals scored/conceded (+/-)</string>
+    <string name="teams_block_info_goals_difference">Goal difference</string>
+    <string name="teams_block_info_points">Points</string>
+
+    <string name="players_block_info_goals">Goal</string>
+    <string name="players_block_info_assists">Assist</string>
+    <string name="players_block_info_saves">Best save</string>
+    <string name="players_block_info_dribbles">Nice dribble</string>
+    <string name="players_block_info_shots">Powerful accurate shot</string>
+    <string name="players_block_info_passes">Nice pass</string>
+
+    <string name="settings_item_language">Language</string>
+    <string name="settings_item_share">Share</string>
+    <string name="settings_item_star">Rate</string>
+    <string name="settings_item_telegram">Telegram group</string>
+    <string name="settings_version">Version</string>
+
+    <string name="choose_language">Choose language</string>
+
+    <string name="telegram_not_installed">Telegram is not installed!</string>
+
+</resources>

@@ -21,6 +21,7 @@ class SettingsViewModel : ViewModel() {
 
     private fun onSettingsItemClicked(item: SettingsItemType) {
         when (item) {
+            SettingsItemType.Language -> setEffectSafely(SettingsEffect.ShowSelectLanguage)
             SettingsItemType.Share -> setEffectSafely(SettingsEffect.Share)
             SettingsItemType.Evaluate -> setEffectSafely(SettingsEffect.OpenPlayMarket)
             SettingsItemType.Telegram -> setEffectSafely(SettingsEffect.OpenTelegram)

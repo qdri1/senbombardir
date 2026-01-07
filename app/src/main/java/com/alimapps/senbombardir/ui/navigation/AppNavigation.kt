@@ -11,13 +11,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -30,6 +35,8 @@ import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameScreen
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeScreen
+import com.alimapps.senbombardir.ui.screen.language.AppLanguage
+import com.alimapps.senbombardir.ui.screen.language.LanguageBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import com.alimapps.senbombardir.ui.screen.settings.SettingsScreen
@@ -37,8 +44,12 @@ import com.alimapps.senbombardir.utils.orDefault
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    showLanguage: Boolean,
+    onLanguageSelected: (AppLanguage) -> Unit,
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -46,6 +57,9 @@ fun AppNavigation() {
         BottomNavItem.Home,
         BottomNavItem.Settings,
     )
+
+    var showLanguageSheet by rememberSaveable { mutableStateOf(showLanguage) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Scaffold(
         bottomBar = {
@@ -101,7 +115,10 @@ fun AppNavigation() {
                     popEnterTransition = { fadeIn(tween(300)) },
                     popExitTransition = { fadeOut(tween(300)) },
                 ) {
-                    SettingsScreen(navController = navController)
+                    SettingsScreen(
+                        navController = navController,
+                        onLanguageClick = { showLanguageSheet = true },
+                    )
                 }
 
                 composable(NavigationItem.AddGame.route) { backStackEntry ->
@@ -125,6 +142,17 @@ fun AppNavigation() {
                         viewModel = koinViewModel<GameResultsViewModel> { parametersOf(gameId) }
                     )
                 }
+            }
+
+            if (showLanguageSheet) {
+                LanguageBottomSheet(
+                    sheetState = sheetState,
+                    onDismiss = { showLanguageSheet = false },
+                    onLanguageSelected = { language ->
+                        onLanguageSelected(language)
+                        showLanguageSheet = false
+                    }
+                )
             }
         }
     }

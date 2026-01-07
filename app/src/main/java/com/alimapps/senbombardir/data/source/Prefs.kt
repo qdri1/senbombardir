@@ -8,4 +8,8 @@ class Prefs(private val preferences: SharedPreferences) {
     var timerValue: Long
         get() = preferences.getLong("LIVE_GAME_TIMER_VALUE", 0L)
         set(value) = preferences.edit { putLong("LIVE_GAME_TIMER_VALUE", value) }
+
+    var selectedLanguage: String?
+        get() = preferences.getString("SELECTED_LANGUAGE", null)
+        set(value) = preferences.edit { putString("SELECTED_LANGUAGE", value) }
 }

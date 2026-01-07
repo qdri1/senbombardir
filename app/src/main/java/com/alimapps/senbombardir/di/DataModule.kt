@@ -3,6 +3,7 @@ package com.alimapps.senbombardir.di
 import android.content.Context
 import androidx.room.Room
 import com.alimapps.senbombardir.data.repository.GameRepository
+import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
 import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
@@ -63,5 +64,9 @@ val dataModule = module {
 
     single {
         PlayerHistoryRepository(teamHistoryDao = get(), playerHistoryDao = get())
+    }
+
+    single {
+        LanguageRepository(prefs = get())
     }
 }

@@ -31,7 +31,6 @@
     <string name="game_time_empty_text">Нужно заполнить Время матча</string>
     <string name="team_name_empty_text">Нужно заполнить Название команды</string>
 
-
     <string name="team_quantity">Количество команд</string>
     <string name="team_number">К-%s</string>
     <string name="team_name">Название команды</string>
@@ -157,11 +156,13 @@
     <string name="players_block_info_shots">Мощьный точный удар</string>
     <string name="players_block_info_passes">Красивый пас</string>
 
+    <string name="settings_item_language">Язык</string>
     <string name="settings_item_share">Поделиться</string>
     <string name="settings_item_star">Оценить</string>
     <string name="settings_item_telegram">Telegram группа</string>
     <string name="settings_version">Версия</string>
 
+    <string name="choose_language">Выберите язык</string>
     <string name="telegram_not_installed">У Вас не установлен Telegram!</string>
 
 </resources>

@@ -2,7 +2,6 @@ package com.alimapps.senbombardir.ui.screen.settings
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +33,7 @@ import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.BuildConfig
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
+import androidx.core.net.toUri
 
 private const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.alimapps.senbombardir"
 private const val TELEGRAM_URL = "https://t.me/+_Ur1Ixp_1bNhNTc6"
@@ -41,12 +41,14 @@ private const val TELEGRAM_URL = "https://t.me/+_Ur1Ixp_1bNhNTc6"
 @Composable
 fun SettingsScreen(
     navController: NavController,
+    onLanguageClick: () -> Unit,
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
     SettingsScreenContent(
         navController = navController,
         viewModel = viewModel,
         onAction = viewModel::action,
+        onLanguageClick = onLanguageClick,
     )
 }
 
@@ -55,12 +57,14 @@ private fun SettingsScreenContent(
     navController: NavController,
     viewModel: SettingsViewModel,
     onAction: (SettingsAction) -> Unit,
+    onLanguageClick: () -> Unit,
 ) {
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
+                is SettingsEffect.ShowSelectLanguage -> onLanguageClick()
                 is SettingsEffect.Share -> openShareIntent(context)
                 is SettingsEffect.OpenPlayMarket -> openPlayMarket(context)
                 is SettingsEffect.OpenTelegram -> openTelegram(context)
@@ -122,14 +126,14 @@ private fun openShareIntent(context: Context) {
 private fun openPlayMarket(context: Context) {
     context.startActivity(
         Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse(GOOGLE_PLAY_URL)
+            data = GOOGLE_PLAY_URL.toUri()
         }
     )
 }
 
 private fun openTelegram(context: Context) {
     try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(TELEGRAM_URL)))
+        context.startActivity(Intent(Intent.ACTION_VIEW, TELEGRAM_URL.toUri()))
     } catch (e: Exception) {
         Toast.makeText(context, context.getString(R.string.telegram_not_installed), Toast.LENGTH_LONG).show()
     }
