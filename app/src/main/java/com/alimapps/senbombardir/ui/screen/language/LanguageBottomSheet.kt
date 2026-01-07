@@ -27,7 +27,8 @@ fun LanguageBottomSheet(
 ) {
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Column(
             modifier = Modifier
@@ -51,7 +52,7 @@ fun LanguageBottomSheet(
                 ) {
                     Text(
                         text = language.title,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
