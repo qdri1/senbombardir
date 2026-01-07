@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
@@ -106,9 +108,16 @@ fun LiveGameBlock(
                 ) {
                     Text(
                         text = liveGameUiModel.leftTeamName,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 12.sp,
+                            maxFontSize = 16.sp,
+                            stepSize = 1.sp
+                        ),
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
                 Box(
@@ -184,9 +193,16 @@ fun LiveGameBlock(
                 ) {
                     Text(
                         text = liveGameUiModel.rightTeamName,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 12.sp,
+                            maxFontSize = 16.sp,
+                            stepSize = 1.sp
+                        ),
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
