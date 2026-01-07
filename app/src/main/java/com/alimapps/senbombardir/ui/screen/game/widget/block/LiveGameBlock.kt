@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
@@ -59,7 +60,8 @@ fun LiveGameBlock(
         Text(
             text = timerValueState.value,
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.displayMedium,
+            style = MaterialTheme.typography.displayLarge,
+            fontSize = 36.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
@@ -70,7 +72,7 @@ fun LiveGameBlock(
                 contentDescription = "GameScreenChangeIcon",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .size(28.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
                     .clickable { onAction(GameAction.OnTimerClicked) }
             )
@@ -81,7 +83,7 @@ fun LiveGameBlock(
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .size(28.dp)
+                    .size(48.dp)
                     .clip(CircleShape)
                     .clickable { onAction(GameAction.OnTeamChangeIconClicked) }
             )
@@ -107,17 +109,18 @@ fun LiveGameBlock(
                 )
                 Box(
                     modifier = Modifier
-                        .size(16.dp)
+                        .size(24.dp)
                         .background(
                             color = parseHexColor(liveGameUiModel.leftTeamColor.hexColor),
-                            shape = RoundedCornerShape(4.dp),
+                            shape = RoundedCornerShape(6.dp),
                         )
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(6.dp))
                 )
                 Text(
                     text = liveGameUiModel.leftTeamGoals.toString(),
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 32.sp,
                     modifier = Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -134,12 +137,14 @@ fun LiveGameBlock(
                 Text(
                     text = "-",
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 32.sp,
                 )
                 Text(
                     text = liveGameUiModel.rightTeamGoals.toString(),
                     color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontSize = 32.sp,
                     modifier = Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
@@ -155,12 +160,12 @@ fun LiveGameBlock(
                 )
                 Box(
                     modifier = Modifier
-                        .size(16.dp)
+                        .size(24.dp)
                         .background(
                             color = parseHexColor(liveGameUiModel.rightTeamColor.hexColor),
-                            shape = RoundedCornerShape(4.dp),
+                            shape = RoundedCornerShape(6.dp),
                         )
-                        .clip(RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(6.dp))
                 )
                 Text(
                     text = liveGameUiModel.rightTeamName,
