@@ -16,6 +16,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.repository.GameRepository
+import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
 import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
@@ -43,6 +44,7 @@ import com.alimapps.senbombardir.ui.model.types.GameSounds
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.screen.add.game.result.UpdateGameResult
+import com.alimapps.senbombardir.ui.screen.language.AppLanguage
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.utils.orDefault
@@ -67,6 +69,7 @@ class GameViewModel(
     private val teamHistoryRepository: TeamHistoryRepository,
     private val playerRepository: PlayerRepository,
     private val playerHistoryRepository: PlayerHistoryRepository,
+    private val languageRepository: LanguageRepository,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
 
@@ -100,9 +103,10 @@ class GameViewModel(
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            textToSpeech.setLanguage(Locale("ru"))
+            val language = languageRepository.getSelectedLanguage() ?: AppLanguage.RU
+            textToSpeech.language = Locale.forLanguageTag(language.code)
             textToSpeech.voices
-                ?.find { it.name.contains("ru", ignoreCase = true) }
+                ?.find { it.name.contains(language.code, ignoreCase = true) }
                 ?.let { textToSpeech.voice = it }
             isTextToSpeechInitialized = true
         }
@@ -1370,6 +1374,7 @@ class GameViewModel(
 
     private fun Long.toStringTime(): String =
         String.format(
+            Locale.ENGLISH,
             "%02d:%02d",
             TimeUnit.MILLISECONDS.toMinutes(this) % TimeUnit.HOURS.toMinutes(1),
             TimeUnit.MILLISECONDS.toSeconds(this) % TimeUnit.MINUTES.toSeconds(1)

@@ -98,12 +98,12 @@
     <string name="text_shot">удар</string>
     <string name="text_save">сейв</string>
 
-    <string name="text_to_speech_goal">%s гол соқты</string>
-    <string name="text_to_speech_assist">%s ассист жасады</string>
-    <string name="text_to_speech_dribble">%s әдемі дриблинг жасады</string>
-    <string name="text_to_speech_pass">%s керемет пас берді</string>
-    <string name="text_to_speech_shot">%s күшті соққы жасады</string>
-    <string name="text_to_speech_save">%s керемет сейв жасады</string>
+    <string name="text_to_speech_goal">Гол от %s</string>
+    <string name="text_to_speech_assist">Ассист от %s</string>
+    <string name="text_to_speech_dribble">Красивый проход от %s</string>
+    <string name="text_to_speech_pass">Красивый пас от %s</string>
+    <string name="text_to_speech_shot">Мощьный удар от %s</string>
+    <string name="text_to_speech_save">Лучший сейв от %s</string>
 
     <string name="stay_team_selection_title">Алаңда қалатын команданы таңдаңыз</string>
     <string name="delete_game_title">Бұл ойынды жоюды қалайсыз ба?</string>
