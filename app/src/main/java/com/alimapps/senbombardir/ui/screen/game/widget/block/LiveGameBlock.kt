@@ -94,21 +94,26 @@ fun LiveGameBlock(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = liveGameUiModel.leftTeamName,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.End,
-                    style = MaterialTheme.typography.bodySmall,
+                Box(
                     modifier = Modifier
                         .weight(1f)
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = null,
                             onClick = { onAction(GameAction.OnLeftTeamClicked) }
-                        )
-                )
+                        ),
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    Text(
+                        text = liveGameUiModel.leftTeamName,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
                 Box(
                     modifier = Modifier
+                        .padding(end = 4.dp)
                         .size(24.dp)
                         .background(
                             color = parseHexColor(liveGameUiModel.leftTeamColor.hexColor),
@@ -160,6 +165,7 @@ fun LiveGameBlock(
                 )
                 Box(
                     modifier = Modifier
+                        .padding(start = 4.dp)
                         .size(24.dp)
                         .background(
                             color = parseHexColor(liveGameUiModel.rightTeamColor.hexColor),
@@ -167,10 +173,7 @@ fun LiveGameBlock(
                         )
                         .clip(RoundedCornerShape(6.dp))
                 )
-                Text(
-                    text = liveGameUiModel.rightTeamName,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodySmall,
+                Box(
                     modifier = Modifier
                         .weight(1f)
                         .clickable(
@@ -178,7 +181,14 @@ fun LiveGameBlock(
                             indication = null,
                             onClick = { onAction(GameAction.OnRightTeamClicked) }
                         )
-                )
+                ) {
+                    Text(
+                        text = liveGameUiModel.rightTeamName,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
             when {
                 uiState.showLeftTeamOptionsDropdown -> LeftTeamOptionsDropdown(onAction)
