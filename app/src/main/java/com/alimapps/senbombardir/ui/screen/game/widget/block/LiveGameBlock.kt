@@ -109,14 +109,16 @@ fun LiveGameBlock(
                     Text(
                         text = liveGameUiModel.leftTeamName,
                         autoSize = TextAutoSize.StepBased(
-                            minFontSize = 12.sp,
+                            minFontSize = 10.sp,
                             maxFontSize = 16.sp,
                             stepSize = 1.sp
                         ),
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall,
-                        maxLines = 3,
+                        maxLines = remember(liveGameUiModel.leftTeamName) {
+                            liveGameUiModel.leftTeamMaxLines
+                        },
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
@@ -194,14 +196,16 @@ fun LiveGameBlock(
                     Text(
                         text = liveGameUiModel.rightTeamName,
                         autoSize = TextAutoSize.StepBased(
-                            minFontSize = 12.sp,
+                            minFontSize = 10.sp,
                             maxFontSize = 16.sp,
                             stepSize = 1.sp
                         ),
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodySmall,
-                        maxLines = 3,
+                        maxLines = remember(liveGameUiModel.rightTeamName) {
+                            liveGameUiModel.rightTeamMaxLines
+                        },
                         overflow = TextOverflow.Ellipsis,
                     )
                 }

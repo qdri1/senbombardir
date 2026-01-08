@@ -22,6 +22,18 @@ data class LiveGameUiModel(
 
     val isLeftTeamWin: Boolean get() = leftTeamGoals > rightTeamGoals
     val isRightTeamWin: Boolean get() = leftTeamGoals < rightTeamGoals
+
+    val leftTeamMaxLines: Int
+        get() {
+            val wordsCount = leftTeamName.trim().split("\\s+".toRegex()).size
+            return if (wordsCount > 3) 3 else wordsCount
+        }
+
+    val rightTeamMaxLines: Int
+        get() {
+            val wordsCount = rightTeamName.trim().split("\\s+".toRegex()).size
+            return if (wordsCount > 3) 3 else wordsCount
+        }
 }
 
 fun LiveGameUiModel.toLiveGameModel(): LiveGameModel =

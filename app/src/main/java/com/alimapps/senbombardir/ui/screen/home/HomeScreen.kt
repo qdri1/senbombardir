@@ -137,7 +137,7 @@ private fun HomeScreenContent(
                                         text = item.name,
                                         color = MaterialTheme.colorScheme.onSurface,
                                         style = MaterialTheme.typography.displayLarge,
-                                        fontSize = 32.sp,
+                                        fontSize = 24.sp,
                                     )
                                     Spacer(
                                         modifier = Modifier
