@@ -12,4 +12,12 @@ class Prefs(private val preferences: SharedPreferences) {
     var selectedLanguage: String?
         get() = preferences.getString("SELECTED_LANGUAGE", null)
         set(value) = preferences.edit { putString("SELECTED_LANGUAGE", value) }
+
+    var billingType: String?
+        get() = preferences.getString("BILLING_TYPE", null)
+        set(value) = preferences.edit { putString("BILLING_TYPE", value) }
+
+    var clearResultsRemainingCount: Int
+        get() = preferences.getInt("CLEAR_RESULTS_REMAINING_COUNT", 2)
+        set(value) = preferences.edit { putInt("CLEAR_RESULTS_REMAINING_COUNT", value) }
 }

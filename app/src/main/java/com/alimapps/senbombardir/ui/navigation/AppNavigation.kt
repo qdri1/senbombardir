@@ -35,7 +35,7 @@ import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameScreen
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeScreen
-import com.alimapps.senbombardir.ui.screen.language.AppLanguage
+import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.ui.screen.language.LanguageBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel

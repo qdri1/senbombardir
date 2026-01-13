@@ -65,6 +65,7 @@
     <string name="team_result_goals_difference">ГА</string>
     <string name="team_result_points">ҰП</string>
 
+    <string name="player_result_limited_text">Ойыншылардың нәтижелері тек қосымшаның толық нұсқасында қолжетімді</string>
     <string name="player_result_place">#</string>
     <string name="player_result_name">Ойыншы</string>
     <string name="player_result_goals">⚽️</string>
@@ -114,9 +115,11 @@
     <string name="delete_game_snackbar_text">Ойынды жою үшін матчты аяқтау керек!</string>
     <string name="update_game_snackbar_text">Ойынды өңдеу үшін матчты аяқтау керек!</string>
     <string name="open_game_results_snackbar_text">Барлық нәтижелерге өту үшін матчты аяқтау керек!</string>
+    <string name="open_activation_screen_snackbar_text">Активация бетіне өту үшін матчты аяқтау керек!</string>
     <string name="go_back_title">Бұл беттен шыққыңыз келе ме?</string>
     <string name="game_count">ойын ойналды: %s</string>
 
+    <string name="sound_limited_text">Дыбыстар тек қосымшаның толық нұсқасында қолжетімді</string>
     <string name="sound_league_chemp">Чемпиондар\nлигасы</string>
     <string name="sound_goal_fans">Стадион\nГоооооол</string>
     <string name="sound_anarbekov">Темірлан\nАнарбеков</string>
@@ -167,5 +170,9 @@
     <string name="choose_language">Тілді таңдаңыз</string>
 
     <string name="telegram_not_installed">Сізде Telegram орнатылмаған!</string>
+
+    <string name="activation_orange_text">Сіз қосымшаның шектеулі нұсқасын пайдаланып отырсыз. Кейбір функциялар қолжетімсіз болуы мүмкін. Толық нұсқаны алыңыз.</string>
+    <string name="activation_green_text">Сіз қосымшаның уақытша тегін нұсқасын пайдаланып отырсыз. Ойын нәтижелерін тазартуға қалған әрекеттер саны: %s</string>
+    <string name="activation_button">Толық нұсқа</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.alimapps.senbombardir.di
 
 import android.content.Context
 import androidx.room.Room
+import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
@@ -68,5 +69,9 @@ val dataModule = module {
 
     single {
         LanguageRepository(prefs = get())
+    }
+
+    single {
+        BillingRepository(prefs = get())
     }
 }

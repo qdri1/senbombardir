@@ -48,6 +48,7 @@ val uiModule = module {
             playerRepository = get(),
             playerHistoryRepository = get(),
             languageRepository = get(),
+            billingRepository = get(),
             context = get(),
         )
     }

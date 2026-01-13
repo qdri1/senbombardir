@@ -53,4 +53,6 @@ sealed interface GameAction {
         val liveGameResultUiModel: LiveGameResultUiModel,
         val teamGoalsValue: Int,
     ) : GameAction
+
+    data object OnActivateClicked : GameAction
 }

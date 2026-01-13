@@ -11,7 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.ui.navigation.AppNavigation
-import com.alimapps.senbombardir.ui.screen.language.AppLanguage
+import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import org.koin.android.ext.android.inject
 import java.util.Locale
