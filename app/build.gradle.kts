@@ -91,6 +91,9 @@ dependencies {
     // --- Media ---
     implementation("androidx.media3:media3-exoplayer:1.8.0")
 
+    // --- Billing ---
+    implementation("com.android.billingclient:billing-ktx:8.0.0")
+
     // --- Room Database ---
     implementation("androidx.room:room-runtime:2.8.3")
     implementation("androidx.room:room-ktx:2.8.3")
