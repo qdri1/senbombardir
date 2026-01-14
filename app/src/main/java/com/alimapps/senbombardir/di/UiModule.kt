@@ -2,6 +2,7 @@ package com.alimapps.senbombardir.di
 
 import com.alimapps.senbombardir.ui.navigation.DefaultNavigationResultManager
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
+import com.alimapps.senbombardir.ui.screen.activation.ActivationViewModel
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeViewModel
@@ -59,6 +60,13 @@ val uiModule = module {
             teamHistoryRepository = get(),
             playerHistoryRepository = get(),
             playerRepository = get(),
+            billingRepository = get(),
+        )
+    }
+
+    viewModel {
+        ActivationViewModel(
+            billingRepository = get(),
         )
     }
 }

@@ -36,6 +36,8 @@ import com.alimapps.senbombardir.ui.screen.game.GameScreen
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeScreen
 import com.alimapps.senbombardir.domain.model.AppLanguage
+import com.alimapps.senbombardir.ui.screen.activation.ActivationScreen
+import com.alimapps.senbombardir.ui.screen.activation.ActivationViewModel
 import com.alimapps.senbombardir.ui.screen.language.LanguageBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
@@ -140,6 +142,12 @@ fun AppNavigation(
                     GameResultsScreen(
                         navController = navController,
                         viewModel = koinViewModel<GameResultsViewModel> { parametersOf(gameId) }
+                    )
+                }
+                composable(NavigationItem.Activation.route) {
+                    ActivationScreen(
+                        navController = navController,
+                        viewModel = koinViewModel<ActivationViewModel>()
                     )
                 }
             }

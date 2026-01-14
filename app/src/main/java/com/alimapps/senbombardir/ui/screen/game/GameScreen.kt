@@ -133,6 +133,7 @@ private fun GameScreenContent(
                 is GameEffect.ShowFinishGameConfirmationBottomSheet -> showFinishGameConfirmation = true
                 is GameEffect.ShowGoBackConfirmationBottomSheet -> showGoBackConfirmation = true
                 is GameEffect.ShowGameInfoBottomSheet -> showGameInfo = true
+                is GameEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
                 is GameEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
                 is GameEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))

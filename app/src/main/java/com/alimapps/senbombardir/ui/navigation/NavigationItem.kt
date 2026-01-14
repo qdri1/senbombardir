@@ -25,4 +25,5 @@ sealed class NavigationItem(val route: String) {
     data object GameResults : NavigationItem("gameResults/{gameId}") {
         fun createRoute(gameId: Long) = "gameResults/$gameId"
     }
+    data object Activation : NavigationItem("activation")
 }

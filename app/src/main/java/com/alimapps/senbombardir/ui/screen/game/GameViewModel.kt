@@ -1394,8 +1394,7 @@ class GameViewModel(
             return
         }
 
-        setEffectSafely(GameEffect.ShowSnackbar(R.string.app_name))
-        // TODO open activation screen
+        setEffectSafely(GameEffect.OpenActivationScreen)
     }
 
     private fun playMedia(@RawRes resId: Int, free: Boolean = false) = Handler(Looper.getMainLooper()).post {

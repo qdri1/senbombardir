@@ -170,9 +170,31 @@
     <string name="choose_language">Choose language</string>
 
     <string name="telegram_not_installed">Telegram is not installed!</string>
+    <string name="google_play_not_installed">Google Play is not installed!</string>
 
     <string name="activation_orange_text">You are using a limited version. Some features are unavailable. Upgrade to the full version.</string>
     <string name="activation_green_text">You are using the trial version of the app. Remaining attempts to clear game results: %s</string>
     <string name="activation_button">Activate</string>
+    <string name="activation_title">Activation</string>
+
+    <string name="activation_text_title">What’s included?</string>
+    <string name="activation_text_1">Name voice-over and celebration sounds (goal, assist, etc.)</string>
+    <string name="activation_text_2">Voice-over for the phrase “One minute remaining”</string>
+    <string name="activation_text_3">Voice-over for the phrase “Play until the ball is out”</string>
+    <string name="activation_text_4">List of football sounds</string>
+    <string name="activation_text_5">Player results</string>
+    <string name="activation_text_6">Best players</string>
+    <string name="activation_text_button">Show prices</string>
+
+    <string name="activation_plan_title">Choose your plan</string>
+    <string name="activation_plan_1">Monthly</string>
+    <string name="activation_plan_2">Yearly</string>
+    <string name="activation_plan_3">Unlimited</string>
+    <string name="activation_plan_button">Buy</string>
+    <string name="activation_plan_desc_subscribe">Subscription</string>
+    <string name="activation_plan_desc_lifetime">One-time purchase</string>
+    <string name="activation_plan_select_error_text">Choose plan</string>
+    <string name="activation_plan_activated_text">You have the full version</string>
+    <string name="activation_plan_activated_button">Manage subscription</string>
 
 </resources>
