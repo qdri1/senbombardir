@@ -21,7 +21,11 @@ class BillingManager(
 
     private val billingClient: BillingClient = BillingClient.newBuilder(context)
         .setListener(this)
-        .enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+        .enablePendingPurchases(
+            PendingPurchasesParams.newBuilder()
+                .enableOneTimeProducts()
+                .build()
+        )
         .build()
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
@@ -98,16 +102,17 @@ class BillingManager(
         billingClient.launchBillingFlow(activity, params)
     }
 
-    fun checkPurchase() {
+    fun checkPurchase(productType: String) {
         val params = QueryPurchasesParams.newBuilder()
-            .setProductType(BillingClient.ProductType.INAPP)
+            .setProductType(productType)
             .build()
 
         billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                purchases.find { it.purchaseState == Purchase.PurchaseState.PURCHASED }?.let { purchase ->
+                val purchase = purchases.find { it.purchaseState == Purchase.PurchaseState.PURCHASED }
+                if (purchase != null) {
                     if (purchase.isAcknowledged) {
-                        listener.onPurchaseCheckSuccess()
+                        listener.onPurchaseCheckSuccess(productType)
                     } else {
                         val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
                             .setPurchaseToken(purchase.purchaseToken)
@@ -115,10 +120,12 @@ class BillingManager(
 
                         billingClient.acknowledgePurchase(acknowledgeParams) { billingResult ->
                             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                                listener.onPurchaseCheckSuccess()
+                                listener.onPurchaseCheckSuccess(productType)
                             }
                         }
                     }
+                } else {
+                    listener.onPurchaseCheckNoPurchase(productType)
                 }
             }
         }
@@ -126,6 +133,7 @@ class BillingManager(
 
     interface BillingUpdatesListener {
         fun onPurchaseSuccess()
-        fun onPurchaseCheckSuccess()
+        fun onPurchaseCheckSuccess(productType: String)
+        fun onPurchaseCheckNoPurchase(productType: String)
     }
 }

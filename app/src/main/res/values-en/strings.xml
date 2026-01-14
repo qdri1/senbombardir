@@ -165,6 +165,7 @@
     <string name="settings_item_share">Share</string>
     <string name="settings_item_star">Rate</string>
     <string name="settings_item_telegram">Telegram group</string>
+    <string name="settings_item_activation">Manage subscription</string>
     <string name="settings_version">Version</string>
 
     <string name="choose_language">Choose language</string>

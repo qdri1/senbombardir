@@ -163,6 +163,7 @@
     <string name="settings_item_share">Поделиться</string>
     <string name="settings_item_star">Оценить</string>
     <string name="settings_item_telegram">Telegram группа</string>
+    <string name="settings_item_activation">Управление подпиской</string>
     <string name="settings_version">Версия</string>
 
     <string name="choose_language">Выберите язык</string>

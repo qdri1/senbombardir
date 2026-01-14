@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameScreen
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameScreen
@@ -51,6 +52,7 @@ import org.koin.core.parameter.parametersOf
 fun AppNavigation(
     showLanguage: Boolean,
     onLanguageSelected: (AppLanguage) -> Unit,
+    onActivationPlanSelected: (ActivationPlan) -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -147,7 +149,8 @@ fun AppNavigation(
                 composable(NavigationItem.Activation.route) {
                     ActivationScreen(
                         navController = navController,
-                        viewModel = koinViewModel<ActivationViewModel>()
+                        viewModel = koinViewModel<ActivationViewModel>(),
+                        onActivationPlanSelected = onActivationPlanSelected,
                     )
                 }
             }

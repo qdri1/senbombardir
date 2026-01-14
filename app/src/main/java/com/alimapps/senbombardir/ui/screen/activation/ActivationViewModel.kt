@@ -40,7 +40,14 @@ class ActivationViewModel(
 
     private fun fetchActivation() = viewModelScope.launch {
         val billingType = billingRepository.getCurrentBillingType()
-        setState(uiState.value.copy(billingType = billingType))
+        setState(
+            uiState.value.copy(
+                billingType = billingType,
+                monthlyPrice = billingRepository.getMonthlyPrice(),
+                yearlyPrice = billingRepository.getYearlyPrice(),
+                unlimitedPrice = billingRepository.getUnlimitedPrice(),
+            )
+        )
     }
 
     private fun onBackClicked() {

@@ -54,11 +54,13 @@ import kotlinx.coroutines.flow.collectLatest
 fun ActivationScreen(
     navController: NavController,
     viewModel: ActivationViewModel,
+    onActivationPlanSelected: (ActivationPlan) -> Unit,
 ) {
     ActivationScreenContent(
         navController = navController,
         viewModel = viewModel,
         onAction = viewModel::action,
+        onActivationPlanSelected = onActivationPlanSelected,
     )
 }
 
@@ -67,6 +69,7 @@ private fun ActivationScreenContent(
     navController: NavController,
     viewModel: ActivationViewModel,
     onAction: (ActivationAction) -> Unit,
+    onActivationPlanSelected: (ActivationPlan) -> Unit,
 ) {
     BackHandler { onAction(ActivationAction.OnBackClicked) }
 
@@ -82,9 +85,7 @@ private fun ActivationScreenContent(
                 is ActivationEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
-                is ActivationEffect.BuySelectedPlan -> {
-                    // TODO launch google play billing
-                }
+                is ActivationEffect.BuySelectedPlan -> onActivationPlanSelected(effect.plan)
             }
         }
     }
@@ -213,7 +214,7 @@ private fun ActivationPlanContent(
         ActivationPlanItem(
             text = stringResource(R.string.activation_plan_1),
             desc = stringResource(R.string.activation_plan_desc_subscribe),
-            price = uiState.monthlyPrice,
+            price = uiState.monthlyPrice ?: "0",
             checked = uiState.selectedPlan == ActivationPlan.Monthly,
             plan = ActivationPlan.Monthly,
             onAction = onAction,
@@ -221,7 +222,7 @@ private fun ActivationPlanContent(
         ActivationPlanItem(
             text = stringResource(R.string.activation_plan_2),
             desc = stringResource(R.string.activation_plan_desc_subscribe),
-            price = uiState.yearlyPrice,
+            price = uiState.yearlyPrice ?: "0",
             checked = uiState.selectedPlan == ActivationPlan.Yearly,
             plan = ActivationPlan.Yearly,
             onAction = onAction,
@@ -229,7 +230,7 @@ private fun ActivationPlanContent(
         ActivationPlanItem(
             text = stringResource(R.string.activation_plan_3),
             desc = stringResource(R.string.activation_plan_desc_lifetime),
-            price = uiState.unlimitedPrice,
+            price = uiState.unlimitedPrice ?: "0",
             checked = uiState.selectedPlan == ActivationPlan.Unlimited,
             plan = ActivationPlan.Unlimited,
             onAction = onAction,

@@ -165,6 +165,7 @@
     <string name="settings_item_share">Бөлісу</string>
     <string name="settings_item_star">Бағалау</string>
     <string name="settings_item_telegram">Telegram тобы</string>
+    <string name="settings_item_activation">Жазылымды басқару</string>
     <string name="settings_version">Нұсқа</string>
 
     <string name="choose_language">Тілді таңдаңыз</string>

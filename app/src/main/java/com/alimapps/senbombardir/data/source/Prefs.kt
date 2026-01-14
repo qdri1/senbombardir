@@ -18,6 +18,18 @@ class Prefs(private val preferences: SharedPreferences) {
         set(value) = preferences.edit { putString("BILLING_TYPE", value) }
 
     var clearResultsRemainingCount: Int
-        get() = preferences.getInt("CLEAR_RESULTS_REMAINING_COUNT", 2)
+        get() = preferences.getInt("CLEAR_RESULTS_REMAINING_COUNT", 3)
         set(value) = preferences.edit { putInt("CLEAR_RESULTS_REMAINING_COUNT", value) }
+
+    var monthlyPrice: String?
+        get() = preferences.getString("MONTHLY_PRICE", null)
+        set(value) = preferences.edit { putString("MONTHLY_PRICE", value) }
+
+    var yearlyPrice: String?
+        get() = preferences.getString("YEARLY_PRICE", null)
+        set(value) = preferences.edit { putString("YEARLY_PRICE", value) }
+
+    var unlimitedPrice: String?
+        get() = preferences.getString("UNLIMITED_PRICE", null)
+        set(value) = preferences.edit { putString("UNLIMITED_PRICE", value) }
 }

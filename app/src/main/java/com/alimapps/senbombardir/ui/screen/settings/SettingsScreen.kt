@@ -34,6 +34,7 @@ import com.alimapps.senbombardir.BuildConfig
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
+import com.alimapps.senbombardir.ui.navigation.NavigationItem
 
 private const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.alimapps.senbombardir"
 private const val TELEGRAM_URL = "https://t.me/+_Ur1Ixp_1bNhNTc6"
@@ -68,6 +69,7 @@ private fun SettingsScreenContent(
                 is SettingsEffect.Share -> openShareIntent(context)
                 is SettingsEffect.OpenPlayMarket -> openPlayMarket(context)
                 is SettingsEffect.OpenTelegram -> openTelegram(context)
+                is SettingsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
             }
         }
     }
