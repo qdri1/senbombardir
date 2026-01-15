@@ -232,6 +232,7 @@ private fun HomeScreenContent(
                         imageVector = Icons.Filled.Refresh,
                         contentDescription = "HomeScreenRefreshIcon",
                         modifier = Modifier
+                            .size(36.dp)
                             .clip(CircleShape)
                             .clickable { onAction(HomeAction.OnRefreshIconClicked) }
                     )
