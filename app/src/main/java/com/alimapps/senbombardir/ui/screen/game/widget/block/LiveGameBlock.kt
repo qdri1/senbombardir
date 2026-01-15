@@ -1,6 +1,7 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.block
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -131,6 +132,11 @@ fun LiveGameBlock(
                             shape = RoundedCornerShape(6.dp),
                         )
                         .clip(RoundedCornerShape(6.dp))
+                        .border(
+                            width = if (liveGameUiModel.leftTeamColor == TeamColor.White) 1.dp else 0.dp,
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(6.dp),
+                        )
                 )
                 Text(
                     text = liveGameUiModel.leftTeamGoals.toString(),
@@ -183,6 +189,11 @@ fun LiveGameBlock(
                             shape = RoundedCornerShape(6.dp),
                         )
                         .clip(RoundedCornerShape(6.dp))
+                        .border(
+                            width = if (liveGameUiModel.rightTeamColor == TeamColor.White) 1.dp else 0.dp,
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(6.dp),
+                        )
                 )
                 Box(
                     modifier = Modifier

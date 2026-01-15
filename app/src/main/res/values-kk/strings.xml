@@ -174,7 +174,7 @@
     <string name="google_play_not_installed">Сізде Google Play орнатылмаған!</string>
 
     <string name="activation_orange_text">Сіз қосымшаның шектеулі нұсқасын пайдаланып отырсыз. Кейбір функциялар қолжетімсіз болуы мүмкін. Толық нұсқаны алыңыз.</string>
-    <string name="activation_green_text">Сіз қосымшаның уақытша тегін нұсқасын пайдаланып отырсыз. Ойын нәтижелерін тазартуға қалған әрекеттер саны: %s</string>
+    <string name="activation_green_text">Сіз қосымшаның уақытша тегін нұсқасын пайдаланып отырсыз. «Осы ойынның нәтижелерін тазарту»-ға қалған әрекеттер саны: %s</string>
     <string name="activation_button">Толық нұсқа алу</string>
     <string name="activation_title">Толық нұсқа алу</string>
 

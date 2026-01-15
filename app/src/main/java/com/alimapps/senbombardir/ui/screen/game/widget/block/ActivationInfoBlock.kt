@@ -26,16 +26,11 @@ fun ActivationInfoBlock(
 ) {
     val isTrialVersion = clearResultsRemainingCount > 0
 
-    val backgroundColor = if (isTrialVersion) {
-        parseHexColor("#4CAF50")
-    } else {
-        parseHexColor("#FFA500")
-    }
     Column (
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
-            .background(backgroundColor)
+            .background(parseHexColor("#FFA500"))
             .padding(vertical = 16.dp)
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),

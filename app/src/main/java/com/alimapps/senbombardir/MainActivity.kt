@@ -118,7 +118,6 @@ class MainActivity : ComponentActivity() {
         if (billingManager == null) {
             billingManager = BillingManager(this, object : BillingManager.BillingUpdatesListener {
                 override fun onPurchaseSuccess() {
-                    println("###onPurchaseSuccess = $selectedActivationPlan")
                     when (selectedActivationPlan) {
                         ActivationPlan.Monthly,
                         ActivationPlan.Yearly -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
@@ -129,7 +128,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onPurchaseCheckSuccess(productType: String) {
-                    println("###onPurchaseCheckSuccess = $productType")
                     when (productType) {
                         BillingClient.ProductType.INAPP -> billingRepository.setCurrentBillingType(BillingType.Lifetime)
                         BillingClient.ProductType.SUBS -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
@@ -137,7 +135,6 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onPurchaseCheckNoPurchase(productType: String) {
-                    println("###onPurchaseCheckNoPurchase = $productType")
                     when (productType) {
                         BillingClient.ProductType.INAPP -> {
                             val billingType = billingRepository.getCurrentBillingType()

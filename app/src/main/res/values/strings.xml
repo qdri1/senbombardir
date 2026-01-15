@@ -171,7 +171,7 @@
     <string name="google_play_not_installed">У Вас не установлен Google Play!</string>
 
     <string name="activation_orange_text">У вас ограниченная версия приложения. Некоторые функции могут быть недоступны. Активируйте полную версию.</string>
-    <string name="activation_green_text">У вас пробная версия приложения. Осталось попыток сброса результатов игры: %s</string>
+    <string name="activation_green_text">У вас пробная версия приложения. Осталось попыток «Сбросить результаты этой игры»: %s</string>
     <string name="activation_button">Активировать</string>
     <string name="activation_title">Активация</string>
 
