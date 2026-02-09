@@ -29,6 +29,7 @@ class HomeViewModel(
 
     fun action(action: HomeAction) {
         when (action) {
+            is HomeAction.OnScreenResumed -> refreshGamesSilently()
             is HomeAction.OnRefreshed -> fetchGames(isRefreshing = true)
             is HomeAction.OnRefreshIconClicked -> fetchGames()
             is HomeAction.OnGameCardClicked -> setEffectSafely(HomeEffect.OpenGameScreen(action.gameId))
@@ -45,6 +46,13 @@ class HomeViewModel(
                 setState(uiState.value.copy(isLoading = true))
             }
             delay(500)
+            val games = gameRepository.getGames().sortedByDescending { it.id }
+            setState(uiState.value.copy(games = games, isLoading = false, isRefreshing = false))
+        }
+    }
+
+    private fun refreshGamesSilently() {
+        viewModelScope.launch {
             val games = gameRepository.getGames().sortedByDescending { it.id }
             setState(uiState.value.copy(games = games, isLoading = false, isRefreshing = false))
         }
