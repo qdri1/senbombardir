@@ -14,4 +14,5 @@ data class GameModel(
     val teamQuantity: Int,
     val rule: String,
     val timeInMinutes: Int,
+    val modifiedAt: Long = 0L,
 )

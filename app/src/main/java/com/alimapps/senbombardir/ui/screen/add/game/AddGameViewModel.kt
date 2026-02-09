@@ -224,6 +224,7 @@ class AddGameViewModel(
             teamQuantity = teamQuantityState.value.quantity,
             rule = rule,
             timeInMinutes = timeInMinuteFieldState.value.toIntOrNull() ?: DEFAULT_TIME_IN_MINUTES,
+            modifiedAt = System.currentTimeMillis(),
         )
         val gameId = gameRepository.saveGame(gameModel)
 

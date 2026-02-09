@@ -25,6 +25,7 @@ import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.GameUiModel
+import com.alimapps.senbombardir.ui.model.toGameModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
@@ -691,6 +692,10 @@ class GameViewModel(
             val copyLiveGameUiModel = liveGameUiModel.copy(isLive = true)
             setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
             liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+            uiState.value.gameUiModel?.let { gameUiModel ->
+                val updatedGame = gameUiModel.copy(modifiedAt = System.currentTimeMillis())
+                gameRepository.updateGame(updatedGame.toGameModel())
+            }
             setBillingType()
         }
     }
