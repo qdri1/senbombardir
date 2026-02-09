@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
@@ -45,6 +46,7 @@ import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
 import com.alimapps.senbombardir.ui.screen.add.game.result.UpdateGameResult
 import com.alimapps.senbombardir.ui.screen.game.result.DeleteGameResult
+import com.alimapps.senbombardir.ui.screen.game.widget.block.ActivationInfoBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.FunctionsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.GameInfoBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.LiveGameBlock
@@ -131,6 +133,7 @@ private fun GameScreenContent(
                 is GameEffect.ShowFinishGameConfirmationBottomSheet -> showFinishGameConfirmation = true
                 is GameEffect.ShowGoBackConfirmationBottomSheet -> showGoBackConfirmation = true
                 is GameEffect.ShowGameInfoBottomSheet -> showGameInfo = true
+                is GameEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
                 is GameEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
                 is GameEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
@@ -179,6 +182,13 @@ private fun GameScreenContent(
                     .verticalScroll(rememberScrollState())
                     .padding(vertical = 16.dp)
             ) {
+                if (uiState.billingType == BillingType.Limited) {
+                    ActivationInfoBlock(
+                        clearResultsRemainingCount = uiState.clearResultsRemainingCount,
+                        onAction = onAction,
+                    )
+                }
+
                 uiState.gameUiModel?.let { gameUiModel ->
                     GameInfoBlock(
                         gameUiModel = gameUiModel,
@@ -193,6 +203,7 @@ private fun GameScreenContent(
                         onAction = onAction,
                     )
                     SoundsBlock(
+                        uiLimited = uiState.uiLimited,
                         onAction = onAction,
                     )
                 }
@@ -206,12 +217,14 @@ private fun GameScreenContent(
                 if (uiState.playerUiModelList.isNotEmpty()) {
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
+                        uiLimited = uiState.uiLimited,
                         onPlayerResultClicked = { onAction(GameAction.OnPlayerResultClicked(playerResultUiModel = it)) },
                     )
                 }
 
                 uiState.gameUiModel?.let {
                     FunctionsBlock(
+                        uiLimited = uiState.uiLimited,
                         onAction = onAction,
                     )
                 }

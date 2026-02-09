@@ -63,6 +63,7 @@
     <string name="team_result_goals_difference">РГ</string>
     <string name="team_result_points">ОЧК</string>
 
+    <string name="player_result_limited_text">Результаты игроков доступны только в полной версии приложения</string>
     <string name="player_result_place">#</string>
     <string name="player_result_name">Игрок</string>
     <string name="player_result_goals">⚽️</string>
@@ -112,9 +113,11 @@
     <string name="delete_game_snackbar_text">Нужно завершить матч чтобы удалить эту игру!</string>
     <string name="update_game_snackbar_text">Нужно завершить матч чтобы редактировать эту игру!</string>
     <string name="open_game_results_snackbar_text">Нужно завершить матч чтобы перейти на результаты всех игр!</string>
+    <string name="open_activation_screen_snackbar_text">Нужно завершить матч чтобы открыть страницу активации!</string>
     <string name="go_back_title">Вы точно хотите выйти из этой страницы?</string>
     <string name="game_count">cыграно игр: %s</string>
 
+    <string name="sound_limited_text">Звуки и озвучки доступны только в полной версии приложения</string>
     <string name="sound_league_chemp">Лига\nЧемпионов</string>
     <string name="sound_goal_fans">Стадион\nГоооооол</string>
     <string name="sound_anarbekov">Темирлан\nАнарбеков</string>
@@ -160,9 +163,36 @@
     <string name="settings_item_share">Поделиться</string>
     <string name="settings_item_star">Оценить</string>
     <string name="settings_item_telegram">Telegram группа</string>
+    <string name="settings_item_activation">Управление подпиской</string>
     <string name="settings_version">Версия</string>
 
     <string name="choose_language">Выберите язык</string>
     <string name="telegram_not_installed">У Вас не установлен Telegram!</string>
+    <string name="google_play_not_installed">У Вас не установлен Google Play!</string>
+
+    <string name="activation_orange_text">У вас ограниченная версия приложения. Некоторые функции могут быть недоступны. Активируйте полную версию.</string>
+    <string name="activation_green_text">У вас пробная версия приложения. Осталось попыток «Сбросить результаты этой игры»: %s</string>
+    <string name="activation_button">Активировать</string>
+    <string name="activation_title">Активация</string>
+
+    <string name="activation_text_title">Что включено?</string>
+    <string name="activation_text_1">Озвучка имени и звуки празднования (гол, ассист и т.д.)</string>
+    <string name="activation_text_2">Озвучка фразы «Осталась одна минута»</string>
+    <string name="activation_text_3">Озвучка фразы «Играем до аута»</string>
+    <string name="activation_text_4">Список футбольных звуков</string>
+    <string name="activation_text_5">Результаты игроков</string>
+    <string name="activation_text_6">Лучшие игроки</string>
+    <string name="activation_text_button">Показать цены</string>
+
+    <string name="activation_plan_title">Выберите ваш план</string>
+    <string name="activation_plan_1">Месяц</string>
+    <string name="activation_plan_2">Год</string>
+    <string name="activation_plan_3">Безлимит</string>
+    <string name="activation_plan_button">Купить</string>
+    <string name="activation_plan_desc_subscribe">Подписка</string>
+    <string name="activation_plan_desc_lifetime">Одноразовая покупка</string>
+    <string name="activation_plan_select_error_text">Выберите план</string>
+    <string name="activation_plan_activated_text">У вас полная версия</string>
+    <string name="activation_plan_activated_button">Управление подпиской</string>
 
 </resources>

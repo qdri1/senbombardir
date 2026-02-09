@@ -30,12 +30,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameScreen
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameScreen
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeScreen
-import com.alimapps.senbombardir.ui.screen.language.AppLanguage
+import com.alimapps.senbombardir.domain.model.AppLanguage
+import com.alimapps.senbombardir.ui.screen.activation.ActivationScreen
+import com.alimapps.senbombardir.ui.screen.activation.ActivationViewModel
 import com.alimapps.senbombardir.ui.screen.language.LanguageBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
@@ -49,6 +52,7 @@ import org.koin.core.parameter.parametersOf
 fun AppNavigation(
     showLanguage: Boolean,
     onLanguageSelected: (AppLanguage) -> Unit,
+    onActivationPlanSelected: (ActivationPlan) -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -140,6 +144,13 @@ fun AppNavigation(
                     GameResultsScreen(
                         navController = navController,
                         viewModel = koinViewModel<GameResultsViewModel> { parametersOf(gameId) }
+                    )
+                }
+                composable(NavigationItem.Activation.route) {
+                    ActivationScreen(
+                        navController = navController,
+                        viewModel = koinViewModel<ActivationViewModel>(),
+                        onActivationPlanSelected = onActivationPlanSelected,
                     )
                 }
             }

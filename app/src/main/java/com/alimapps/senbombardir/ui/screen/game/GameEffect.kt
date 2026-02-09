@@ -20,6 +20,7 @@ sealed interface GameEffect : DebounceEffect {
     data object ShowFinishGameConfirmationBottomSheet : GameEffect
     data object ShowGoBackConfirmationBottomSheet : GameEffect
     data object ShowGameInfoBottomSheet : GameEffect
+    data object OpenActivationScreen : GameEffect
     class ShowBestPlayersBottomSheet(val bestPlayers: List<BestPlayerUiModel>) : GameEffect
     class ShowSnackbar(val stringRes: Int) : GameEffect
 }

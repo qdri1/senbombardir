@@ -1,6 +1,7 @@
 package com.alimapps.senbombardir.ui.screen.home
 
 sealed interface HomeAction {
+    data object OnScreenResumed : HomeAction
     data object OnRefreshed : HomeAction
     data object OnRefreshIconClicked : HomeAction
     class OnGameCardClicked(val gameId: Long) : HomeAction

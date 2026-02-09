@@ -15,6 +15,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
@@ -24,6 +25,7 @@ import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.GameUiModel
+import com.alimapps.senbombardir.ui.model.toGameModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
@@ -44,7 +46,8 @@ import com.alimapps.senbombardir.ui.model.types.GameSounds
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.screen.add.game.result.UpdateGameResult
-import com.alimapps.senbombardir.ui.screen.language.AppLanguage
+import com.alimapps.senbombardir.domain.model.AppLanguage
+import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.utils.orDefault
@@ -70,6 +73,7 @@ class GameViewModel(
     private val playerRepository: PlayerRepository,
     private val playerHistoryRepository: PlayerHistoryRepository,
     private val languageRepository: LanguageRepository,
+    private val billingRepository: BillingRepository,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
 
@@ -91,6 +95,9 @@ class GameViewModel(
 
     private val isLive: Boolean
         get() = uiState.value.liveGameUiModel?.isLive ?: false
+
+    private val uiLimited: Boolean
+        get() = uiState.value.uiLimited
 
     private val timeInMinutes: Int
         get() = uiState.value.gameUiModel?.timeInMinutes.orDefault()
@@ -140,10 +147,15 @@ class GameViewModel(
             is GameAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
             is GameAction.OnLiveGameResultClicked -> onLiveGameResultClicked(action.liveGameResultUiModel)
             is GameAction.OnSaveLiveGameResultClicked -> onSaveLiveGameResultClicked(action.liveGameResultUiModel, action.teamGoalsValue)
+            is GameAction.OnActivateClicked -> openActivationScreen()
         }
     }
 
     private fun speak(text: String, onComplete: () -> Unit) {
+        if (uiLimited) {
+            return
+        }
+
         if (isTextToSpeechInitialized) {
             val utteranceId = UUID.randomUUID().toString()
 
@@ -187,6 +199,7 @@ class GameViewModel(
                     )
                 )
                 setTimerValue()
+                setBillingType()
             }
         }
     }
@@ -204,6 +217,34 @@ class GameViewModel(
             timerValue = timeInMinutes.toMillis()
             _timerValueState.value = timerValue.toStringTime()
         }
+    }
+
+    private fun setBillingType() {
+        val billingType = billingRepository.getCurrentBillingType()
+        val clearResultsRemainingCount = billingRepository.getClearResultsRemainingCount()
+
+        val uiLimited = if (billingType == BillingType.Limited) {
+            if (clearResultsRemainingCount > 0) {
+                false
+            } else {
+                val gameStarted = isLive || uiState.value.teamUiModelList.any { it.points > 0 }
+                if (gameStarted) {
+                    true
+                } else {
+                    false
+                }
+            }
+        } else {
+            false
+        }
+
+        setState(
+            uiState.value.copy(
+                billingType = billingType,
+                clearResultsRemainingCount = clearResultsRemainingCount,
+                uiLimited = uiLimited,
+            )
+        )
     }
 
     private fun onBackClicked() {
@@ -273,6 +314,7 @@ class GameViewModel(
 
             liveGameRepository.updateLiveGame(liveGameModel)
         }
+        billingRepository.decreaseClearResultsRemainingCount()
 
         fetchGame()
     }
@@ -644,17 +686,22 @@ class GameViewModel(
     }
 
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
-        playMedia(resId = R.raw.start_match)
+        playMedia(resId = R.raw.start_match, free = true)
         startTimer()
         viewModelScope.launch {
             val copyLiveGameUiModel = liveGameUiModel.copy(isLive = true)
             setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
             liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+            uiState.value.gameUiModel?.let { gameUiModel ->
+                val updatedGame = gameUiModel.copy(modifiedAt = System.currentTimeMillis())
+                gameRepository.updateGame(updatedGame.toGameModel())
+            }
+            setBillingType()
         }
     }
 
     private fun finishGame() {
-        playMedia(resId = R.raw.finish)
+        playMedia(resId = R.raw.finish, free = true)
         resetTimer()
         uiState.value.gameUiModel?.let { gameUiModel ->
             uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -1332,7 +1379,7 @@ class GameViewModel(
     }
 
     private fun onSoundClicked(sound: GameSounds) {
-        playMedia(resId = sound.rawRes)
+        playMedia(resId = sound.rawRes, free = true)
     }
 
     private fun onFunctionClicked(function: GameFunction) {
@@ -1346,7 +1393,20 @@ class GameViewModel(
         }
     }
 
-    private fun playMedia(@RawRes resId: Int) = Handler(Looper.getMainLooper()).post {
+    private fun openActivationScreen() {
+        if (isLive) {
+            setEffectSafely(GameEffect.ShowSnackbar(R.string.open_activation_screen_snackbar_text))
+            return
+        }
+
+        setEffectSafely(GameEffect.OpenActivationScreen)
+    }
+
+    private fun playMedia(@RawRes resId: Int, free: Boolean = false) = Handler(Looper.getMainLooper()).post {
+        if (uiLimited && free.not()) {
+            return@post
+        }
+
         val url = "android.resource://${context.packageName}/$resId"
 
         val mediaItem = MediaItem.Builder()

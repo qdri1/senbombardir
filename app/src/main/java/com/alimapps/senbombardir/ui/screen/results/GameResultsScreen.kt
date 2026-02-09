@@ -136,6 +136,7 @@ private fun GameResultsScreenContent(
                 if (uiState.playerUiModelList.isNotEmpty()) {
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
+                        uiLimited = uiState.uiLimited,
                         onPlayerResultClicked = { playerResultUiModel = it },
                     )
                 }

@@ -16,6 +16,7 @@ data class GameUiModel(
     val teamQuantity: TeamQuantity,
     val gameRule: GameRule,
     val timeInMinutes: Int,
+    val modifiedAt: Long = 0L,
 )
 
 fun GameUiModel.toGameModel(): GameModel {
@@ -31,6 +32,7 @@ fun GameUiModel.toGameModel(): GameModel {
         format = gameFormat.format,
         teamQuantity = teamQuantity.quantity,
         rule = rule,
-        timeInMinutes = timeInMinutes
+        timeInMinutes = timeInMinutes,
+        modifiedAt = modifiedAt,
     )
 }

@@ -3,9 +3,11 @@ package com.alimapps.senbombardir.ui.screen.results
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
+import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
@@ -25,6 +27,7 @@ class GameResultsViewModel(
     private val teamHistoryRepository: TeamHistoryRepository,
     private val playerHistoryRepository: PlayerHistoryRepository,
     private val playerRepository: PlayerRepository,
+    private val billingRepository: BillingRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GameResultsUiState())
@@ -62,10 +65,14 @@ class GameResultsViewModel(
             .thenBy { it.teamName }
             .thenBy { it.name }
         )
+        val billingType = billingRepository.getCurrentBillingType()
+        val clearResultsRemainingCount = billingRepository.getClearResultsRemainingCount()
+        val uiLimited = billingType == BillingType.Limited && clearResultsRemainingCount <= 0
         setState(
             uiState.value.copy(
                 teamUiModelList = teamUiModelList,
                 playerUiModelList = playerUiModelList,
+                uiLimited = uiLimited,
             )
         )
     }

@@ -1,7 +1,7 @@
 package com.alimapps.senbombardir.data.repository
 
 import com.alimapps.senbombardir.data.source.Prefs
-import com.alimapps.senbombardir.ui.screen.language.AppLanguage
+import com.alimapps.senbombardir.domain.model.AppLanguage
 
 class LanguageRepository(
     private val prefs: Prefs,

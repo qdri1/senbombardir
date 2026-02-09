@@ -27,6 +27,7 @@ class GameRepository(
                 teamQuantity = teamQuantity,
                 gameRule = rule,
                 timeInMinutes = gameModel.timeInMinutes,
+                modifiedAt = gameModel.modifiedAt,
             )
         }
 
@@ -49,6 +50,7 @@ class GameRepository(
                 teamQuantity = teamQuantity,
                 gameRule = rule,
                 timeInMinutes = gameModel.timeInMinutes,
+                modifiedAt = gameModel.modifiedAt,
             )
         }
 

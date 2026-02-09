@@ -1,4 +1,4 @@
-package com.alimapps.senbombardir.ui.screen.language
+package com.alimapps.senbombardir.domain.model
 
 enum class AppLanguage(val code: String, val title: String) {
     KZ("kk", "Қазақша"),

@@ -15,8 +15,8 @@ android {
         applicationId = "com.alimapps.senbombardir"
         minSdk = 24
         targetSdk = 36
-        versionCode = 18
-        versionName = "1.8"
+        versionCode = 21
+        versionName = "2.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -90,6 +90,9 @@ dependencies {
 
     // --- Media ---
     implementation("androidx.media3:media3-exoplayer:1.8.0")
+
+    // --- Billing ---
+    implementation("com.android.billingclient:billing-ktx:8.0.0")
 
     // --- Room Database ---
     implementation("androidx.room:room-runtime:2.8.3")

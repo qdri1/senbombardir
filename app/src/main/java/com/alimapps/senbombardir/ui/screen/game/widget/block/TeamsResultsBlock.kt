@@ -1,6 +1,7 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.block
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @Composable
@@ -85,6 +87,11 @@ fun TeamsResultsBlock(
                                     shape = RoundedCornerShape(4.dp),
                                 )
                                 .clip(RoundedCornerShape(4.dp))
+                                .border(
+                                    width = if (teamUiModel.color == TeamColor.White) 1.dp else 0.dp,
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(4.dp),
+                                )
                         )
                         Text(
                             text = teamUiModel.name,
