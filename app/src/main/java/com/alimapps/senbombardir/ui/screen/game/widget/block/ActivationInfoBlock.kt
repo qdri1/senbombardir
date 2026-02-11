@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.screen.game.GameAction
 import com.alimapps.senbombardir.ui.utils.parseHexColor
@@ -47,6 +49,14 @@ fun ActivationInfoBlock(
                 .clip(RoundedCornerShape(8.dp))
                 .clickable { onAction(GameAction.OnActivateClicked) }
                 .padding(12.dp)
+        )
+        Text(
+            text = stringResource(id = R.string.activation_green_text),
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.labelSmall,
+            textAlign = TextAlign.Center,
+            fontSize = 12.sp,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

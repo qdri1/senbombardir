@@ -174,8 +174,8 @@
     <string name="google_play_not_installed">Google Play is not installed!</string>
 
     <string name="activation_orange_text">You are using a limited version. Some features are unavailable. Upgrade to the full version.</string>
-    <string name="activation_green_text">You are using the trial version of the app. Remaining attempts to «Clear this game results»: %s</string>
-    <string name="activation_button">Activate</string>
+    <string name="activation_green_text">Limit after 5 games played</string>
+    <string name="activation_button">Upgrade</string>
     <string name="activation_title">Activation</string>
 
     <string name="activation_text_title">What’s included?</string>
