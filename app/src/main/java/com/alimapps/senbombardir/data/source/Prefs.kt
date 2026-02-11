@@ -17,10 +17,6 @@ class Prefs(private val preferences: SharedPreferences) {
         get() = preferences.getString("BILLING_TYPE", null)
         set(value) = preferences.edit { putString("BILLING_TYPE", value) }
 
-    var clearResultsRemainingCount: Int
-        get() = preferences.getInt("CLEAR_RESULTS_REMAINING_COUNT", 3)
-        set(value) = preferences.edit { putInt("CLEAR_RESULTS_REMAINING_COUNT", value) }
-
     var monthlyPrice: String?
         get() = preferences.getString("MONTHLY_PRICE", null)
         set(value) = preferences.edit { putString("MONTHLY_PRICE", value) }

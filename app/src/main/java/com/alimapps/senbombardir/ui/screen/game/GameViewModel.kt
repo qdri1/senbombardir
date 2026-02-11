@@ -221,27 +221,15 @@ class GameViewModel(
 
     private fun setBillingType() {
         val billingType = billingRepository.getCurrentBillingType()
-        val clearResultsRemainingCount = billingRepository.getClearResultsRemainingCount()
-
+        val gameCount = uiState.value.liveGameUiModel?.gameCount ?: 0
         val uiLimited = if (billingType == BillingType.Limited) {
-            if (clearResultsRemainingCount > 0) {
-                false
-            } else {
-                val gameStarted = isLive || uiState.value.teamUiModelList.any { it.points > 0 }
-                if (gameStarted) {
-                    true
-                } else {
-                    false
-                }
-            }
+            gameCount >= 5
         } else {
             false
         }
-
         setState(
             uiState.value.copy(
                 billingType = billingType,
-                clearResultsRemainingCount = clearResultsRemainingCount,
                 uiLimited = uiLimited,
             )
         )
@@ -314,7 +302,6 @@ class GameViewModel(
 
             liveGameRepository.updateLiveGame(liveGameModel)
         }
-        billingRepository.decreaseClearResultsRemainingCount()
 
         fetchGame()
     }
@@ -696,7 +683,6 @@ class GameViewModel(
                 val updatedGame = gameUiModel.copy(modifiedAt = System.currentTimeMillis())
                 gameRepository.updateGame(updatedGame.toGameModel())
             }
-            setBillingType()
         }
     }
 
@@ -746,6 +732,7 @@ class GameViewModel(
                 liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
             }
         }
+        setBillingType()
     }
 
     private fun finishTeam3Game(
@@ -810,6 +797,7 @@ class GameViewModel(
         updateTeamsBlock()
         updatePlayersBlock()
         updateLiveGameBlock()
+        setBillingType()
     }
 
     private fun finishTeam4Game(
@@ -904,6 +892,7 @@ class GameViewModel(
         updateTeamsBlock()
         updatePlayersBlock()
         updateLiveGameBlock()
+        setBillingType()
     }
 
     private suspend fun finishGameRuleTeam3WinnerStay(

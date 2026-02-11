@@ -19,17 +19,6 @@ class BillingRepository(
         prefs.billingType = billingType.name
     }
 
-    fun getClearResultsRemainingCount(): Int {
-        return prefs.clearResultsRemainingCount
-    }
-
-    fun decreaseClearResultsRemainingCount() {
-        val clearResultsRemainingCount = prefs.clearResultsRemainingCount
-        if (clearResultsRemainingCount > 0) {
-            prefs.clearResultsRemainingCount = clearResultsRemainingCount - 1
-        }
-    }
-
     fun getMonthlyPrice(): String? {
         return prefs.monthlyPrice
     }

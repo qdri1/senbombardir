@@ -155,6 +155,14 @@ private fun ActivationTextContent(
         )
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
+            text = stringResource(R.string.activation_text_5),
+        )
+        ActivationTextItem(
+            icon = painterResource(R.drawable.ic_star_shine),
+            text = stringResource(R.string.activation_text_6),
+        )
+        ActivationTextItem(
+            icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_1),
         )
         ActivationTextItem(
@@ -168,14 +176,6 @@ private fun ActivationTextContent(
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_4),
-        )
-        ActivationTextItem(
-            icon = painterResource(R.drawable.ic_star_shine),
-            text = stringResource(R.string.activation_text_5),
-        )
-        ActivationTextItem(
-            icon = painterResource(R.drawable.ic_star_shine),
-            text = stringResource(R.string.activation_text_6),
         )
         Button(
             onClick = { onAction(ActivationAction.ShowPriceButtonClicked) },

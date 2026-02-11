@@ -184,7 +184,6 @@ private fun GameScreenContent(
             ) {
                 if (uiState.billingType == BillingType.Limited) {
                     ActivationInfoBlock(
-                        clearResultsRemainingCount = uiState.clearResultsRemainingCount,
                         onAction = onAction,
                     )
                 }

@@ -21,11 +21,8 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @Composable
 fun ActivationInfoBlock(
-    clearResultsRemainingCount: Int,
     onAction: (GameAction) -> Unit,
 ) {
-    val isTrialVersion = clearResultsRemainingCount > 0
-
     Column (
         modifier = Modifier
             .fillMaxWidth()
@@ -37,26 +34,19 @@ fun ActivationInfoBlock(
         horizontalAlignment = Alignment.End,
     ) {
         Text(
-            text = if (isTrialVersion) {
-                stringResource(id = R.string.activation_green_text, clearResultsRemainingCount.toString())
-            } else {
-                stringResource(id = R.string.activation_orange_text)
-            },
+            text = stringResource(id = R.string.activation_orange_text),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.fillMaxWidth(),
         )
-
-        if (isTrialVersion.not()) {
-            Text(
-                text = stringResource(id = R.string.activation_button),
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .clickable { onAction(GameAction.OnActivateClicked) }
-                    .padding(12.dp)
-            )
-        }
+        Text(
+            text = stringResource(id = R.string.activation_button),
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .clickable { onAction(GameAction.OnActivateClicked) }
+                .padding(12.dp)
+        )
     }
 }

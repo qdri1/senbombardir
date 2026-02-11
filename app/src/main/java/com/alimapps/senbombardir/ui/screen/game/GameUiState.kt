@@ -17,6 +17,5 @@ data class GameUiState(
     val showRightTeamChangeDropdown: Boolean = false,
     val isTimerPlay: Boolean = false,
     val billingType: BillingType = BillingType.Lifetime,
-    val clearResultsRemainingCount: Int = 2,
     val uiLimited: Boolean = false,
 )

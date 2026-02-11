@@ -66,8 +66,7 @@ class GameResultsViewModel(
             .thenBy { it.name }
         )
         val billingType = billingRepository.getCurrentBillingType()
-        val clearResultsRemainingCount = billingRepository.getClearResultsRemainingCount()
-        val uiLimited = billingType == BillingType.Limited && clearResultsRemainingCount <= 0
+        val uiLimited = billingType == BillingType.Limited
         setState(
             uiState.value.copy(
                 teamUiModelList = teamUiModelList,
