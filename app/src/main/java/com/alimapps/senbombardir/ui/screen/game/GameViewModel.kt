@@ -303,6 +303,7 @@ class GameViewModel(
             liveGameRepository.updateLiveGame(liveGameModel)
         }
 
+        setModifiedAt()
         fetchGame()
     }
 
@@ -672,6 +673,13 @@ class GameViewModel(
         )
     }
 
+    private suspend fun setModifiedAt() {
+        uiState.value.gameUiModel?.let { gameUiModel ->
+            val updatedGame = gameUiModel.copy(modifiedAt = System.currentTimeMillis())
+            gameRepository.updateGame(updatedGame.toGameModel())
+        }
+    }
+
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
         playMedia(resId = R.raw.start_match, free = true)
         startTimer()
@@ -679,10 +687,7 @@ class GameViewModel(
             val copyLiveGameUiModel = liveGameUiModel.copy(isLive = true)
             setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
             liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
-            uiState.value.gameUiModel?.let { gameUiModel ->
-                val updatedGame = gameUiModel.copy(modifiedAt = System.currentTimeMillis())
-                gameRepository.updateGame(updatedGame.toGameModel())
-            }
+            setModifiedAt()
         }
     }
 

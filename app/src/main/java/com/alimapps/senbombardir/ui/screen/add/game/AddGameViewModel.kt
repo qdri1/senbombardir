@@ -293,6 +293,7 @@ class AddGameViewModel(
                 val gameModel = gameUiModel.toGameModel().copy(
                     name = gameNameFieldState.value.trim(),
                     timeInMinutes = timeInMinuteFieldState.value.toIntOrNull() ?: DEFAULT_TIME_IN_MINUTES,
+                    modifiedAt = System.currentTimeMillis(),
                 )
                 gameRepository.updateGame(gameModel)
             }
