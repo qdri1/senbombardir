@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -95,18 +96,31 @@ fun TeamsResultsBlock(
                                     shape = RoundedCornerShape(4.dp),
                                 )
                         )
-                        Text(
-                            text = teamUiModel.name,
-                            autoSize = TextAutoSize.StepBased(
-                                minFontSize = 10.sp,
-                                maxFontSize = 14.sp,
-                                stepSize = 1.sp
-                            ),
-                            color = textColor,
-                            style = textStyle,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
+                        Box(
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(
+                                text = teamUiModel.name,
+                                color = textColor,
+                                style = textStyle,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.fillMaxWidth().alpha(0f)
+                            )
+                            Text(
+                                text = teamUiModel.name,
+                                autoSize = TextAutoSize.StepBased(
+                                    minFontSize = 10.sp,
+                                    maxFontSize = 14.sp,
+                                    stepSize = 1.sp
+                                ),
+                                color = textColor,
+                                style = textStyle,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
             }
