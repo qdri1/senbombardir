@@ -37,6 +37,7 @@ class SettingsViewModel(
     private fun onActivationCodeSubmitted(code: String) {
         if (code.trim() == RemoteConfig.activationCode) {
             billingRepository.setCurrentBillingType(BillingType.Lifetime)
+            billingRepository.setSecretActivated(true)
             setEffectSafely(SettingsEffect.ActivationSuccess)
         } else {
             setEffectSafely(SettingsEffect.ActivationError)

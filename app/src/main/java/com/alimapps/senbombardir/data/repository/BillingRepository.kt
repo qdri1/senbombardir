@@ -19,6 +19,10 @@ class BillingRepository(
         prefs.billingType = billingType.name
     }
 
+    fun isSecretActivated(): Boolean = prefs.isSecretActivated
+
+    fun setSecretActivated(value: Boolean) { prefs.isSecretActivated = value }
+
     fun getMonthlyPrice(): String? {
         return prefs.monthlyPrice
     }

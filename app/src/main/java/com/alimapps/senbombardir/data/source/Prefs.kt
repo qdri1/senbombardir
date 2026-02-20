@@ -17,6 +17,10 @@ class Prefs(private val preferences: SharedPreferences) {
         get() = preferences.getString("BILLING_TYPE", null)
         set(value) = preferences.edit { putString("BILLING_TYPE", value) }
 
+    var isSecretActivated: Boolean
+        get() = preferences.getBoolean("SECRET_ACTIVATED", false)
+        set(value) = preferences.edit { putBoolean("SECRET_ACTIVATED", value) }
+
     var monthlyPrice: String?
         get() = preferences.getString("MONTHLY_PRICE", null)
         set(value) = preferences.edit { putString("MONTHLY_PRICE", value) }

@@ -165,7 +165,8 @@ class MainActivity : ComponentActivity() {
                     when (productType) {
                         BillingClient.ProductType.INAPP -> {
                             val billingType = billingRepository.getCurrentBillingType()
-                            if (billingType == BillingType.Lifetime) {
+                            val isSecretActivated = billingRepository.isSecretActivated()
+                            if (billingType == BillingType.Lifetime && isSecretActivated.not()) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
                             }
                         }
