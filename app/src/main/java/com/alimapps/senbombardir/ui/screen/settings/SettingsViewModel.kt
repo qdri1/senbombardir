@@ -24,7 +24,6 @@ class SettingsViewModel : ViewModel() {
             SettingsItemType.Language -> setEffectSafely(SettingsEffect.ShowSelectLanguage)
             SettingsItemType.Share -> setEffectSafely(SettingsEffect.Share)
             SettingsItemType.Evaluate -> setEffectSafely(SettingsEffect.OpenPlayMarket)
-            SettingsItemType.Telegram -> setEffectSafely(SettingsEffect.OpenTelegram)
             SettingsItemType.Activation -> setEffectSafely(SettingsEffect.OpenActivationScreen)
         }
     }

@@ -18,6 +18,7 @@ import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager
+import com.alimapps.senbombardir.ui.utils.RemoteConfig
 import com.android.billingclient.api.BillingClient
 import org.koin.android.ext.android.inject
 import java.util.Locale
@@ -33,6 +34,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        RemoteConfig.configureAndActivate()
         val selectedLanguage = languageRepository.getSelectedLanguage()
         selectedLanguage?.let { setLocale(this, it) }
         checkPurchase()

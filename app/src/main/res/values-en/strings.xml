@@ -164,13 +164,15 @@
     <string name="settings_item_language">Language</string>
     <string name="settings_item_share">Share</string>
     <string name="settings_item_star">Rate</string>
-    <string name="settings_item_telegram">Telegram group</string>
+    <string name="settings_item_telegram">Telegram</string>
+    <string name="settings_item_whatsapp">WhatsApp</string>
     <string name="settings_item_activation">Manage subscription</string>
     <string name="settings_version">Version</string>
 
     <string name="choose_language">Choose language</string>
 
     <string name="telegram_not_installed">Telegram is not installed!</string>
+    <string name="whatsapp_not_installed">Whatsapp is not installed!</string>
     <string name="google_play_not_installed">Google Play is not installed!</string>
 
     <string name="activation_orange_text">You are using a limited version. Some features are unavailable. Upgrade to the full version.</string>

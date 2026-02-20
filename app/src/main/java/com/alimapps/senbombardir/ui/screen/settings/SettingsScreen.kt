@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,9 +36,9 @@ import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
+import com.alimapps.senbombardir.ui.utils.RemoteConfig
 
 private const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.alimapps.senbombardir"
-private const val TELEGRAM_URL = "https://t.me/+_Ur1Ixp_1bNhNTc6"
 
 @Composable
 fun SettingsScreen(
@@ -68,7 +69,6 @@ private fun SettingsScreenContent(
                 is SettingsEffect.ShowSelectLanguage -> onLanguageClick()
                 is SettingsEffect.Share -> openShareIntent(context)
                 is SettingsEffect.OpenPlayMarket -> openPlayMarket(context)
-                is SettingsEffect.OpenTelegram -> openTelegram(context)
                 is SettingsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
             }
         }
@@ -83,27 +83,27 @@ private fun SettingsScreenContent(
             .padding(16.dp)
     ) {
         SettingsItemType.entries.forEach { item ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(MaterialTheme.colorScheme.surface)
-                    .clickable { onAction(SettingsAction.OnSettingsItemClicked(item)) }
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    painter = painterResource(id = item.iconRes),
-                    contentDescription = String.empty,
-                    modifier = Modifier
-                )
-                Text(
-                    text = stringResource(id = item.stringRes),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.labelSmall,
-                )
-            }
+            SettingsItemContent(
+                painter = painterResource(item.iconRes),
+                text = stringResource(item.stringRes),
+                onItemClicked = { onAction(SettingsAction.OnSettingsItemClicked(item)) },
+            )
+        }
+
+        if (RemoteConfig.telegramUrl.isNotEmpty()) {
+            SettingsItemContent(
+                painter = painterResource(R.drawable.ic_telegram),
+                text = stringResource(R.string.settings_item_telegram),
+                onItemClicked = { openTelegram(context) },
+            )
+        }
+
+        if (RemoteConfig.whatsappUrl.isNotEmpty()) {
+            SettingsItemContent(
+                painter = painterResource(R.drawable.ic_feedback),
+                text = stringResource(R.string.settings_item_whatsapp),
+                onItemClicked = { openWhatsapp(context) },
+            )
         }
 
         Text(
@@ -113,6 +113,35 @@ private fun SettingsScreenContent(
             modifier = Modifier
                 .padding(top = 12.dp)
                 .align(Alignment.CenterHorizontally)
+        )
+    }
+}
+
+@Composable
+private fun SettingsItemContent(
+    painter: Painter,
+    text: String,
+    onItemClicked: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .clickable { onItemClicked() }
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painter,
+            contentDescription = String.empty,
+            modifier = Modifier
+        )
+        Text(
+            text = text,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.labelSmall,
         )
     }
 }
@@ -135,9 +164,17 @@ private fun openPlayMarket(context: Context) {
 
 private fun openTelegram(context: Context) {
     try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, TELEGRAM_URL.toUri()))
-    } catch (e: Exception) {
+        context.startActivity(Intent(Intent.ACTION_VIEW, RemoteConfig.telegramUrl.toUri()))
+    } catch (_: Exception) {
         Toast.makeText(context, context.getString(R.string.telegram_not_installed), Toast.LENGTH_LONG).show()
+    }
+}
+
+private fun openWhatsapp(context: Context) {
+    try {
+        context.startActivity(Intent(Intent.ACTION_VIEW, RemoteConfig.whatsappUrl.toUri()))
+    } catch (_: Exception) {
+        Toast.makeText(context, context.getString(R.string.whatsapp_not_installed), Toast.LENGTH_LONG).show()
     }
 }
 

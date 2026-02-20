@@ -164,13 +164,15 @@
     <string name="settings_item_language">Тіл</string>
     <string name="settings_item_share">Бөлісу</string>
     <string name="settings_item_star">Бағалау</string>
-    <string name="settings_item_telegram">Telegram тобы</string>
+    <string name="settings_item_telegram">Telegram</string>
+    <string name="settings_item_whatsapp">WhatsApp</string>
     <string name="settings_item_activation">Жазылымды басқару</string>
     <string name="settings_version">Нұсқа</string>
 
     <string name="choose_language">Тілді таңдаңыз</string>
 
     <string name="telegram_not_installed">Сізде Telegram орнатылмаған!</string>
+    <string name="whatsapp_not_installed">Сізде Whatsapp орнатылмаған!</string>
     <string name="google_play_not_installed">Сізде Google Play орнатылмаған!</string>
 
     <string name="activation_orange_text">Сіз қосымшаның шектеулі нұсқасын пайдаланып отырсыз. Кейбір функциялар қолжетімсіз болуы мүмкін. Толық нұсқаны алыңыз.</string>
