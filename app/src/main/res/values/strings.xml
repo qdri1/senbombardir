@@ -202,4 +202,11 @@
     <string name="update_button_skip">Пропустить</string>
     <string name="update_button_update">Обновить</string>
 
+    <string name="activation_code_dialog_title">Активация</string>
+    <string name="activation_code_dialog_hint">Введите код активации</string>
+    <string name="activation_code_button_confirm">Подтвердить</string>
+    <string name="activation_code_button_cancel">Отмена</string>
+    <string name="activation_code_success">Активировано!</string>
+    <string name="activation_code_error">Неверный код</string>
+
 </resources>

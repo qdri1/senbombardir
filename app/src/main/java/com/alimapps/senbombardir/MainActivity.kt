@@ -5,7 +5,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
@@ -17,13 +16,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
-import com.alimapps.senbombardir.BuildConfig
 import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.domain.model.ActivationPlan
-import com.alimapps.senbombardir.ui.navigation.AppNavigation
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.domain.model.BillingType
+import com.alimapps.senbombardir.ui.navigation.AppNavigation
 import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager

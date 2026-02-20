@@ -5,6 +5,7 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,11 +15,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,6 +73,8 @@ private fun SettingsScreenContent(
     onLanguageClick: () -> Unit,
 ) {
     val context = LocalContext.current
+    var tapCount by remember { mutableIntStateOf(0) }
+    var showCodeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
@@ -69,8 +83,27 @@ private fun SettingsScreenContent(
                 is SettingsEffect.Share -> openShareIntent(context)
                 is SettingsEffect.OpenPlayMarket -> openPlayMarket(context)
                 is SettingsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
+                is SettingsEffect.ActivationSuccess -> {
+                    showCodeDialog = false
+                    Toast.makeText(context, context.getString(R.string.activation_code_success), Toast.LENGTH_SHORT).show()
+                }
+                is SettingsEffect.ActivationError -> {
+                    Toast.makeText(context, context.getString(R.string.activation_code_error), Toast.LENGTH_SHORT).show()
+                }
             }
         }
+    }
+
+    if (showCodeDialog) {
+        ActivationCodeDialog(
+            onDismiss = {
+                showCodeDialog = false
+                tapCount = 0
+            },
+            onConfirm = { code ->
+                onAction(SettingsAction.OnActivationCodeSubmitted(code))
+            },
+        )
     }
 
     Column(
@@ -112,6 +145,16 @@ private fun SettingsScreenContent(
             modifier = Modifier
                 .padding(top = 12.dp)
                 .align(Alignment.CenterHorizontally)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                ) {
+                    tapCount++
+                    if (tapCount >= 7) {
+                        tapCount = 0
+                        showCodeDialog = true
+                    }
+                }
         )
     }
 }
@@ -143,6 +186,59 @@ private fun SettingsItemContent(
             style = MaterialTheme.typography.labelSmall,
         )
     }
+}
+
+@Composable
+private fun ActivationCodeDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (String) -> Unit,
+) {
+    var code by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = stringResource(R.string.activation_code_dialog_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        },
+        text = {
+            TextField(
+                value = code,
+                onValueChange = { code = it },
+                placeholder = {
+                    Text(
+                        text = stringResource(R.string.activation_code_dialog_hint),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.outline,
+                    )
+                },
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                ),
+            )
+        },
+        confirmButton = {
+            Button(
+                onClick = { onConfirm(code) },
+                enabled = code.isNotBlank(),
+            ) {
+                Text(text = stringResource(R.string.activation_code_button_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = stringResource(R.string.activation_code_button_cancel))
+            }
+        },
+        containerColor = MaterialTheme.colorScheme.surface,
+    )
 }
 
 private fun openShareIntent(context: Context) {

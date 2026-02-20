@@ -2,13 +2,18 @@ package com.alimapps.senbombardir.ui.screen.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alimapps.senbombardir.data.repository.BillingRepository
+import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.model.types.SettingsItemType
+import com.alimapps.senbombardir.ui.utils.RemoteConfig
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-class SettingsViewModel : ViewModel() {
+class SettingsViewModel(
+    private val billingRepository: BillingRepository,
+) : ViewModel() {
 
     private val _effect = MutableSharedFlow<SettingsEffect>()
     val effect: Flow<SettingsEffect> get() = _effect.debounceEffect()
@@ -16,6 +21,7 @@ class SettingsViewModel : ViewModel() {
     fun action(action: SettingsAction) {
         when (action) {
             is SettingsAction.OnSettingsItemClicked -> onSettingsItemClicked(action.item)
+            is SettingsAction.OnActivationCodeSubmitted -> onActivationCodeSubmitted(action.code)
         }
     }
 
@@ -25,6 +31,15 @@ class SettingsViewModel : ViewModel() {
             SettingsItemType.Share -> setEffectSafely(SettingsEffect.Share)
             SettingsItemType.Evaluate -> setEffectSafely(SettingsEffect.OpenPlayMarket)
             SettingsItemType.Activation -> setEffectSafely(SettingsEffect.OpenActivationScreen)
+        }
+    }
+
+    private fun onActivationCodeSubmitted(code: String) {
+        if (code.trim() == RemoteConfig.activationCode) {
+            billingRepository.setCurrentBillingType(BillingType.Lifetime)
+            setEffectSafely(SettingsEffect.ActivationSuccess)
+        } else {
+            setEffectSafely(SettingsEffect.ActivationError)
         }
     }
 

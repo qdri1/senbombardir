@@ -7,4 +7,6 @@ sealed interface SettingsEffect : DebounceEffect {
     data object Share : SettingsEffect
     data object OpenPlayMarket : SettingsEffect
     data object OpenActivationScreen : SettingsEffect
+    data object ActivationSuccess : SettingsEffect
+    data object ActivationError : SettingsEffect
 }

@@ -24,7 +24,9 @@ val uiModule = module {
     }
 
     viewModel {
-        SettingsViewModel()
+        SettingsViewModel(
+            billingRepository = get(),
+        )
     }
 
     viewModel { (gameId: Long?) ->
