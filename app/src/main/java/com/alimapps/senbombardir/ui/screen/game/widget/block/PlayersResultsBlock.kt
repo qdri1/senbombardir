@@ -89,6 +89,7 @@ fun PlayersResultsBlock(
                 val headerTextStyle = MaterialTheme.typography.labelSmall
                 val textColor = MaterialTheme.colorScheme.onSurface
                 val textStyle = MaterialTheme.typography.labelSmall
+                val textStyleBold = MaterialTheme.typography.labelLarge
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -182,7 +183,7 @@ fun PlayersResultsBlock(
                             Text(
                                 text = playerUiModel.goals.toString(),
                                 color = textColor,
-                                style = textStyle,
+                                style = textStyleBold,
                                 modifier = Modifier
                                     .clickable(
                                         interactionSource = remember { MutableInteractionSource() },

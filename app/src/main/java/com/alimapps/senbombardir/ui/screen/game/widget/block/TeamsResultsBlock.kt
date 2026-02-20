@@ -45,6 +45,7 @@ fun TeamsResultsBlock(
         val headerTextStyle = MaterialTheme.typography.labelSmall
         val textColor = MaterialTheme.colorScheme.onSurface
         val textStyle = MaterialTheme.typography.labelSmall
+        val textStyleBold = MaterialTheme.typography.labelLarge
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -250,7 +251,7 @@ fun TeamsResultsBlock(
                     Text(
                         text = teamUiModel.points.toString(),
                         color = textColor,
-                        style = textStyle,
+                        style = textStyleBold,
                     )
                 }
             }
