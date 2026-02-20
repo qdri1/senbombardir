@@ -1,27 +1,38 @@
 package com.alimapps.senbombardir
 
 import android.app.LocaleManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.core.net.toUri
+import com.alimapps.senbombardir.BuildConfig
 import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.ui.navigation.AppNavigation
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.domain.model.BillingType
+import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager
 import com.alimapps.senbombardir.ui.utils.RemoteConfig
 import com.android.billingclient.api.BillingClient
 import org.koin.android.ext.android.inject
 import java.util.Locale
+
+const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.alimapps.senbombardir"
 
 class MainActivity : ComponentActivity() {
 
@@ -40,6 +51,22 @@ class MainActivity : ComponentActivity() {
         checkPurchase()
         setContent {
             AppTheme {
+                var showUpdateDialog by remember {
+                    mutableStateOf(
+                        RemoteConfig.isAppUpdateRequired && RemoteConfig.appVersionCode > BuildConfig.VERSION_CODE
+                    )
+                }
+
+                if (showUpdateDialog && selectedLanguage != null) {
+                    AppUpdateDialog(
+                        onSkip = { showUpdateDialog = false },
+                        onUpdate = {
+                            showUpdateDialog = false
+                            openGooglePlay()
+                        },
+                    )
+                }
+
                 AppNavigation(
                     showLanguage = selectedLanguage == null,
                     onLanguageSelected = { appLanguage ->
@@ -153,6 +180,14 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             })
+        }
+    }
+
+    private fun openGooglePlay() {
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, GOOGLE_PLAY_URL.toUri()))
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
         }
     }
 

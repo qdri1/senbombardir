@@ -200,4 +200,9 @@
     <string name="activation_plan_activated_text">Сізде толық нұсқа</string>
     <string name="activation_plan_activated_button">Жазылымды басқару</string>
 
+    <string name="update_required_title">Жаңарту қажет</string>
+    <string name="update_required_message">Қолданбаның жаңа нұсқасы қол жетімді. Жаңартыңыз.</string>
+    <string name="update_button_skip">Өткізіп жіберу</string>
+    <string name="update_button_update">Жаңарту</string>
+
 </resources>

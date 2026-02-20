@@ -200,4 +200,9 @@
     <string name="activation_plan_activated_text">You have the full version</string>
     <string name="activation_plan_activated_button">Manage subscription</string>
 
+    <string name="update_required_title">Update required</string>
+    <string name="update_required_message">A new version of the app is available. Please update.</string>
+    <string name="update_button_skip">Skip</string>
+    <string name="update_button_update">Update</string>
+
 </resources>

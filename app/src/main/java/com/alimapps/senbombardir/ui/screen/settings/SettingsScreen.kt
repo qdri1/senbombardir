@@ -35,10 +35,9 @@ import com.alimapps.senbombardir.BuildConfig
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
+import com.alimapps.senbombardir.GOOGLE_PLAY_URL
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.utils.RemoteConfig
-
-private const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.alimapps.senbombardir"
 
 @Composable
 fun SettingsScreen(

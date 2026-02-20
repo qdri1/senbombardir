@@ -197,4 +197,9 @@
     <string name="activation_plan_activated_text">У вас полная версия</string>
     <string name="activation_plan_activated_button">Управление подпиской</string>
 
+    <string name="update_required_title">Требуется обновление</string>
+    <string name="update_required_message">Доступна новая версия приложения. Пожалуйста, обновите приложение.</string>
+    <string name="update_button_skip">Пропустить</string>
+    <string name="update_button_update">Обновить</string>
+
 </resources>
