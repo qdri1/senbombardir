@@ -123,13 +123,14 @@
     <string name="sound_anarbekov">Темирлан\nАнарбеков</string>
     <string name="sound_uo_uo_uo">UO UO UO</string>
     <string name="sound_whistle">Свисток</string>
-    <string name="sound_stadium_applause">Стадион\nшапалақ</string>
-    <string name="sound_girls_applause">Қыздар\nшапалақ</string>
+    <string name="sound_stadium_applause">Аплодирует\nСтадион</string>
+    <string name="sound_girls_applause">Аплодируют\nдевушки</string>
     <string name="sound_bilgenin_istep_jatyr">Білгенін\nістеп жатыр</string>
     <string name="sound_goal_save">Не деген\nсейв</string>
     <string name="sound_suiii">Suiii</string>
     <string name="sound_suiii_full">Suiiiii\nFull</string>
     <string name="sound_goal_goal_goal">Голь Голь\nГоль</string>
+    <string name="sound_oiii_kandai_goal">Уйиии қандай\nшебер гол</string>
     <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
     <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
 
