@@ -137,6 +137,11 @@ fun LiveGameBlock(
                             color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(6.dp),
                         )
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onAction(GameAction.OnLeftTeamClicked) }
+                        )
                 )
                 Text(
                     text = liveGameUiModel.leftTeamGoals.toString(),
@@ -193,6 +198,11 @@ fun LiveGameBlock(
                             width = if (liveGameUiModel.rightTeamColor == TeamColor.White) 1.dp else 0.dp,
                             color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = RoundedCornerShape(6.dp),
+                        )
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null,
+                            onClick = { onAction(GameAction.OnRightTeamClicked) }
                         )
                 )
                 Box(
