@@ -110,7 +110,13 @@ class GameViewModel(
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val language = languageRepository.getSelectedLanguage() ?: AppLanguage.RU
+            val selectedLanguage = languageRepository.getSelectedLanguage() ?: AppLanguage.RU
+            val language = if (selectedLanguage == AppLanguage.KZ) {
+                AppLanguage.RU
+            } else {
+                selectedLanguage
+            }
+
             textToSpeech.language = Locale.forLanguageTag(language.code)
             textToSpeech.voices
                 ?.find { it.name.contains(language.code, ignoreCase = true) }
