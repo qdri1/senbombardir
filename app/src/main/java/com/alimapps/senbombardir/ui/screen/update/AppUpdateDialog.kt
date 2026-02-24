@@ -19,15 +19,10 @@ fun AppUpdateDialog(
         title = {
             Text(
                 text = stringResource(R.string.update_required_title),
-                style = MaterialTheme.typography.titleMedium,
-            )
-        },
-        text = {
-            Text(
-                text = stringResource(R.string.update_required_message),
                 style = MaterialTheme.typography.bodyMedium,
             )
         },
+        text = null,
         confirmButton = {
             Button(onClick = onUpdate) {
                 Text(text = stringResource(R.string.update_button_update))
