@@ -188,9 +188,9 @@
     <string name="activation_text_button">Показать цены</string>
 
     <string name="activation_plan_title">Выберите ваш план</string>
-    <string name="activation_plan_1">Месяц</string>
-    <string name="activation_plan_2">Год</string>
-    <string name="activation_plan_3">Безлимит</string>
+    <string name="activation_plan_1">Ежемесячный</string>
+    <string name="activation_plan_2">Ежегодный</string>
+    <string name="activation_plan_3">Пожизненный</string>
     <string name="activation_plan_button">Купить</string>
     <string name="activation_plan_desc_subscribe">Подписка</string>
     <string name="activation_plan_desc_lifetime">Одноразовая покупка</string>

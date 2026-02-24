@@ -192,8 +192,8 @@
 
     <string name="activation_plan_title">Choose your plan</string>
     <string name="activation_plan_1">Monthly</string>
-    <string name="activation_plan_2">Yearly</string>
-    <string name="activation_plan_3">Unlimited</string>
+    <string name="activation_plan_2">Annual</string>
+    <string name="activation_plan_3">Lifetime</string>
     <string name="activation_plan_button">Buy</string>
     <string name="activation_plan_desc_subscribe">Subscription</string>
     <string name="activation_plan_desc_lifetime">One-time purchase</string>
