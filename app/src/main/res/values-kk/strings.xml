@@ -195,7 +195,7 @@
     <string name="activation_plan_2">Жыл сайын</string>
     <string name="activation_plan_3">Өмір бойы</string>
     <string name="activation_plan_button">Сатып алу</string>
-    <string name="activation_plan_desc_subscribe">Жазылым (Подписка)</string>
+    <string name="activation_plan_desc_subscribe">Жазылым</string>
     <string name="activation_plan_desc_lifetime">Бір реттік сатып алу</string>
     <string name="activation_plan_select_error_text">Тарифті таңдаңыз</string>
     <string name="activation_plan_activated_text">Сізде толық нұсқа</string>
