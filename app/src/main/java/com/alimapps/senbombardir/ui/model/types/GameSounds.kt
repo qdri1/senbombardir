@@ -14,6 +14,7 @@ enum class GameSounds(val stringRes: Int, val rawRes: Int) {
     GoalGoalGoal(stringRes = R.string.sound_goal_goal_goal, rawRes = R.raw.gol_gol_gol),
     OiiiKandaiGoal(stringRes = R.string.sound_oiii_kandai_goal, rawRes = R.raw.oooi_kandai_gol),
     BilgeninIstepJatyr(stringRes = R.string.sound_bilgenin_istep_jatyr, rawRes = R.raw.bilgenin_istep_jatyr),
+    EuropaKarashy(stringRes = R.string.sound_europa_karashy, rawRes = R.raw.europa_karashy),
     Anarbekov(stringRes = R.string.sound_anarbekov, rawRes = R.raw.sound_anarbekov),
     GoalSave(stringRes = R.string.sound_goal_save, rawRes = R.raw.goal_save),
     ModrichtynPasy(stringRes = R.string.sound_modrichtyn_pasy, rawRes = R.raw.modrichtyn_pasy),
