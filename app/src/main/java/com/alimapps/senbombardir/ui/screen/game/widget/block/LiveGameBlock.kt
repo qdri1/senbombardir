@@ -142,7 +142,7 @@ fun LiveGameBlock(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_replace_sides),
                         contentDescription = "GameScreenChangeIcon",
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .size(24.dp)
                             .clip(CircleShape)

@@ -16,7 +16,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -42,11 +41,6 @@ fun GameInfoBottomSheet(
                 .padding(horizontal = 16.dp),
         ) {
             LiveGameBlockInfo.entries.forEach { info ->
-                val color = if (info == LiveGameBlockInfo.ReplaceTeams) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    Color.Black
-                }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -55,7 +49,7 @@ fun GameInfoBottomSheet(
                     Icon(
                         painter = painterResource(id = info.drawableRes),
                         contentDescription = "GameScreenEditIcon",
-                        tint = color,
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = stringResource(id = info.descriptionRes),
