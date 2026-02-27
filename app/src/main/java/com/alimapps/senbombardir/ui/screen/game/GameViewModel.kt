@@ -217,14 +217,7 @@ class GameViewModel(
     private fun setRestTeamUiModelList() {
         when (teamQuantity) {
             TeamQuantity.Team2 -> Unit
-            TeamQuantity.Team3 -> {
-                uiState.value.liveGameUiModel?.let { liveGameUiModel ->
-                    val restTeamUiModelList = uiState.value.teamUiModelList.filter { teamUiModel ->
-                        teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
-                    }
-                    setState(uiState.value.copy(restTeamUiModelList = restTeamUiModelList))
-                }
-            }
+            TeamQuantity.Team3 -> Unit
             TeamQuantity.Team4 -> {
                 uiState.value.liveGameUiModel?.let { liveGameUiModel ->
                     val restTeamUiModelList = uiState.value.teamUiModelList.filter { teamUiModel ->
