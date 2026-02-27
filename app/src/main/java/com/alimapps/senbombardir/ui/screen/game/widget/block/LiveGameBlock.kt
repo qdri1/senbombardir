@@ -24,7 +24,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,51 +51,17 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 fun LiveGameBlock(
     liveGameUiModel: LiveGameUiModel,
     restTeamUiModelList: List<TeamUiModel>,
-    timerValueState: State<String>,
     uiState: GameUiState,
     onAction: (GameAction) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
             .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 20.dp)
             .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Text(
-            text = timerValueState.value,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.displayLarge,
-            fontSize = 36.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        if (liveGameUiModel.isLive) {
-            val painterId = if (uiState.isTimerPlay) R.drawable.ic_pause_circled else R.drawable.ic_play_circled
-            Icon(
-                painter = painterResource(id = painterId),
-                contentDescription = "GameScreenChangeIcon",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .size(48.dp)
-                    .clip(CircleShape)
-                    .clickable { onAction(GameAction.OnTimerClicked) }
-            )
-        } else {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_change),
-                contentDescription = "GameScreenChangeIcon",
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .size(48.dp)
-                    .clip(CircleShape)
-                    .clickable { onAction(GameAction.OnTeamChangeIconClicked) }
-            )
-        }
-
         Box {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -166,12 +131,24 @@ fun LiveGameBlock(
                             }
                         )
                 )
-                Text(
-                    text = "-",
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 32.sp,
-                )
+                if (liveGameUiModel.isLive) {
+                    Text(
+                        text = "-",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 32.sp,
+                    )
+                } else {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_replace_sides),
+                        contentDescription = "GameScreenChangeIcon",
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clip(CircleShape)
+                            .clickable { onAction(GameAction.OnTeamChangeIconClicked) }
+                    )
+                }
                 Text(
                     text = liveGameUiModel.rightTeamGoals.toString(),
                     color = MaterialTheme.colorScheme.onSurface,

@@ -3,9 +3,9 @@ package com.alimapps.senbombardir.ui.model.types
 import com.alimapps.senbombardir.R
 
 enum class LiveGameBlockInfo(val drawableRes: Int, val descriptionRes: Int) {
-    ReplaceTeams(drawableRes = R.drawable.ic_change, descriptionRes = R.string.live_game_info_replace_teams),
-    PauseTimer(drawableRes = R.drawable.ic_pause_circled, descriptionRes = R.string.live_game_info_pause_timer),
-    PlayTimer(drawableRes = R.drawable.ic_play_circled, descriptionRes = R.string.live_game_info_play_timer),
+    ReplaceTeams(drawableRes = R.drawable.ic_replace_sides, descriptionRes = R.string.live_game_info_replace_teams),
+    PauseTimer(drawableRes = R.drawable.ic_pause, descriptionRes = R.string.live_game_info_pause_timer),
+    PlayTimer(drawableRes = R.drawable.ic_play, descriptionRes = R.string.live_game_info_play_timer),
 }
 
 enum class TeamsBlockInfo(val stringRes: Int, val descriptionRes: Int) {

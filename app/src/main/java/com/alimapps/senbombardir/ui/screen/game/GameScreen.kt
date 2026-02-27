@@ -53,6 +53,7 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.LiveGameBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.SoundsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
+import com.alimapps.senbombardir.ui.screen.game.widget.block.TimerBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameInfoBottomSheet
@@ -195,10 +196,15 @@ private fun GameScreenContent(
                 }
 
                 uiState.liveGameUiModel?.let { liveGameUiModel ->
+                    TimerBlock(
+                        liveGameUiModel = liveGameUiModel,
+                        timerValueState = viewModel.timerValueState,
+                        uiState = uiState,
+                        onAction = onAction,
+                    )
                     LiveGameBlock(
                         liveGameUiModel = liveGameUiModel,
                         restTeamUiModelList = uiState.restTeamUiModelList,
-                        timerValueState = viewModel.timerValueState,
                         uiState = uiState,
                         onAction = onAction,
                     )
