@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
+import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.screen.game.GameAction
 import com.alimapps.senbombardir.ui.screen.game.GameUiState
@@ -47,6 +51,7 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 @Composable
 fun LiveGameBlock(
     liveGameUiModel: LiveGameUiModel,
+    restTeamUiModelList: List<TeamUiModel>,
     timerValueState: State<String>,
     uiState: GameUiState,
     onAction: (GameAction) -> Unit,
@@ -290,6 +295,54 @@ fun LiveGameBlock(
                     color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelSmall,
                 )
+            }
+        }
+
+        if (restTeamUiModelList.isNotEmpty()) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                HorizontalDivider(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                        .background(MaterialTheme.colorScheme.background)
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                restTeamUiModelList.forEach { teamUiModel ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(
+                                    color = parseHexColor(teamUiModel.color.hexColor),
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                                .clip(RoundedCornerShape(4.dp))
+                                .border(
+                                    width = if (teamUiModel.color == TeamColor.White) 1.dp else 0.dp,
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                        )
+                        Text(
+                            text = teamUiModel.name,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                        )
+                    }
+                }
             }
         }
     }

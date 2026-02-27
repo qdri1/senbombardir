@@ -197,6 +197,7 @@ private fun GameScreenContent(
                 uiState.liveGameUiModel?.let { liveGameUiModel ->
                     LiveGameBlock(
                         liveGameUiModel = liveGameUiModel,
+                        restTeamUiModelList = uiState.restTeamUiModelList,
                         timerValueState = viewModel.timerValueState,
                         uiState = uiState,
                         onAction = onAction,

@@ -102,6 +102,9 @@ class GameViewModel(
     private val timeInMinutes: Int
         get() = uiState.value.gameUiModel?.timeInMinutes.orDefault()
 
+    private val teamQuantity: TeamQuantity
+        get() = uiState.value.gameUiModel?.teamQuantity ?: TeamQuantity.Team2
+
     private var oldTeamId: Long = 0L
 
     init {
@@ -204,8 +207,35 @@ class GameViewModel(
                         liveGameUiModel = liveGameUiModel,
                     )
                 )
+                setRestTeamUiModelList()
                 setTimerValue()
                 setBillingType()
+            }
+        }
+    }
+
+    private fun setRestTeamUiModelList() {
+        when (teamQuantity) {
+            TeamQuantity.Team2 -> Unit
+            TeamQuantity.Team3 -> {
+                uiState.value.liveGameUiModel?.let { liveGameUiModel ->
+                    val restTeamUiModelList = uiState.value.teamUiModelList.filter { teamUiModel ->
+                        teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
+                    }
+                    setState(uiState.value.copy(restTeamUiModelList = restTeamUiModelList))
+                }
+            }
+            TeamQuantity.Team4 -> {
+                uiState.value.liveGameUiModel?.let { liveGameUiModel ->
+                    val restTeamUiModelList = uiState.value.teamUiModelList.filter { teamUiModel ->
+                        teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
+                    }
+                    setState(
+                        uiState.value.copy(
+                            restTeamUiModelList = restTeamUiModelList.sortedBy { it.id == oldTeamId },
+                        )
+                    )
+                }
             }
         }
     }
@@ -464,6 +494,7 @@ class GameViewModel(
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+                        setRestTeamUiModelList()
                     }
                 }
             }
@@ -487,6 +518,7 @@ class GameViewModel(
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+                        setRestTeamUiModelList()
                     }
                 }
             }
@@ -1210,6 +1242,7 @@ class GameViewModel(
     private suspend fun updateLiveGameBlock() {
         val liveGameUiModel = liveGameRepository.getLiveGame(gameId)
         setState(uiState.value.copy(liveGameUiModel = liveGameUiModel))
+        setRestTeamUiModelList()
     }
 
     private suspend fun updateTeamsBlock() {
