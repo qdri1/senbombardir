@@ -97,11 +97,8 @@ class GameResultsViewModel(
             ).toTeamHistoryModel()
             teamHistoryRepository.updateTeamHistory(teamHistoryModel)
 
-            playerHistoryRepository.getPlayersHistories(teamUiModel.id).forEach { playerHistoryUiModel ->
-                val playerUiModel = playerRepository.getPlayer(playerHistoryUiModel.id)
-                if (playerUiModel == null) {
-                    playerHistoryRepository.deletePlayerHistory(playerHistoryUiModel.id)
-                } else {
+            playerHistoryRepository.getPlayersHistories(teamUiModel.id)
+                .forEach { playerHistoryUiModel ->
                     val playerHistoryModel = playerHistoryUiModel.copy(
                         goals = 0,
                         assists = 0,
@@ -110,9 +107,9 @@ class GameResultsViewModel(
                         shots = 0,
                         saves = 0,
                     ).toPlayerHistoryModel()
+
                     playerHistoryRepository.updatePlayerHistory(playerHistoryModel)
                 }
-            }
         }
         fetchGameHistory()
     }
