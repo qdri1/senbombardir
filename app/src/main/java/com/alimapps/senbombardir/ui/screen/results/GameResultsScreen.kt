@@ -176,7 +176,7 @@ private fun GameResultsScreenContent(
         }
         playerToRemove != null -> playerToRemove?.let { player ->
             ConfirmationBottomSheet(
-                title = stringResource(id = R.string.remove_player_history_title),
+                title = stringResource(id = R.string.remove_player_history_title, player.name),
                 onPositiveClicked = {
                     playerToRemove = null
                     onAction(GameResultsAction.OnRemovePlayerHistoryConfirmationClicked(player))

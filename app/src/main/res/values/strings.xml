@@ -108,7 +108,7 @@
     <string name="delete_game_title">Вы точно хотите удалить эту игру?</string>
     <string name="clear_results_title">Вы точно хотите очистить результаты этой игры?</string>
     <string name="clear_all_results_title">Вы точно хотите очистить результаты всех игр?</string>
-    <string name="remove_player_history_title">Вы точно хотите удалить этого игрока из списка?</string>
+    <string name="remove_player_history_title">Вы точно хотите удалить игрока %s из списка?</string>
     <string name="finish_game_title">Вы точно хотите завершить этот матч?</string>
     <string name="finish_game_snackbar_text">Нужно завершить матч чтобы очистить результаты этой игры!</string>
     <string name="delete_game_snackbar_text">Нужно завершить матч чтобы удалить эту игру!</string>

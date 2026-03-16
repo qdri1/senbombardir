@@ -110,7 +110,7 @@
     <string name="delete_game_title">Бұл ойынды жоюды қалайсыз ба?</string>
     <string name="clear_results_title">Осы ойынның нәтижелерін тазартқыңыз келе ме?</string>
     <string name="clear_all_results_title">Барлық ойындардың нәтижелерін тазартқыңыз келе ме?</string>
-    <string name="remove_player_history_title">Бұл ойыншыны тізімнен алып тастағыңыз келетініне сенімдісіз бе?</string>
+    <string name="remove_player_history_title">%s ойыншыны тізімнен алып тастағыңыз келетініне сенімдісіз бе?</string>
     <string name="finish_game_title">Бұл матчты аяқтағыңыз келе ме?</string>
     <string name="finish_game_snackbar_text">Нәтижелерді тазарту үшін матчты аяқтау керек!</string>
     <string name="delete_game_snackbar_text">Ойынды жою үшін матчты аяқтау керек!</string>
