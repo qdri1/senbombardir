@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
+import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
@@ -71,6 +72,7 @@ private fun GameResultsScreenContent(
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
+    var playerToRemove by remember { mutableStateOf<PlayerUiModel?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
@@ -82,6 +84,7 @@ private fun GameResultsScreenContent(
                 is GameResultsEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
+                is GameResultsEffect.ShowRemovePlayerConfirmationBottomSheet -> playerToRemove = effect.playerUiModel
             }
         }
     }
@@ -137,6 +140,7 @@ private fun GameResultsScreenContent(
                         playerUiModelList = uiState.playerUiModelList,
                         uiLimited = uiState.uiLimited,
                         onPlayerResultClicked = { playerResultUiModel = it },
+                        onRemovePlayerClicked = { onAction(GameResultsAction.OnRemovePlayerHistoryClicked(it)) },
                     )
                 }
 
@@ -168,6 +172,17 @@ private fun GameResultsScreenContent(
                 },
                 onNegativeClicked = { showClearResultsConfirmation = false },
                 onDismissed = { showClearResultsConfirmation = false },
+            )
+        }
+        playerToRemove != null -> playerToRemove?.let { player ->
+            ConfirmationBottomSheet(
+                title = stringResource(id = R.string.remove_player_history_title),
+                onPositiveClicked = {
+                    playerToRemove = null
+                    onAction(GameResultsAction.OnRemovePlayerHistoryConfirmationClicked(player))
+                },
+                onNegativeClicked = { playerToRemove = null },
+                onDismissed = { playerToRemove = null },
             )
         }
         bestPlayers.isNotEmpty() -> {

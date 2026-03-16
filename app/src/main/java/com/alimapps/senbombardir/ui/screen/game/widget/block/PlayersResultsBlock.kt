@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,6 +44,7 @@ fun PlayersResultsBlock(
     playerUiModelList: List<PlayerUiModel>,
     uiLimited: Boolean,
     onPlayerResultClicked: (PlayerResultUiModel) -> Unit,
+    onRemovePlayerClicked: (PlayerUiModel) -> Unit,
 ) {
     Box(
         modifier = Modifier.padding(top = 16.dp),
@@ -124,6 +128,7 @@ fun PlayersResultsBlock(
                         )
                         playerUiModelList.forEach { playerUiModel ->
                             Row(
+                                modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
@@ -142,6 +147,7 @@ fun PlayersResultsBlock(
                                         )
                                 )
                                 Box(
+                                    modifier = Modifier.weight(1f),
                                     contentAlignment = Alignment.Center,
                                 ) {
                                     Text(
@@ -164,6 +170,21 @@ fun PlayersResultsBlock(
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                         modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                                if (!playerUiModel.existsInPlayerList) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Delete,
+                                        contentDescription = "RemovePlayerHistory",
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier
+                                            .size(14.dp)
+                                            .clip(CircleShape)
+                                            .clickable(
+                                                interactionSource = remember { MutableInteractionSource() },
+                                                indication = null,
+                                                onClick = { onRemovePlayerClicked(playerUiModel) }
+                                            )
                                     )
                                 }
                             }

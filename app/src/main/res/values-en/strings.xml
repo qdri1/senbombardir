@@ -110,6 +110,7 @@
     <string name="delete_game_title">Are you sure you want to delete this game?</string>
     <string name="clear_results_title">Are you sure you want to clear the results of this game?</string>
     <string name="clear_all_results_title">Are you sure you want to clear all games results?</string>
+    <string name="remove_player_history_title">Are you sure you want to remove this player from the list?</string>
     <string name="finish_game_title">Are you sure you want to finish this match?</string>
     <string name="finish_game_snackbar_text">You must finish the match to clear the results!</string>
     <string name="delete_game_snackbar_text">You must finish the match to delete the game!</string>

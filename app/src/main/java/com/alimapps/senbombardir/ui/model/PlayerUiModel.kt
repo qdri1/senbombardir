@@ -18,6 +18,7 @@ data class PlayerUiModel(
     val passes: Int,
     val shots: Int,
     val saves: Int,
+    val existsInPlayerList: Boolean = true,
 )
 
 fun PlayerUiModel.toPlayerModel(): PlayerModel =

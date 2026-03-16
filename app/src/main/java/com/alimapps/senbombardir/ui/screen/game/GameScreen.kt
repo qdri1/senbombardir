@@ -225,6 +225,7 @@ private fun GameScreenContent(
                         playerUiModelList = uiState.playerUiModelList,
                         uiLimited = uiState.uiLimited,
                         onPlayerResultClicked = { onAction(GameAction.OnPlayerResultClicked(playerResultUiModel = it)) },
+                        onRemovePlayerClicked = {},
                     )
                 }
 

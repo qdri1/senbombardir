@@ -50,6 +50,8 @@ class GameResultsViewModel(
             is GameResultsAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
             is GameResultsAction.OnFunctionClicked -> onFunctionClicked(action.function)
             is GameResultsAction.OnActivateClicked -> setEffectSafely(GameResultsEffect.OpenActivationScreen)
+            is GameResultsAction.OnRemovePlayerHistoryClicked -> setEffectSafely(GameResultsEffect.ShowRemovePlayerConfirmationBottomSheet(action.playerUiModel))
+            is GameResultsAction.OnRemovePlayerHistoryConfirmationClicked -> onRemovePlayerHistoryConfirmationClicked(action.playerUiModel)
         }
     }
 
@@ -60,7 +62,9 @@ class GameResultsViewModel(
                 .thenBy { it.name }
             )
         val playerUiModelList = teamUiModelList.flatMap { teamUiModel ->
-            playerHistoryRepository.getPlayersHistories(teamUiModel.id)
+            playerHistoryRepository.getPlayersHistories(teamUiModel.id).map { playerUiModel ->
+                playerUiModel.copy(existsInPlayerList = playerRepository.getPlayer(playerUiModel.id) != null)
+            }
         }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
             .thenByDescending { it.assists }
             .thenByDescending { it.saves + it.dribbles + it.shots + it.passes }
@@ -131,6 +135,11 @@ class GameResultsViewModel(
             fetchGameHistory()
             setEffect(GameResultsEffect.ShowSnackbar(R.string.save_success))
         }
+    }
+
+    private fun onRemovePlayerHistoryConfirmationClicked(playerUiModel: PlayerUiModel) = viewModelScope.launch {
+        playerHistoryRepository.deletePlayerHistory(playerUiModel.id)
+        fetchGameHistory()
     }
 
     private fun onFunctionClicked(function: GameResultsFunction) {
