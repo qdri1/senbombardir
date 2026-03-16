@@ -1,13 +1,16 @@
 package com.alimapps.senbombardir.ui.screen.results
 
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
+import com.alimapps.senbombardir.ui.model.types.GameResultsFunction
 
 sealed interface GameResultsAction {
     data object OnBackClicked : GameResultsAction
-    data object OnClearResultsClicked : GameResultsAction
     data object OnClearResultsConfirmationClicked : GameResultsAction
     class OnSavePlayerResultClicked(
         val playerResultUiModel: PlayerResultUiModel,
         val playerResultValue: Int,
     ) : GameResultsAction
+
+    class OnFunctionClicked(val function: GameResultsFunction) : GameResultsAction
+    data object OnActivateClicked : GameResultsAction
 }

@@ -8,11 +8,14 @@ import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.domain.model.BillingType
+import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
+import com.alimapps.senbombardir.ui.model.types.BestPlayerOption
+import com.alimapps.senbombardir.ui.model.types.GameResultsFunction
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import kotlinx.coroutines.flow.Flow
@@ -43,9 +46,10 @@ class GameResultsViewModel(
     fun action(action: GameResultsAction) {
         when (action) {
             is GameResultsAction.OnBackClicked -> setEffectSafely(GameResultsEffect.CloseScreen)
-            is GameResultsAction.OnClearResultsClicked -> setEffectSafely(GameResultsEffect.ShowClearResultsConfirmationBottomSheet)
             is GameResultsAction.OnClearResultsConfirmationClicked -> onClearResultsConfirmationClicked()
             is GameResultsAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
+            is GameResultsAction.OnFunctionClicked -> onFunctionClicked(action.function)
+            is GameResultsAction.OnActivateClicked -> setEffectSafely(GameResultsEffect.OpenActivationScreen)
         }
     }
 
@@ -127,6 +131,51 @@ class GameResultsViewModel(
             fetchGameHistory()
             setEffect(GameResultsEffect.ShowSnackbar(R.string.save_success))
         }
+    }
+
+    private fun onFunctionClicked(function: GameResultsFunction) {
+        when (function) {
+            GameResultsFunction.BestPlayers -> onBestPlayersClicked()
+            GameResultsFunction.ClearResults -> setEffectSafely(GameResultsEffect.ShowClearResultsConfirmationBottomSheet)
+        }
+    }
+
+    private fun onBestPlayersClicked() {
+        val bestPlayers = mutableListOf<BestPlayerUiModel>()
+        val playerList = uiState.value.playerUiModelList
+
+        playerList.maxByOrNull {
+            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots
+        }?.let { best ->
+            bestPlayers.add(
+                BestPlayerUiModel(
+                    option = BestPlayerOption.BestPlayer,
+                    playerUiModel = best
+                )
+            )
+        }
+
+        val statOptions = listOf(
+            Triple(BestPlayerOption.Goals, { it: PlayerUiModel -> it.goals > 0 }, { it: PlayerUiModel -> it.goals }),
+            Triple(BestPlayerOption.Assists, { it: PlayerUiModel -> it.assists > 0 }, { it: PlayerUiModel -> it.assists }),
+            Triple(BestPlayerOption.Saves, { it: PlayerUiModel -> it.saves > 0 }, { it: PlayerUiModel -> it.saves }),
+            Triple(BestPlayerOption.Dribbles, { it: PlayerUiModel -> it.dribbles > 0 }, { it: PlayerUiModel -> it.dribbles }),
+            Triple(BestPlayerOption.Passes, { it: PlayerUiModel -> it.passes > 0 }, { it: PlayerUiModel -> it.passes }),
+            Triple(BestPlayerOption.Shots, { it: PlayerUiModel -> it.shots > 0 }, { it: PlayerUiModel -> it.shots }),
+        )
+
+        statOptions.forEach { (option, filter, selector) ->
+            playerList.filter(filter).maxByOrNull(selector)?.let { best ->
+                bestPlayers.add(
+                    BestPlayerUiModel(
+                        option = option,
+                        playerUiModel = best
+                    )
+                )
+            }
+        }
+
+        setEffectSafely(GameResultsEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
     }
 
     private fun setState(state: GameResultsUiState) {

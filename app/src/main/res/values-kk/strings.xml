@@ -144,6 +144,9 @@
     <string name="function_all_results">Барлық ойындардың нәтижелері</string>
     <string name="function_remove">Ойынды жою</string>
 
+    <string name="function_best_players_all_games">Барлық ойындардың үздік ойыншылары</string>
+    <string name="function_clear_result_all_games">Барлық ойындардың нәтижелерін тазарту</string>
+
     <string name="live_game_info_replace_teams">Сол және оң командаларды ауыстыру</string>
     <string name="live_game_info_pause_timer">Таймерді тоқтату</string>
     <string name="live_game_info_play_timer">Таймерді жалғастыру</string>

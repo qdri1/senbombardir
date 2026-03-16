@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,11 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
+import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
+import com.alimapps.senbombardir.ui.screen.results.widget.GameResultsFunctionsBlock
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -67,12 +70,15 @@ private fun GameResultsScreenContent(
 
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
+    var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is GameResultsEffect.CloseScreen -> navController.navigateUp()
+                is GameResultsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
                 is GameResultsEffect.ShowClearResultsConfirmationBottomSheet -> showClearResultsConfirmation = true
+                is GameResultsEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
                 is GameResultsEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
@@ -104,13 +110,6 @@ private fun GameResultsScreenContent(
                         .weight(1f)
                         .padding(start = 4.dp)
                 )
-                Icon(
-                    imageVector = Icons.Filled.Refresh,
-                    contentDescription = "GameResultsScreenClearResultsIcon",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { onAction(GameResultsAction.OnClearResultsClicked) }
-                )
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -140,6 +139,11 @@ private fun GameResultsScreenContent(
                         onPlayerResultClicked = { playerResultUiModel = it },
                     )
                 }
+
+                GameResultsFunctionsBlock(
+                    uiLimited = uiState.uiLimited,
+                    onAction = onAction,
+                )
             }
         }
     }
@@ -164,6 +168,12 @@ private fun GameResultsScreenContent(
                 },
                 onNegativeClicked = { showClearResultsConfirmation = false },
                 onDismissed = { showClearResultsConfirmation = false },
+            )
+        }
+        bestPlayers.isNotEmpty() -> {
+            BestPlayersBottomSheet(
+                bestPlayers = bestPlayers,
+                onDismissed = { bestPlayers = emptyList() },
             )
         }
     }

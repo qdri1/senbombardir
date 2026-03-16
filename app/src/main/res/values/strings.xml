@@ -142,6 +142,9 @@
     <string name="function_all_results">Результаты всех игр</string>
     <string name="function_remove">Удалить игру</string>
 
+    <string name="function_best_players_all_games">Лучшие игроки всех игр</string>
+    <string name="function_clear_result_all_games">Сбросить результаты всех игр</string>
+
     <string name="live_game_info_replace_teams">Поменять левую и правую команду местами</string>
     <string name="live_game_info_pause_timer">Остановить таймер</string>
     <string name="live_game_info_play_timer">Продолжить таймер</string>
