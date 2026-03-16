@@ -180,12 +180,16 @@
     <string name="activation_title">Активация</string>
 
     <string name="activation_text_title">Что включено?</string>
-    <string name="activation_text_1">Озвучка имени и звуки празднования (гол, ассист и т.д.)</string>
-    <string name="activation_text_2">Озвучка фразы «Осталась одна минута»</string>
-    <string name="activation_text_3">Озвучка фразы «Играем до аута»</string>
-    <string name="activation_text_4">Список футбольных звуков</string>
-    <string name="activation_text_5">Результаты игроков</string>
-    <string name="activation_text_6">Лучшие игроки</string>
+    <string name="activation_text_1">Результаты игроков</string>
+    <string name="activation_desc_1">Доступны результаты всех игроков.</string>
+    <string name="activation_text_2">Лучшие игроки</string>
+    <string name="activation_desc_2">Мы подготовили для вас список лучших игроков.</string>
+    <string name="activation_text_3">Озвучка имени и звуки празднования</string>
+    <string name="activation_desc_3">Голосовое сопровождение: гол, ассист, сейв, дриблинг, удар, пас.</string>
+    <string name="activation_text_4">Озвучка фраз</string>
+    <string name="activation_desc_4">Фразы «Осталась одна минута» и «Играем до аута».</string>
+    <string name="activation_text_5">Список футбольных звуков</string>
+    <string name="activation_desc_5">Интересные исторические футбольные звуки.</string>
     <string name="activation_text_button">Показать цены</string>
 
     <string name="activation_plan_title">Выберите ваш план</string>

@@ -183,12 +183,16 @@
     <string name="activation_title">Activation</string>
 
     <string name="activation_text_title">What’s included?</string>
-    <string name="activation_text_1">Name voice-over and celebration sounds (goal, assist, etc.)</string>
-    <string name="activation_text_2">Voice-over for the phrase “One minute remaining”</string>
-    <string name="activation_text_3">Voice-over for the phrase “Play until the ball is out”</string>
-    <string name="activation_text_4">List of football sounds</string>
-    <string name="activation_text_5">Player results</string>
-    <string name="activation_text_6">Best players</string>
+    <string name="activation_text_1">Player results</string>
+    <string name="activation_desc_1">All players results are available.</string>
+    <string name="activation_text_2">Best players</string>
+    <string name="activation_desc_2">We prepare for you the list of best players.</string>
+    <string name="activation_text_3">Name voice-over and celebration sounds</string>
+    <string name="activation_desc_3">Voice-over goal, assist, save, dribble, shot, pass.</string>
+    <string name="activation_text_4">Voice-over for the phrases</string>
+    <string name="activation_desc_4">“One minute remaining” and “Play until the ball is out” phrases.</string>
+    <string name="activation_text_5">List of football sounds</string>
+    <string name="activation_desc_5">Interesting historical Football sounds.</string>
     <string name="activation_text_button">Show prices</string>
 
     <string name="activation_plan_title">Choose your plan</string>

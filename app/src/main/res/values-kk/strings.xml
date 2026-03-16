@@ -183,12 +183,16 @@
     <string name="activation_title">Толық нұсқа алу</string>
 
     <string name="activation_text_title">Не кіреді?</string>
-    <string name="activation_text_1">Аттың дыбысталуы және мерекелік дыбыстар (гол, ассист және т.б.)</string>
-    <string name="activation_text_2">«Бір минут қалды» деген фразаның дыбысталуы</string>
-    <string name="activation_text_3">«Аутқа дейін ойнаймыз» деген фразаның дыбысталуы</string>
-    <string name="activation_text_4">Футбол дыбыстарының тізімі</string>
-    <string name="activation_text_5">Ойыншылардың нәтижелері</string>
-    <string name="activation_text_6">Үздік ойыншылар</string>
+    <string name="activation_text_1">Ойыншылардың нәтижелері</string>
+    <string name="activation_desc_1">Барлық ойыншылардың нәтижелері қолжетімді.</string>
+    <string name="activation_text_2">Үздік ойыншылар</string>
+    <string name="activation_desc_2">Сіздер үшін ең үздік ойыншылардың тізімін дайындап қойдық.</string>
+    <string name="activation_text_3">Аттың дыбысталуы және мерекелік дыбыстар</string>
+    <string name="activation_desc_3">Дыбыстық сүйемелдеу: гол, ассист, сейв, дриблинг, соққы, пас.</string>
+    <string name="activation_text_4">Фразаларды дыбыстау</string>
+    <string name="activation_desc_4">«Бір минут қалды» және «Аутқа дейін ойнаймыз» фразалары.</string>
+    <string name="activation_text_5">Футбол дыбыстарының тізімі</string>
+    <string name="activation_desc_5">Қызықты тарихи футбол дыбыстары.</string>
     <string name="activation_text_button">Бағаларды көрсету</string>
 
     <string name="activation_plan_title">Тарифті таңдаңыз</string>

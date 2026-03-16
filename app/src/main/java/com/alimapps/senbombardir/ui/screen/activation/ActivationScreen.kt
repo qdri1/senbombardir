@@ -155,27 +155,28 @@ private fun ActivationTextContent(
         )
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
-            text = stringResource(R.string.activation_text_5),
-        )
-        ActivationTextItem(
-            icon = painterResource(R.drawable.ic_star_shine),
-            text = stringResource(R.string.activation_text_6),
-        )
-        ActivationTextItem(
-            icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_1),
+            desc = stringResource(R.string.activation_desc_1),
         )
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_2),
+            desc = stringResource(R.string.activation_desc_2),
         )
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_3),
+            desc = stringResource(R.string.activation_desc_3),
         )
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_4),
+            desc = stringResource(R.string.activation_desc_4),
+        )
+        ActivationTextItem(
+            icon = painterResource(R.drawable.ic_star_shine),
+            text = stringResource(R.string.activation_text_5),
+            desc = stringResource(R.string.activation_desc_5),
         )
         Button(
             onClick = { onAction(ActivationAction.ShowPriceButtonClicked) },
@@ -291,6 +292,7 @@ private fun ActivatedContent(
 private fun ActivationTextItem(
     icon: Painter,
     text: String,
+    desc: String,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -303,14 +305,25 @@ private fun ActivationTextItem(
         Icon(
             painter = icon,
             contentDescription = "GameScreenEditIcon",
-            tint = parseHexColor("#FFA500"),
+            tint = MaterialTheme.colorScheme.primary,
         )
-        Text(
-            text = text,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium,
+        Column(
             modifier = Modifier.weight(1f),
-        )
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(
+                text = text,
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelMedium,
+                modifier = Modifier,
+            )
+            Text(
+                text = desc,
+                color = MaterialTheme.colorScheme.outline,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier,
+            )
+        }
     }
 }
 
