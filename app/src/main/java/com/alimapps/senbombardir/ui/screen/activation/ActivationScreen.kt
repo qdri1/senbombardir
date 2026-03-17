@@ -22,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -314,7 +315,7 @@ private fun ActivationTextItem(
             Text(
                 text = text,
                 color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier,
             )
             Text(
@@ -322,6 +323,11 @@ private fun ActivationTextItem(
                 color = MaterialTheme.colorScheme.outline,
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier,
+            )
+            HorizontalDivider(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .background(MaterialTheme.colorScheme.outline)
             )
         }
     }
