@@ -200,6 +200,13 @@ private fun ActivationPlanContent(
     uiState: ActivationUiState,
     onAction: (ActivationAction) -> Unit,
 ) {
+    val economyPercent = calculateEconomy(uiState.monthlyPrice, uiState.yearlyPrice)
+    val yearlyBadges = buildList {
+        if (economyPercent != null) {
+            add(stringResource(R.string.activation_plan_badge_save, economyPercent) to true)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -228,6 +235,7 @@ private fun ActivationPlanContent(
             checked = uiState.selectedPlan == ActivationPlan.Yearly,
             plan = ActivationPlan.Yearly,
             onAction = onAction,
+            badges = yearlyBadges,
         )
         ActivationPlanItem(
             text = stringResource(R.string.activation_plan_3),
@@ -320,14 +328,13 @@ private fun ActivationTextItem(
             )
             Text(
                 text = desc,
-                color = MaterialTheme.colorScheme.outline,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier,
             )
             HorizontalDivider(
                 modifier = Modifier
                     .padding(top = 8.dp)
-                    .background(MaterialTheme.colorScheme.outline)
             )
         }
     }
@@ -341,45 +348,116 @@ private fun ActivationPlanItem(
     checked: Boolean,
     plan: ActivationPlan,
     onAction: (ActivationAction) -> Unit,
+    badges: List<Pair<String, Boolean>> = emptyList(),
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .padding(vertical = 8.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.background)
-            .clickable { onAction(ActivationAction.OnActivationPlanItemClicked(plan)) }
-            .padding(16.dp)
     ) {
-        Column(
-            modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = if (badges.isNotEmpty()) 12.dp else 0.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.background)
+                .clickable { onAction(ActivationAction.OnActivationPlanItemClicked(plan)) }
+                .padding(16.dp)
         ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                Text(
+                    text = text,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Text(
+                    text = desc,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.labelSmall,
+                )
+            }
             Text(
-                text = text,
+                text = price,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium,
             )
-            Text(
-                text = desc,
-                color = MaterialTheme.colorScheme.onSurface,
-                style = MaterialTheme.typography.labelSmall,
+            Checkbox(
+                checked = checked,
+                onCheckedChange = null,
             )
         }
+        if (badges.isNotEmpty()) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(end = 12.dp)
+            ) {
+                badges.forEach { (label, isPrimary) ->
+                    PlanBadge(text = label, isPrimary = isPrimary)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PlanBadge(text: String, isPrimary: Boolean) {
+    val shape = RoundedCornerShape(50)
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .clip(shape)
+            .background(
+                if (isPrimary) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.tertiary
+            )
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+    ) {
         Text(
-            text = price,
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier,
-        )
-        Checkbox(
-            checked = checked,
-            onCheckedChange = null,
+            text = text,
+            color = if (isPrimary) MaterialTheme.colorScheme.onPrimary
+                    else MaterialTheme.colorScheme.onTertiary,
+            style = MaterialTheme.typography.labelSmall,
         )
     }
+}
+
+private fun extractNumericValue(price: String?): Double? {
+    if (price.isNullOrBlank()) return null
+    val noSpaces = price.replace(" ", "").replace("\u00A0", "")
+    val numericStr = noSpaces.filter { it.isDigit() || it == '.' || it == ',' }
+    if (numericStr.isEmpty()) return null
+    val dotCount = numericStr.count { it == '.' }
+    val commaCount = numericStr.count { it == ',' }
+    return when {
+        dotCount == 0 && commaCount == 0 -> numericStr.toDoubleOrNull()
+        dotCount == 1 && commaCount == 0 -> numericStr.toDoubleOrNull()
+        dotCount == 0 && commaCount == 1 -> numericStr.replace(',', '.').toDoubleOrNull()
+        dotCount > 1 -> numericStr.replace(".", "").replace(",", ".").toDoubleOrNull()
+        commaCount > 1 -> numericStr.replace(",", "").toDoubleOrNull()
+        else -> {
+            val lastDot = numericStr.lastIndexOf('.')
+            val lastComma = numericStr.lastIndexOf(',')
+            if (lastDot > lastComma) numericStr.replace(",", "").toDoubleOrNull()
+            else numericStr.replace(".", "").replace(",", ".").toDoubleOrNull()
+        }
+    }
+}
+
+private fun calculateEconomy(monthlyPrice: String?, yearlyPrice: String?): Int? {
+    val monthly = extractNumericValue(monthlyPrice) ?: return null
+    val yearly = extractNumericValue(yearlyPrice) ?: return null
+    if (monthly <= 0) return null
+    val monthlyPerYear = monthly * 12
+    if (monthlyPerYear <= yearly) return null
+    return ((monthlyPerYear - yearly) / monthlyPerYear * 100).toInt()
 }
 
 private fun openGooglePlaySubscriptions(context: Context) {

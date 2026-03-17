@@ -209,6 +209,7 @@
     <string name="activation_plan_select_error_text">Choose plan</string>
     <string name="activation_plan_activated_text">You have the full version</string>
     <string name="activation_plan_activated_button">Manage subscription</string>
+    <string name="activation_plan_badge_save">Save %d%%</string>
 
     <string name="update_required_title">A new version of the app is available</string>
     <string name="update_button_skip">Skip</string>
