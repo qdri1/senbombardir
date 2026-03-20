@@ -65,7 +65,7 @@ class AddGameViewModel(
     private val _gameNameFieldState = mutableStateOf(String.empty)
     val gameNameFieldState: State<String> = _gameNameFieldState
 
-    private val _timeInMinuteFieldState = mutableStateOf(DEFAULT_TIME_IN_MINUTES.toString())
+    private val _timeInMinuteFieldState = mutableStateOf(String.empty)
     val timeInMinuteFieldState: State<String> = _timeInMinuteFieldState
 
     private val _gameFormatState = mutableStateOf(GameFormat.Format5x5)

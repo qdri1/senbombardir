@@ -25,6 +25,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -83,7 +84,19 @@ fun AppNavigation(
                                     restoreState = true
                                 }
                             },
-                            icon = { Icon(item.icon, contentDescription = item.route) },
+                            icon = {
+                                if (item.iconVector != null) {
+                                    Icon(
+                                        imageVector = item.iconVector,
+                                        contentDescription = item.route
+                                    )
+                                } else {
+                                    Icon(
+                                        painter = painterResource(item.iconRes),
+                                        contentDescription = item.route
+                                    )
+                                }
+                            },
                             label = { Text(text = stringResource(id = item.label)) }
                         )
                     }
