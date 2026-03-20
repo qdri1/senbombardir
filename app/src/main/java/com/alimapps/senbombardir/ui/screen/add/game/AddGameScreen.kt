@@ -466,7 +466,7 @@ fun TabContent(
                 .padding(top = 4.dp)
                 .padding(bottom = 16.dp)
         ) {
-            Text(text = stringResource(id = R.string.add_player))
+            Text(text = stringResource(id = R.string.add_player), style = MaterialTheme.typography.labelLarge)
         }
     }
 }

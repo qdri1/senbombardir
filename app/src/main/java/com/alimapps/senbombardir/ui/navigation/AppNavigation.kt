@@ -106,7 +106,7 @@ fun AppNavigation(
                                     )
                                 }
                             },
-                            label = { Text(text = stringResource(id = item.label)) }
+                            label = { Text(text = stringResource(id = item.label), style = MaterialTheme.typography.labelSmall) }
                         )
                     }
                 }

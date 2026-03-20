@@ -65,7 +65,7 @@ fun ConfirmationBottomSheet(
                     .padding(top = 4.dp)
                     .padding(bottom = 16.dp)
             ) {
-                Text(text = stringResource(id = R.string.button_no))
+                Text(text = stringResource(id = R.string.button_no), style = MaterialTheme.typography.labelLarge)
             }
             Button(
                 onClick = { onPositiveClicked() },
@@ -77,7 +77,7 @@ fun ConfirmationBottomSheet(
                     .padding(top = 4.dp)
                     .padding(bottom = 16.dp)
             ) {
-                Text(text = stringResource(id = R.string.button_yes))
+                Text(text = stringResource(id = R.string.button_yes), style = MaterialTheme.typography.labelLarge)
             }
         }
     }

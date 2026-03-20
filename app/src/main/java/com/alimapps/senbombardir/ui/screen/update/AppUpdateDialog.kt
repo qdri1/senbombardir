@@ -25,12 +25,12 @@ fun AppUpdateDialog(
         text = null,
         confirmButton = {
             Button(onClick = onUpdate) {
-                Text(text = stringResource(R.string.update_button_update))
+                Text(text = stringResource(R.string.update_button_update), style = MaterialTheme.typography.labelLarge)
             }
         },
         dismissButton = {
             TextButton(onClick = onSkip) {
-                Text(text = stringResource(R.string.update_button_skip))
+                Text(text = stringResource(R.string.update_button_skip), style = MaterialTheme.typography.labelLarge)
             }
         },
         containerColor = MaterialTheme.colorScheme.surface,

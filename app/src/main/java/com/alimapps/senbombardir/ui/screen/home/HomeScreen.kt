@@ -256,7 +256,10 @@ private fun HomeScreenContent(
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp)
         ) {
-            Text(text = stringResource(id = R.string.add_game))
+            Text(
+                text = stringResource(id = R.string.add_game),
+                style = MaterialTheme.typography.labelLarge,
+            )
         }
     }
 }

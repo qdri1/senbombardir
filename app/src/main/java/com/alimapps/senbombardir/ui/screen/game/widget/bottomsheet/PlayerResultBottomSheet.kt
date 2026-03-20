@@ -105,7 +105,7 @@ fun PlayerResultBottomSheet(
                 .padding(top = 12.dp)
                 .padding(bottom = 16.dp)
         ) {
-            Text(text = stringResource(id = R.string.save))
+            Text(text = stringResource(id = R.string.save), style = MaterialTheme.typography.labelLarge)
         }
         Text(
             text = stringResource(id = R.string.result_correction_text),
