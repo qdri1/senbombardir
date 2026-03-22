@@ -138,8 +138,13 @@ private fun SettingsScreenContent(
             )
         }
 
+        val versionName = if (BuildConfig.DEBUG) {
+            "${stringResource(id = R.string.settings_version)}: ${BuildConfig.VERSION_NAME} - ${BuildConfig.BUILD_TYPE}"
+        } else {
+            "${stringResource(id = R.string.settings_version)}: ${BuildConfig.VERSION_NAME}"
+        }
         Text(
-            text = "${stringResource(id = R.string.settings_version)}: ${BuildConfig.VERSION_NAME} - ${BuildConfig.BUILD_TYPE}",
+            text = versionName,
             color = MaterialTheme.colorScheme.outline,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
