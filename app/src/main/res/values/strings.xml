@@ -1,71 +1,72 @@
 <resources>
     <string name="app_name">Dop Tep</string>
 
-    <string name="tab_home">Игры</string>
-    <string name="tab_settings">Настройки</string>
+    <string name="tab_home">Ойындар</string>
+    <string name="tab_settings">Баптаулар</string>
 
-    <string name="add_game">Добавить игру</string>
-    <string name="update_game">Редактировать игру</string>
+    <string name="add_game">Ойын қосу</string>
+    <string name="update_game">Ойынды өңдеу</string>
 
-    <string name="game_empty">У вас пока нет игр</string>
-    <string name="game_name">Название игры</string>
-    <string name="game_time">Время матча в минутах</string>
-    <string name="game_format">Формат игры</string>
+    <string name="game_empty">Сізде әлі ойындар жоқ</string>
+    <string name="game_name">Ойын атауы</string>
+    <string name="game_time">Матч уақыты (минут)</string>
+    <string name="game_format">Ойын форматы</string>
 
-    <string name="game_rules">Правила игры</string>
-    <string name="game_rule_2_change_side">После каждого тайма меняемся сторонами</string>
-    <string name="game_rule_2_stay_side">Не меняемся сторонами</string>
-    <string name="game_rule_3_only_2_games">Ровно 2 игры</string>
-    <string name="game_rule_3_winner_stay_2">Победивший остается (макс. 2 игры)</string>
-    <string name="game_rule_3_winner_stay_3">Победивший остается (макс. 3 игры)</string>
-    <string name="game_rule_3_winner_stay_4">Победивший остается (макс. 4 игры)</string>
-    <string name="game_rule_3_winner_stay_unlimited">Победивший всегда остается</string>
-    <string name="game_rule_4_only_3_games">Ровно 3 игры</string>
-    <string name="game_rule_4_winner_stay_3">Победивший остается (макс. 3 игры)</string>
-    <string name="game_rule_4_winner_stay_4">Победивший остается (макс. 4 игры)</string>
-    <string name="game_rule_4_winner_stay_5">Победивший остается (макс. 5 игры)</string>
-    <string name="game_rule_4_winner_stay_6">Победивший остается (макс. 6 игры)</string>
-    <string name="game_rule_4_winner_stay_unlimited">Победивший всегда остается</string>
+    <string name="game_rules">Ойын ережелері</string>
+    <string name="game_rule_2_change_side">Әр таймнан кейін алаң ауыстырамыз</string>
+    <string name="game_rule_2_stay_side">Алаң ауыстырмаймыз</string>
+    <string name="game_rule_3_only_2_games">Дәл 2 ойын</string>
+    <string name="game_rule_3_winner_stay_2">Жеңген команда қалады (макс. 2 ойын)</string>
+    <string name="game_rule_3_winner_stay_3">Жеңген команда қалады (макс. 3 ойын)</string>
+    <string name="game_rule_3_winner_stay_4">Жеңген команда қалады (макс. 4 ойын)</string>
+    <string name="game_rule_3_winner_stay_unlimited">Жеңген команда әрдайым қалады</string>
+    <string name="game_rule_4_only_3_games">Дәл 3 ойын</string>
+    <string name="game_rule_4_winner_stay_3">Жеңген команда қалады (макс. 3 ойын)</string>
+    <string name="game_rule_4_winner_stay_4">Жеңген команда қалады (макс. 4 ойын)</string>
+    <string name="game_rule_4_winner_stay_5">Жеңген команда қалады (макс. 5 ойын)</string>
+    <string name="game_rule_4_winner_stay_6">Жеңген команда қалады (макс. 6 ойын)</string>
+    <string name="game_rule_4_winner_stay_unlimited">Жеңген команда әрдайым қалады</string>
 
-    <string name="game_name_empty_text">Нужно заполнить Название игры</string>
-    <string name="game_time_empty_text">Нужно заполнить Время матча</string>
-    <string name="team_name_empty_text">Нужно заполнить Название команды</string>
+    <string name="game_name_empty_text">Ойын атауын енгізу керек</string>
+    <string name="game_time_empty_text">Матч уақытын енгізу керек</string>
+    <string name="team_name_empty_text">Команда атауын енгізу керек</string>
 
-    <string name="team_quantity">Количество команд</string>
+    <string name="team_quantity">Командалар саны</string>
     <string name="team_number">К-%s</string>
-    <string name="team_name">Название команды</string>
-    <string name="choose_team_color">Выберите цвет</string>
+    <string name="team_name">Команда атауы</string>
+    <string name="choose_team_color">Түсті таңдаңыз</string>
 
-    <string name="player_number">Игрок %s</string>
-    <string name="add_player">Добавить игрока</string>
-    <string name="save">Сохранить</string>
-    <string name="save_success">Сохранено</string>
-    <string name="result_correction_text">Внимание! Этот раздел предназначен для внесения корректировок в ошибочные результаты. Если вы хотите добавить новый результат, нажмите на название левой или правой команды во время игры.</string>
+    <string name="player_number">Ойыншы %s</string>
+    <string name="add_player">Ойыншы қосу</string>
+    <string name="save">Сақтау</string>
+    <string name="save_success">Сақталды</string>
 
-    <string name="button_yes">Да</string>
-    <string name="button_no">Нет</string>
+    <string name="result_correction_text">Назар аударыңыз! Бұл бөлім қате нәтижелерді түзетуге арналған. Егер жаңа нәтижені қосқыңыз келсе, ойын барысында сол немесе оң команданың атауын басыңыз.</string>
 
-    <string name="home_game_name">Название:</string>
-    <string name="home_game_format">Формат:</string>
-    <string name="home_game_team_quantity">Команд:</string>
-    <string name="home_game_rule">Правила:</string>
-    <string name="home_game_time">Время тайма:</string>
+    <string name="button_yes">Иә</string>
+    <string name="button_no">Жоқ</string>
+
+    <string name="home_game_name">Атауы:</string>
+    <string name="home_game_format">Форматы:</string>
+    <string name="home_game_team_quantity">Командалар:</string>
+    <string name="home_game_rule">Ереже:</string>
+    <string name="home_game_time">Тайм уақыты:</string>
 
     <string name="time_in_minutes">%d минут</string>
 
     <string name="team_result_place">#</string>
     <string name="team_result_name">Команда</string>
-    <string name="team_result_games">И</string>
-    <string name="team_result_wins">В</string>
-    <string name="team_result_draws">Н</string>
-    <string name="team_result_loses">П</string>
+    <string name="team_result_games">О</string>
+    <string name="team_result_wins">Ж</string>
+    <string name="team_result_draws">Т</string>
+    <string name="team_result_loses">Ұ</string>
     <string name="team_result_goals_conceded">+/-</string>
-    <string name="team_result_goals_difference">РГ</string>
-    <string name="team_result_points">ОЧК</string>
+    <string name="team_result_goals_difference">ГА</string>
+    <string name="team_result_points">ҰП</string>
 
-    <string name="player_result_limited_text">Результаты игроков доступны только в полной версии приложения</string>
+    <string name="player_result_limited_text">Ойыншылардың нәтижелері тек қосымшаның толық нұсқасында қолжетімді</string>
     <string name="player_result_place">#</string>
-    <string name="player_result_name">Игрок</string>
+    <string name="player_result_name">Ойыншы</string>
     <string name="player_result_goals">⚽️</string>
     <string name="player_result_assists">А</string>
     <string name="player_result_dribbles">Д</string>
@@ -79,16 +80,16 @@
     <string name="team_option_pass">Пас</string>
     <string name="team_option_shot">Удар</string>
     <string name="team_option_save">Сейв</string>
-    <string name="team_option_players_title">выберите автора</string>
+    <string name="team_option_players_title">Авторды таңдаңыз</string>
     <string name="team_option_players_auto_goal">Автогол</string>
 
-    <string name="best_player_option_best_player">Лучший игрок 🔥</string>
-    <string name="best_player_option_goals">Лучший бомбардир️ ⚽️</string>
-    <string name="best_player_option_assists">Лучший ассист️</string>
-    <string name="best_player_option_saves">Лучший сейв</string>
-    <string name="best_player_option_dribbles">Лучший дриблинг</string>
-    <string name="best_player_option_passes">Лучший пас</string>
-    <string name="best_player_option_shots">Лучший удар</string>
+    <string name="best_player_option_best_player">Үздік ойыншы 🔥</string>
+    <string name="best_player_option_goals">Үздік бомбардир️ ⚽️</string>
+    <string name="best_player_option_assists">Үздік ассист</string>
+    <string name="best_player_option_saves">Үздік сейв</string>
+    <string name="best_player_option_dribbles">Үздік дриблинг</string>
+    <string name="best_player_option_passes">Үздік пас</string>
+    <string name="best_player_option_shots">Үздік удар</string>
 
     <string name="text_goal">гол</string>
     <string name="text_assist">ассист</string>
@@ -104,28 +105,28 @@
     <string name="text_to_speech_shot">Мощьный удар от %s</string>
     <string name="text_to_speech_save">Лучший сейв от %s</string>
 
-    <string name="stay_team_selection_title">Выберите команду которая остается на поле</string>
-    <string name="delete_game_title">Вы точно хотите удалить эту игру?</string>
-    <string name="clear_results_title">Вы точно хотите очистить результаты этой игры?</string>
-    <string name="clear_all_results_title">Вы точно хотите очистить результаты всех игр?</string>
-    <string name="remove_player_history_title">Вы точно хотите удалить игрока %s из списка?</string>
-    <string name="finish_game_title">Вы точно хотите завершить этот матч?</string>
-    <string name="finish_game_snackbar_text">Нужно завершить матч чтобы очистить результаты этой игры!</string>
-    <string name="delete_game_snackbar_text">Нужно завершить матч чтобы удалить эту игру!</string>
-    <string name="update_game_snackbar_text">Нужно завершить матч чтобы редактировать эту игру!</string>
-    <string name="open_game_results_snackbar_text">Нужно завершить матч чтобы перейти на результаты всех игр!</string>
-    <string name="open_activation_screen_snackbar_text">Нужно завершить матч чтобы открыть страницу активации!</string>
-    <string name="go_back_title">Вы точно хотите выйти из этой страницы?</string>
-    <string name="game_count">cыграно игр: %s</string>
+    <string name="stay_team_selection_title">Алаңда қалатын команданы таңдаңыз</string>
+    <string name="delete_game_title">Бұл ойынды жоюды қалайсыз ба?</string>
+    <string name="clear_results_title">Осы ойынның нәтижелерін тазартқыңыз келе ме?</string>
+    <string name="clear_all_results_title">Барлық ойындардың нәтижелерін тазартқыңыз келе ме?</string>
+    <string name="remove_player_history_title">%s ойыншыны тізімнен алып тастағыңыз келетініне сенімдісіз бе?</string>
+    <string name="finish_game_title">Бұл матчты аяқтағыңыз келе ме?</string>
+    <string name="finish_game_snackbar_text">Нәтижелерді тазарту үшін матчты аяқтау керек!</string>
+    <string name="delete_game_snackbar_text">Ойынды жою үшін матчты аяқтау керек!</string>
+    <string name="update_game_snackbar_text">Ойынды өңдеу үшін матчты аяқтау керек!</string>
+    <string name="open_game_results_snackbar_text">Барлық нәтижелерге өту үшін матчты аяқтау керек!</string>
+    <string name="open_activation_screen_snackbar_text">Активация бетіне өту үшін матчты аяқтау керек!</string>
+    <string name="go_back_title">Бұл беттен шыққыңыз келе ме?</string>
+    <string name="game_count">ойын ойналды: %s</string>
 
-    <string name="sound_limited_text">Звуки и озвучки доступны только в полной версии приложения</string>
-    <string name="sound_league_chemp">Лига\nЧемпионов</string>
+    <string name="sound_limited_text">Дыбыстар тек қосымшаның толық нұсқасында қолжетімді</string>
+    <string name="sound_league_chemp">Чемпиондар\nлигасы</string>
     <string name="sound_goal_fans">Стадион\nГоооооол</string>
-    <string name="sound_anarbekov">Темирлан\nАнарбеков</string>
+    <string name="sound_anarbekov">Темірлан\nАнарбеков</string>
     <string name="sound_uo_uo_uo">UO UO UO</string>
-    <string name="sound_whistle">Свисток</string>
-    <string name="sound_stadium_applause">Аплодирует\nСтадион</string>
-    <string name="sound_girls_applause">Аплодируют\nдевушки</string>
+    <string name="sound_whistle">Ысқырық</string>
+    <string name="sound_stadium_applause">Стадион\nшапалақ</string>
+    <string name="sound_girls_applause">Қыздар\nшапалақ</string>
     <string name="sound_bilgenin_istep_jatyr">Білгенін\nістеп жатыр</string>
     <string name="sound_europa_karashy">Европа\nқарашы</string>
     <string name="sound_goal_save">Не деген\nсейв</string>
@@ -136,87 +137,88 @@
     <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
     <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
 
-    <string name="function_best_players">Лучшие игроки</string>
-    <string name="function_edit">Редактировать игру</string>
-    <string name="function_clear_result">Сбросить результаты этой игры</string>
-    <string name="function_info">Инфо</string>
-    <string name="function_all_results">Результаты всех игр</string>
-    <string name="function_remove">Удалить игру</string>
+    <string name="function_best_players">Үздік ойыншылар</string>
+    <string name="function_edit">Ойынды өңдеу</string>
+    <string name="function_clear_result">Осы ойынның нәтижелерін тазарту</string>
+    <string name="function_info">Ақпарат</string>
+    <string name="function_all_results">Барлық ойындардың нәтижелері</string>
+    <string name="function_remove">Ойынды жою</string>
 
-    <string name="function_best_players_all_games">Лучшие игроки всех игр</string>
-    <string name="function_clear_result_all_games">Сбросить результаты всех игр</string>
+    <string name="function_best_players_all_games">Барлық ойындардың үздік ойыншылары</string>
+    <string name="function_clear_result_all_games">Барлық ойындардың нәтижелерін тазарту</string>
 
-    <string name="live_game_info_replace_teams">Поменять левую и правую команду местами</string>
-    <string name="live_game_info_pause_timer">Остановить таймер</string>
-    <string name="live_game_info_play_timer">Продолжить таймер</string>
+    <string name="live_game_info_replace_teams">Сол және оң командаларды ауыстыру</string>
+    <string name="live_game_info_pause_timer">Таймерді тоқтату</string>
+    <string name="live_game_info_play_timer">Таймерді жалғастыру</string>
 
-    <string name="teams_block_info_games">Игр</string>
-    <string name="teams_block_info_wins">Выигрыши</string>
-    <string name="teams_block_info_draws">Ничьи</string>
-    <string name="teams_block_info_loses">Поражения</string>
-    <string name="teams_block_info_goals_conceded">Количество забитых/пропущенных (+/-) голов</string>
-    <string name="teams_block_info_goals_difference">Разница голов</string>
-    <string name="teams_block_info_points">Количество очков</string>
+    <string name="teams_block_info_games">Ойындар</string>
+    <string name="teams_block_info_wins">Жеңістер</string>
+    <string name="teams_block_info_draws">Тең ойындар</string>
+    <string name="teams_block_info_loses">Ұтылыстар</string>
+    <string name="teams_block_info_goals_conceded">Соғылған/жіберілген голдар саны (+/-)</string>
+    <string name="teams_block_info_goals_difference">Гол айырмасы</string>
+    <string name="teams_block_info_points">Ұпай саны</string>
 
     <string name="players_block_info_goals">Гол</string>
     <string name="players_block_info_assists">Ассист</string>
-    <string name="players_block_info_saves">Лучший сейв</string>
-    <string name="players_block_info_dribbles">Красивый проход/дриблинг</string>
-    <string name="players_block_info_shots">Мощьный точный удар</string>
-    <string name="players_block_info_passes">Красивый пас</string>
+    <string name="players_block_info_saves">Үздік сейв</string>
+    <string name="players_block_info_dribbles">Әдемі дриблинг</string>
+    <string name="players_block_info_shots">Күшті дәл соққы (удар)</string>
+    <string name="players_block_info_passes">Әдемі пас</string>
 
-    <string name="settings_item_language">Язык</string>
-    <string name="settings_item_share">Поделиться</string>
-    <string name="settings_item_star">Оценить</string>
+    <string name="settings_item_language">Тіл</string>
+    <string name="settings_item_share">Бөлісу</string>
+    <string name="settings_item_star">Бағалау</string>
     <string name="settings_item_telegram">Telegram</string>
     <string name="settings_item_whatsapp">WhatsApp</string>
-    <string name="settings_item_activation">Управление подпиской</string>
-    <string name="settings_version">Версия</string>
+    <string name="settings_item_activation">Жазылымды басқару</string>
+    <string name="settings_version">Нұсқа</string>
 
-    <string name="choose_language">Выберите язык</string>
-    <string name="telegram_not_installed">У Вас не установлен Telegram!</string>
-    <string name="whatsapp_not_installed">У Вас не установлен Whatsapp!</string>
-    <string name="google_play_not_installed">У Вас не установлен Google Play!</string>
+    <string name="choose_language">Тілді таңдаңыз</string>
 
-    <string name="activation_orange_text">У вас ограниченная версия приложения. Некоторые функции могут быть недоступны. Активируйте полную версию.</string>
-    <string name="activation_green_text">Ограничение после 5 сыгранных игр</string>
-    <string name="activation_button">Активировать</string>
-    <string name="activation_title">Активация</string>
+    <string name="telegram_not_installed">Сізде Telegram орнатылмаған!</string>
+    <string name="whatsapp_not_installed">Сізде Whatsapp орнатылмаған!</string>
+    <string name="google_play_not_installed">Сізде Google Play орнатылмаған!</string>
 
-    <string name="activation_text_title">Что включено?</string>
-    <string name="activation_text_1">Результаты игроков</string>
-    <string name="activation_desc_1">Доступны результаты всех игроков.</string>
-    <string name="activation_text_2">Лучшие игроки</string>
-    <string name="activation_desc_2">Мы подготовили для вас список лучших игроков.</string>
-    <string name="activation_text_3">Озвучка имени и звуки празднования</string>
-    <string name="activation_desc_3">Голосовое сопровождение: гол, ассист, сейв, дриблинг, удар, пас.</string>
-    <string name="activation_text_4">Озвучка фраз</string>
-    <string name="activation_desc_4">Фразы «Осталась одна минута» и «Играем до аута».</string>
-    <string name="activation_text_5">Список футбольных звуков</string>
-    <string name="activation_desc_5">Интересные исторические футбольные звуки.</string>
-    <string name="activation_text_button">Показать цены</string>
+    <string name="activation_orange_text">Сіз қосымшаның шектеулі нұсқасын пайдаланып отырсыз. Кейбір функциялар қолжетімсіз болуы мүмкін. Толық нұсқаны алыңыз.</string>
+    <string name="activation_green_text">Шектеу 5 ойыннан кейін</string>
+    <string name="activation_button">Толық нұсқа алу</string>
+    <string name="activation_title">Толық нұсқа алу</string>
 
-    <string name="activation_plan_title">Выберите ваш план</string>
-    <string name="activation_plan_1">Ежемесячный</string>
-    <string name="activation_plan_2">Ежегодный</string>
-    <string name="activation_plan_3">Пожизненный</string>
-    <string name="activation_plan_button">Купить</string>
-    <string name="activation_plan_desc_subscribe">Подписка</string>
-    <string name="activation_plan_desc_lifetime">Одноразовая покупка</string>
-    <string name="activation_plan_select_error_text">Выберите план</string>
-    <string name="activation_plan_activated_text">У вас полная версия</string>
-    <string name="activation_plan_activated_button">Управление подпиской</string>
-    <string name="activation_plan_badge_save">Экономия %d%%</string>
+    <string name="activation_text_title">Не кіреді?</string>
+    <string name="activation_text_1">Ойыншылардың нәтижелері</string>
+    <string name="activation_desc_1">Барлық ойыншылардың нәтижелері қолжетімді.</string>
+    <string name="activation_text_2">Үздік ойыншылар</string>
+    <string name="activation_desc_2">Сіздер үшін ең үздік ойыншылардың тізімін дайындап қойдық.</string>
+    <string name="activation_text_3">Аттың дыбысталуы және мерекелік дыбыстар</string>
+    <string name="activation_desc_3">Дыбыстық сүйемелдеу: гол, ассист, сейв, дриблинг, соққы, пас.</string>
+    <string name="activation_text_4">Фразаларды дыбыстау</string>
+    <string name="activation_desc_4">«Бір минут қалды» және «Аутқа дейін ойнаймыз» фразалары.</string>
+    <string name="activation_text_5">Футбол дыбыстарының тізімі</string>
+    <string name="activation_desc_5">Қызықты тарихи футбол дыбыстары.</string>
+    <string name="activation_text_button">Бағаларды көрсету</string>
 
-    <string name="update_required_title">Доступна новая версия приложения</string>
-    <string name="update_button_skip">Пропустить</string>
-    <string name="update_button_update">Обновить</string>
+    <string name="activation_plan_title">Тарифті таңдаңыз</string>
+    <string name="activation_plan_1">Ай сайын</string>
+    <string name="activation_plan_2">Жыл сайын</string>
+    <string name="activation_plan_3">Өмір бойы</string>
+    <string name="activation_plan_button">Сатып алу</string>
+    <string name="activation_plan_desc_subscribe">Жазылым</string>
+    <string name="activation_plan_desc_lifetime">Бір реттік сатып алу</string>
+    <string name="activation_plan_select_error_text">Тарифті таңдаңыз</string>
+    <string name="activation_plan_activated_text">Сізде толық нұсқа</string>
+    <string name="activation_plan_activated_button">Жазылымды басқару</string>
+    <string name="activation_plan_badge_save">Үнемдеу %d%%</string>
+
+    <string name="update_required_title">Қосымшаның жаңа версиясы шықты</string>
+    <string name="update_button_skip">Өткізіп жіберу</string>
+    <string name="update_button_update">Жаңарту</string>
 
     <string name="activation_code_dialog_title">Активация</string>
-    <string name="activation_code_dialog_hint">Введите код активации</string>
-    <string name="activation_code_button_confirm">Подтвердить</string>
-    <string name="activation_code_button_cancel">Отмена</string>
-    <string name="activation_code_success">Активировано!</string>
-    <string name="activation_code_error">Неверный код</string>
+    <string name="activation_code_dialog_hint">Активация кодын енгізіңіз</string>
+    <string name="activation_code_button_confirm">Растау</string>
+    <string name="activation_code_button_cancel">Болдырмау</string>
+    <string name="activation_code_success">Белсендірілді!</string>
+    <string name="activation_code_error">Қате код</string>
 
 </resources>

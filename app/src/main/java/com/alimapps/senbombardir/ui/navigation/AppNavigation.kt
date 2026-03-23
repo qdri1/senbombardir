@@ -54,6 +54,7 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun AppNavigation(
     showLanguage: Boolean,
+    selectedLanguage: AppLanguage?,
     onLanguageSelected: (AppLanguage) -> Unit,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
 ) {
@@ -180,6 +181,7 @@ fun AppNavigation(
             if (showLanguageSheet) {
                 LanguageBottomSheet(
                     sheetState = sheetState,
+                    selectedLanguage = selectedLanguage,
                     onDismiss = { showLanguageSheet = false },
                     onLanguageSelected = { language ->
                         onLanguageSelected(language)

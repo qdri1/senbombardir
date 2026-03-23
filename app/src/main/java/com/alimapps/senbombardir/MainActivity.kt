@@ -67,6 +67,7 @@ class MainActivity : ComponentActivity() {
 
                 AppNavigation(
                     showLanguage = selectedLanguage == null,
+                    selectedLanguage = selectedLanguage,
                     onLanguageSelected = { appLanguage ->
                         languageRepository.saveLanguage(appLanguage)
                         setLocale(this, appLanguage)
