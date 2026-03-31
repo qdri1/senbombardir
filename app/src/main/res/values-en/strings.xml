@@ -125,7 +125,8 @@
     <string name="sound_goal_fans">Stadium\nGooooal</string>
     <string name="sound_anarbekov">Temirlan\nAnarbekov</string>
     <string name="sound_uo_uo_uo">UO UO UO</string>
-    <string name="sound_whistle">Whistle</string>
+    <string name="sound_whistle">Whistle\n№1</string>
+    <string name="sound_start_match">Whistle\n№2</string>
     <string name="sound_stadium_applause">Stadium\napplause</string>
     <string name="sound_girls_applause">Girls\napplause</string>
     <string name="sound_bilgenin_istep_jatyr">Білгенін\nістеп жатыр</string>

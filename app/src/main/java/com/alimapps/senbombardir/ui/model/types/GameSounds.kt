@@ -4,6 +4,7 @@ import com.alimapps.senbombardir.R
 
 enum class GameSounds(val stringRes: Int, val rawRes: Int) {
     Whistle(stringRes = R.string.sound_whistle, rawRes = R.raw.whistle),
+    StartMatch(stringRes = R.string.sound_start_match, rawRes = R.raw.start_match),
     LeagueChemp(stringRes = R.string.sound_league_chemp, rawRes = R.raw.sound_league_chemp),
     GoalFans(stringRes = R.string.sound_goal_fans, rawRes = R.raw.sound_goal_fans),
     UoUoUo(stringRes = R.string.sound_uo_uo_uo, rawRes = R.raw.sound_uo_uo_uo),

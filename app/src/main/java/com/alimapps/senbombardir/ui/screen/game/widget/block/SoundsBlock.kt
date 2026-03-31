@@ -53,7 +53,7 @@ fun SoundsBlock(
                         .clickable { onAction(GameAction.OnSoundClicked(gameSound)) }
                         .padding(12.dp)
                 )
-                if (gameSound != GameSounds.Whistle && uiLimited) {
+                if (gameSound != GameSounds.Whistle && gameSound != GameSounds.StartMatch && uiLimited) {
                     Box(
                         modifier = Modifier
                             .matchParentSize()
