@@ -146,6 +146,9 @@
     <string name="sound_oiii_kandai_goal">Уйиии қандай\nшебер гол</string>
     <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
     <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
+    <string name="sound_penalty_real_madrid">Penalti a favor del\nReal Madrid</string>
+    <string name="sound_stadium_atmosphere">Атмосфера\nСтадиона</string>
+    <string name="sound_freed_from_desire">Freed From\nDesire</string>
 
     <string name="function_best_players">Лучшие игроки</string>
     <string name="function_edit">Редактировать игру</string>

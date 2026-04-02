@@ -702,7 +702,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_yellow_card, playerUiModel.name),
-                    onComplete = { playMedia(resId = R.raw.goal_save) }, // TODO add yellow card sound
+                    onComplete = { playMedia(resId = R.raw.sound_penalty_real_madrid) },
                 )
             }
             TeamOption.RedCard -> {
@@ -718,7 +718,7 @@ class GameViewModel(
 
                 speak(
                     text = context.getString(R.string.text_to_speech_red_card, playerUiModel.name),
-                    onComplete = { playMedia(resId = R.raw.goal_save) }, // TODO add red card sound
+                    onComplete = { playMedia(resId = R.raw.sound_penalty_real_madrid) },
                 )
             }
         }
