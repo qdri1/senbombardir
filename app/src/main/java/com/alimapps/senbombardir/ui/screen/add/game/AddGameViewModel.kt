@@ -255,6 +255,8 @@ class AddGameViewModel(
                         passes = 0,
                         shots = 0,
                         saves = 0,
+                        yellowCards = 0,
+                        redCards = 0,
                     )
                 }.forEach { playerModel ->
                     val playerId = playerRepository.savePlayer(playerModel)
@@ -331,6 +333,8 @@ class AddGameViewModel(
                                             passes = playerUiModel.passes,
                                             shots = playerUiModel.shots,
                                             saves = playerUiModel.saves,
+                                            yellowCards = playerUiModel.yellowCards,
+                                            redCards = playerUiModel.redCards,
                                         )
                                         val playerId = playerRepository.savePlayer(newPlayerModel)
 
@@ -350,6 +354,8 @@ class AddGameViewModel(
                                                 passes = playerHistoryUiModel.passes,
                                                 shots = playerHistoryUiModel.shots,
                                                 saves = playerHistoryUiModel.saves,
+                                                yellowCards = playerHistoryUiModel.yellowCards,
+                                                redCards = playerHistoryUiModel.redCards,
                                             )
                                         } else {
                                             PlayerHistoryModel(
@@ -362,6 +368,8 @@ class AddGameViewModel(
                                                 passes = 0,
                                                 shots = 0,
                                                 saves = 0,
+                                                yellowCards = 0,
+                                                redCards = 0,
                                             )
                                         }
                                         playerHistoryRepository.savePlayerHistory(playerHistoryModel)
@@ -379,6 +387,8 @@ class AddGameViewModel(
                                     passes = 0,
                                     shots = 0,
                                     saves = 0,
+                                    yellowCards = 0,
+                                    redCards = 0,
                                 )
                                 val playerId = playerRepository.savePlayer(newPlayerModel)
 
@@ -398,6 +408,8 @@ class AddGameViewModel(
                                         passes = playerHistoryUiModel.passes,
                                         shots = playerHistoryUiModel.shots,
                                         saves = playerHistoryUiModel.saves,
+                                        yellowCards = playerHistoryUiModel.yellowCards,
+                                        redCards = playerHistoryUiModel.redCards,
                                     )
                                 } else {
                                     PlayerHistoryModel(
@@ -410,6 +422,8 @@ class AddGameViewModel(
                                         passes = 0,
                                         shots = 0,
                                         saves = 0,
+                                        yellowCards = 0,
+                                        redCards = 0,
                                     )
                                 }
                                 playerHistoryRepository.savePlayerHistory(playerHistoryModel)

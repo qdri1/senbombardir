@@ -32,6 +32,8 @@ class PlayerHistoryRepository(
                 passes = it.passes,
                 shots = it.shots,
                 saves = it.saves,
+                yellowCards = it.yellowCards,
+                redCards = it.redCards,
             )
         }
 
@@ -54,6 +56,8 @@ class PlayerHistoryRepository(
                 passes = it.passes,
                 shots = it.shots,
                 saves = it.saves,
+                yellowCards = it.yellowCards,
+                redCards = it.redCards,
             )
         }
     }
@@ -74,6 +78,8 @@ class PlayerHistoryRepository(
                 passes = it.passes,
                 shots = it.shots,
                 saves = it.saves,
+                yellowCards = it.yellowCards,
+                redCards = it.redCards,
             )
         }
     }

@@ -9,4 +9,6 @@ enum class TeamOption(val stringRes: Int) {
     Dribble(stringRes = R.string.team_option_dribble),
     Shot(stringRes = R.string.team_option_shot),
     Pass(stringRes = R.string.team_option_pass),
+    YellowCard(stringRes = R.string.team_option_yellow_card),
+    RedCard(stringRes = R.string.team_option_red_card),
 }

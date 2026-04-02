@@ -73,6 +73,8 @@
     <string name="player_result_passes">П</string>
     <string name="player_result_shots">У</string>
     <string name="player_result_saves">С</string>
+    <string name="player_result_yellow_card">🟨</string>
+    <string name="player_result_red_card">🟥</string>
 
     <string name="team_option_goal">Гол ⚽️</string>
     <string name="team_option_assist">Ассист</string>
@@ -80,6 +82,8 @@
     <string name="team_option_pass">Пас</string>
     <string name="team_option_shot">Удар</string>
     <string name="team_option_save">Сейв</string>
+    <string name="team_option_yellow_card">Сары 🟨</string>
+    <string name="team_option_red_card">Қызыл 🟥</string>
     <string name="team_option_players_title">Авторды таңдаңыз</string>
     <string name="team_option_players_auto_goal">Автогол</string>
 
@@ -90,6 +94,7 @@
     <string name="best_player_option_dribbles">Үздік дриблинг</string>
     <string name="best_player_option_passes">Үздік пас</string>
     <string name="best_player_option_shots">Үздік удар</string>
+    <string name="best_player_option_aggressive_player">Ең өрескел ойыншы 👎</string>
 
     <string name="text_goal">гол</string>
     <string name="text_assist">ассист</string>
@@ -97,6 +102,8 @@
     <string name="text_pass">пас</string>
     <string name="text_shot">удар</string>
     <string name="text_save">сейв</string>
+    <string name="text_yellow_card">сары 🟨</string>
+    <string name="text_red_card">қызыл 🟥</string>
 
     <string name="text_to_speech_goal">Гол от %s</string>
     <string name="text_to_speech_assist">Ассист от %s</string>
@@ -104,6 +111,8 @@
     <string name="text_to_speech_pass">Красивый пас от %s</string>
     <string name="text_to_speech_shot">Мощьный удар от %s</string>
     <string name="text_to_speech_save">Лучший сейв от %s</string>
+    <string name="text_to_speech_yellow_card">Жёлтая карточка %s</string>
+    <string name="text_to_speech_red_card">Красная карточка %s</string>
 
     <string name="stay_team_selection_title">Алаңда қалатын команданы таңдаңыз</string>
     <string name="delete_game_title">Бұл ойынды жоюды қалайсыз ба?</string>
@@ -166,6 +175,8 @@
     <string name="players_block_info_dribbles">Әдемі дриблинг</string>
     <string name="players_block_info_shots">Күшті дәл соққы (удар)</string>
     <string name="players_block_info_passes">Әдемі пас</string>
+    <string name="players_block_info_yellow_card">Сары карточка</string>
+    <string name="players_block_info_red_card">Қызыл карточка</string>
 
     <string name="settings_item_language">Тіл</string>
     <string name="settings_item_share">Бөлісу</string>

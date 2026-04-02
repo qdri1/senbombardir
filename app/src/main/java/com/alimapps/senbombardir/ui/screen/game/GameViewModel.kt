@@ -341,7 +341,7 @@ class GameViewModel(
         val playerList = uiState.value.playerUiModelList
 
         playerList.maxByOrNull {
-            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots
+            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots - it.yellowCards - (it.redCards * 3)
         }?.let { best ->
             bestPlayers.add(
                 BestPlayerUiModel(
@@ -370,6 +370,17 @@ class GameViewModel(
                 )
             }
         }
+
+        playerList.maxByOrNull { it.yellowCards + it.redCards }
+            ?.takeIf { it.yellowCards > 0 || it.redCards > 0 }
+            ?.let { aggressivePlayer ->
+                bestPlayers.add(
+                    BestPlayerUiModel(
+                        option = BestPlayerOption.AggressivePlayer,
+                        playerUiModel = aggressivePlayer
+                    )
+                )
+            }
 
         setEffectSafely(GameEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
     }
@@ -676,6 +687,38 @@ class GameViewModel(
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.goal_save) },
+                )
+            }
+            TeamOption.YellowCard -> {
+                val copyPlayerUiModel = playerUiModel.copy(yellowCards = playerUiModel.yellowCards + 1)
+                playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        yellowCards = playerHistoryUiModel.yellowCards + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
+                speak(
+                    text = context.getString(R.string.text_to_speech_yellow_card, playerUiModel.name),
+                    onComplete = { playMedia(resId = R.raw.goal_save) }, // TODO add yellow card sound
+                )
+            }
+            TeamOption.RedCard -> {
+                val copyPlayerUiModel = playerUiModel.copy(redCards = playerUiModel.redCards + 1)
+                playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        redCards = playerHistoryUiModel.redCards + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
+                speak(
+                    text = context.getString(R.string.text_to_speech_red_card, playerUiModel.name),
+                    onComplete = { playMedia(resId = R.raw.goal_save) }, // TODO add red card sound
                 )
             }
         }
@@ -1358,6 +1401,28 @@ class GameViewModel(
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
                         val diffs = playerResultValue - playerResultUiModel.playerUiModel.passes
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(passes = playerHistoryUiModel.passes.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.YellowCard -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(yellowCards = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.yellowCards
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(yellowCards = playerHistoryUiModel.yellowCards.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.RedCard -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(redCards = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.redCards
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(redCards = playerHistoryUiModel.redCards.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }

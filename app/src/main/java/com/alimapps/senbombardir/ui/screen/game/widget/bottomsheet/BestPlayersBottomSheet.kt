@@ -51,7 +51,6 @@ fun BestPlayersBottomSheet(
                     )
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(
@@ -69,7 +68,9 @@ fun BestPlayersBottomSheet(
                                         best.playerUiModel.saves.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_save)}" },
                                         best.playerUiModel.dribbles.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_dribble)}" },
                                         best.playerUiModel.passes.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_pass)}" },
-                                        best.playerUiModel.shots.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_shot)}" }
+                                        best.playerUiModel.shots.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_shot)}" },
+                                        best.playerUiModel.yellowCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_yellow_card)}" },
+                                        best.playerUiModel.redCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_red_card)}" },
                                     ).joinToString(separator = ", ")
                                 }
                                 BestPlayerOption.Goals -> "${best.playerUiModel.goals} ${stringResource(R.string.text_goal)}"
@@ -78,6 +79,12 @@ fun BestPlayersBottomSheet(
                                 BestPlayerOption.Dribbles -> "${best.playerUiModel.dribbles} ${stringResource(R.string.text_dribble)}"
                                 BestPlayerOption.Passes -> "${best.playerUiModel.passes} ${stringResource(R.string.text_pass)}"
                                 BestPlayerOption.Shots -> "${best.playerUiModel.shots} ${stringResource(R.string.text_shot)}"
+                                BestPlayerOption.AggressivePlayer -> {
+                                    listOfNotNull(
+                                        best.playerUiModel.yellowCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_yellow_card)}" },
+                                        best.playerUiModel.redCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_red_card)}" },
+                                    ).joinToString(separator = ", ")
+                                }
                             },
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelSmall,

@@ -46,6 +46,8 @@ fun PlayerResultBottomSheet(
         TeamOption.Dribble -> playerResultUiModel.playerUiModel.dribbles
         TeamOption.Shot -> playerResultUiModel.playerUiModel.shots
         TeamOption.Pass -> playerResultUiModel.playerUiModel.passes
+        TeamOption.YellowCard -> playerResultUiModel.playerUiModel.yellowCards
+        TeamOption.RedCard -> playerResultUiModel.playerUiModel.redCards
     }
     var playerResultValue by remember { mutableStateOf(currentPlayerResult) }
 

@@ -20,7 +20,7 @@ import com.alimapps.senbombardir.data.model.TeamModel
         TeamHistoryModel::class,
         PlayerHistoryModel::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -39,6 +39,15 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        val MIGRATIONS = arrayOf(MIGRATION_2_3)
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE players ADD COLUMN yellowCards INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE players ADD COLUMN redCards INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE players_history ADD COLUMN yellowCards INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE players_history ADD COLUMN redCards INTEGER NOT NULL DEFAULT 0")
+            }
+        }
+
+        val MIGRATIONS = arrayOf(MIGRATION_2_3, MIGRATION_3_4)
     }
 }

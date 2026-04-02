@@ -25,4 +25,6 @@ enum class PlayersBlockInfo(val stringRes: Int, val descriptionRes: Int) {
     Dribbles(stringRes = R.string.player_result_dribbles, descriptionRes = R.string.players_block_info_dribbles),
     Shots(stringRes = R.string.player_result_shots, descriptionRes = R.string.players_block_info_shots),
     Passes(stringRes = R.string.player_result_passes, descriptionRes = R.string.players_block_info_passes),
+    YellowCards(stringRes = R.string.player_result_yellow_card, descriptionRes = R.string.players_block_info_yellow_card),
+    RedCards(stringRes = R.string.player_result_red_card, descriptionRes = R.string.players_block_info_red_card),
 }

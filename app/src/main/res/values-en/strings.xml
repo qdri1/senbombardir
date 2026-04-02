@@ -74,6 +74,8 @@
     <string name="player_result_passes">P</string>
     <string name="player_result_shots">SH</string>
     <string name="player_result_saves">SV</string>
+    <string name="player_result_yellow_card">🟨</string>
+    <string name="player_result_red_card">🟥</string>
 
     <string name="team_option_goal">Goal ⚽️</string>
     <string name="team_option_assist">Assist</string>
@@ -81,6 +83,8 @@
     <string name="team_option_pass">Pass</string>
     <string name="team_option_shot">Shot</string>
     <string name="team_option_save">Save</string>
+    <string name="team_option_yellow_card">Yellow 🟨</string>
+    <string name="team_option_red_card">Red 🟥</string>
     <string name="team_option_players_title">Select player</string>
     <string name="team_option_players_auto_goal">Own goal</string>
 
@@ -91,6 +95,7 @@
     <string name="best_player_option_dribbles">Best dribbles</string>
     <string name="best_player_option_passes">Best passes</string>
     <string name="best_player_option_shots">Best shots</string>
+    <string name="best_player_option_aggressive_player">Most aggressive player 👎</string>
 
     <string name="text_goal">goal</string>
     <string name="text_assist">assist</string>
@@ -98,6 +103,8 @@
     <string name="text_pass">pass</string>
     <string name="text_shot">shot</string>
     <string name="text_save">save</string>
+    <string name="text_yellow_card">yellow 🟨</string>
+    <string name="text_red_card">red 🟥</string>
 
     <string name="text_to_speech_goal">Goal by %s</string>
     <string name="text_to_speech_assist">Assist by %s</string>
@@ -105,6 +112,8 @@
     <string name="text_to_speech_pass">Great pass by %s</string>
     <string name="text_to_speech_shot">Powerful shot by %s</string>
     <string name="text_to_speech_save">Great save by %s</string>
+    <string name="text_to_speech_yellow_card">Yellow card %s</string>
+    <string name="text_to_speech_red_card">Red card %s</string>
 
     <string name="stay_team_selection_title">Select the team that stays on the field</string>
     <string name="delete_game_title">Are you sure you want to delete this game?</string>
@@ -167,6 +176,8 @@
     <string name="players_block_info_dribbles">Nice dribble</string>
     <string name="players_block_info_shots">Powerful accurate shot</string>
     <string name="players_block_info_passes">Nice pass</string>
+    <string name="players_block_info_yellow_card">Yellow card</string>
+    <string name="players_block_info_red_card">Red card</string>
 
     <string name="settings_item_language">Language</string>
     <string name="settings_item_share">Share</string>

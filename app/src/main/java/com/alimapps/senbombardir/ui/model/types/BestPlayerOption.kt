@@ -10,4 +10,5 @@ enum class BestPlayerOption(val stringRes: Int) {
     Dribbles(stringRes = R.string.best_player_option_dribbles),
     Passes(stringRes = R.string.best_player_option_passes),
     Shots(stringRes = R.string.best_player_option_shots),
+    AggressivePlayer(stringRes = R.string.best_player_option_aggressive_player),
 }

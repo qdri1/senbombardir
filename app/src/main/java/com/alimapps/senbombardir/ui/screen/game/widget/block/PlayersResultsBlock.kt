@@ -334,6 +334,54 @@ fun PlayersResultsBlock(
                             )
                         }
                     }
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(verticalSpace),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.player_result_yellow_card),
+                            color = headerTextColor,
+                            style = headerTextStyle,
+                        )
+                        playerUiModelList.forEach { playerUiModel ->
+                            Text(
+                                text = playerUiModel.yellowCards.toString(),
+                                color = textColor,
+                                style = textStyle,
+                                modifier = Modifier
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null,
+                                        onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.YellowCard)) }
+                                    )
+                            )
+                        }
+                    }
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(verticalSpace),
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.player_result_red_card),
+                            color = headerTextColor,
+                            style = headerTextStyle,
+                        )
+                        playerUiModelList.forEach { playerUiModel ->
+                            Text(
+                                text = playerUiModel.redCards.toString(),
+                                color = textColor,
+                                style = textStyle,
+                                modifier = Modifier
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = null,
+                                        onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.RedCard)) }
+                                    )
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -30,6 +30,8 @@ data class PlayerModel(
     val passes: Int,
     val shots: Int,
     val saves: Int,
+    val yellowCards: Int,
+    val redCards: Int,
 )
 
 fun PlayerModel.toPlayerHistoryModel(playerId: Long): PlayerHistoryModel =
@@ -43,4 +45,6 @@ fun PlayerModel.toPlayerHistoryModel(playerId: Long): PlayerHistoryModel =
         passes = passes,
         shots = shots,
         saves = saves,
+        yellowCards = yellowCards,
+        redCards = redCards,
     )

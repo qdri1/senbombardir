@@ -125,6 +125,8 @@ class GameResultsViewModel(
             TeamOption.Dribble -> playerResultUiModel.playerUiModel.copy(dribbles = playerResultValue)
             TeamOption.Shot -> playerResultUiModel.playerUiModel.copy(shots = playerResultValue)
             TeamOption.Pass -> playerResultUiModel.playerUiModel.copy(passes = playerResultValue)
+            TeamOption.YellowCard -> playerResultUiModel.playerUiModel.copy(yellowCards = playerResultValue)
+            TeamOption.RedCard -> playerResultUiModel.playerUiModel.copy(redCards = playerResultValue)
         }
 
         viewModelScope.launch {
@@ -151,7 +153,7 @@ class GameResultsViewModel(
         val playerList = uiState.value.playerUiModelList
 
         playerList.maxByOrNull {
-            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots
+            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots - it.yellowCards - (it.redCards * 3)
         }?.let { best ->
             bestPlayers.add(
                 BestPlayerUiModel(
@@ -180,6 +182,17 @@ class GameResultsViewModel(
                 )
             }
         }
+
+        playerList.maxByOrNull { it.yellowCards + it.redCards }
+            ?.takeIf { it.yellowCards > 0 || it.redCards > 0 }
+            ?.let { aggressivePlayer ->
+                bestPlayers.add(
+                    BestPlayerUiModel(
+                        option = BestPlayerOption.AggressivePlayer,
+                        playerUiModel = aggressivePlayer
+                    )
+                )
+            }
 
         setEffectSafely(GameResultsEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
     }

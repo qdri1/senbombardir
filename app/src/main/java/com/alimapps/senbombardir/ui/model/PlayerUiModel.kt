@@ -18,6 +18,8 @@ data class PlayerUiModel(
     val passes: Int,
     val shots: Int,
     val saves: Int,
+    val yellowCards: Int,
+    val redCards: Int,
     val existsInPlayerList: Boolean = true,
 )
 
@@ -32,6 +34,8 @@ fun PlayerUiModel.toPlayerModel(): PlayerModel =
         passes = passes,
         shots = shots,
         saves = saves,
+        yellowCards = yellowCards,
+        redCards = redCards,
     )
 
 fun PlayerUiModel.toPlayerHistoryModel(): PlayerHistoryModel =
@@ -45,4 +49,6 @@ fun PlayerUiModel.toPlayerHistoryModel(): PlayerHistoryModel =
         passes = passes,
         shots = shots,
         saves = saves,
+        yellowCards = yellowCards,
+        redCards = redCards,
     )
