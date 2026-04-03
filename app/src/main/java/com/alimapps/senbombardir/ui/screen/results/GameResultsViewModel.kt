@@ -67,7 +67,10 @@ class GameResultsViewModel(
             }
         }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
             .thenByDescending { it.assists }
-            .thenByDescending { it.saves + it.dribbles + it.shots + it.passes }
+            .thenByDescending { it.saves }
+            .thenByDescending { it.dribbles + it.shots + it.passes }
+            .thenBy { it.redCards }
+            .thenBy { it.yellowCards }
             .thenByDescending { it.teamPoints }
             .thenByDescending { it.teamGoalsDifference }
             .thenBy { it.teamName }

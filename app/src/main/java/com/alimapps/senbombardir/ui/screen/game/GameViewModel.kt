@@ -193,6 +193,8 @@ class GameViewModel(
                     .thenByDescending { it.assists }
                     .thenByDescending { it.saves }
                     .thenByDescending { it.dribbles + it.shots + it.passes }
+                    .thenBy { it.redCards }
+                    .thenBy { it.yellowCards }
                     .thenByDescending { it.teamPoints }
                     .thenByDescending { it.teamGoalsDifference }
                     .thenBy { it.teamName }
@@ -1297,6 +1299,8 @@ class GameViewModel(
             .thenByDescending { it.assists }
             .thenByDescending { it.saves }
             .thenByDescending { it.dribbles + it.shots + it.passes }
+            .thenBy { it.redCards }
+            .thenBy { it.yellowCards }
             .thenByDescending { it.teamPoints }
             .thenByDescending { it.teamGoalsDifference }
             .thenBy { it.teamName }
