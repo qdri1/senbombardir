@@ -373,8 +373,8 @@ class GameViewModel(
             }
         }
 
-        playerList.maxByOrNull { it.yellowCards + it.redCards }
-            ?.takeIf { it.yellowCards > 0 || it.redCards > 0 }
+        playerList.filter { it.yellowCards > 0 || it.redCards > 0 }
+            .maxByOrNull { it.yellowCards + (it.redCards * 3) }
             ?.let { aggressivePlayer ->
                 bestPlayers.add(
                     BestPlayerUiModel(
