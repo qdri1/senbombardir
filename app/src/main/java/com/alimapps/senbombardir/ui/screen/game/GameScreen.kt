@@ -203,6 +203,7 @@ private fun GameScreenContent(
                         onAction = onAction,
                     )
                     LiveGameBlock(
+                        gameUiModel = uiState.gameUiModel,
                         liveGameUiModel = liveGameUiModel,
                         nextPlayingTeamsUiModelList = uiState.nextPlayingTeamsUiModelList,
                         uiState = uiState,

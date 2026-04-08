@@ -222,9 +222,9 @@ class GameViewModel(
             TeamQuantity.Team3 -> when (gameUiModel.gameRule) {
                 GameRuleTeam3.ONLY_2_GAMES -> setTeam3Only2GamesNextPlayingTeams()
                 GameRuleTeam3.WINNER_STAY_2 -> setTeam3WinnerStayNextPlayingTeams(winCount = 1)
-                GameRuleTeam3.WINNER_STAY_3 -> setTeam3WinnerStayNextPlayingTeams(winCount = 2)
-                GameRuleTeam3.WINNER_STAY_4 -> setTeam3WinnerStayNextPlayingTeams(winCount = 3)
-                GameRuleTeam3.WINNER_STAY_UNLIMITED -> setTeam3WinnerStayNextPlayingTeams(winCount = 99)
+                GameRuleTeam3.WINNER_STAY_3 -> Unit
+                GameRuleTeam3.WINNER_STAY_4 -> Unit
+                GameRuleTeam3.WINNER_STAY_UNLIMITED -> Unit
             }
             TeamQuantity.Team4 -> Unit
         }
@@ -726,7 +726,6 @@ class GameViewModel(
                     ).toPlayerHistoryModel()
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
-                setNextPlayingTeamsUiModelList()
 
                 speak(
                     text = context.getString(R.string.text_to_speech_goal, playerUiModel.name),
@@ -1468,7 +1467,6 @@ class GameViewModel(
             TeamOption.Goal -> {
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(goals = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
-                setNextPlayingTeamsUiModelList()
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
                         val diffs = playerResultValue - playerResultUiModel.playerUiModel.goals

@@ -35,10 +35,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.NextPlayingTeamsUiModel
+import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.TeamColor
+import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.screen.game.GameAction
 import com.alimapps.senbombardir.ui.screen.game.GameUiState
 import com.alimapps.senbombardir.ui.screen.game.widget.dropdown.LeftTeamChangeDropdown
@@ -49,6 +52,7 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @Composable
 fun LiveGameBlock(
+    gameUiModel: GameUiModel?,
     liveGameUiModel: LiveGameUiModel,
     nextPlayingTeamsUiModelList: List<NextPlayingTeamsUiModel>,
     uiState: GameUiState,
@@ -62,178 +66,206 @@ fun LiveGameBlock(
             .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Box {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { onAction(GameAction.OnLeftTeamClicked) }
-                        ),
-                    contentAlignment = Alignment.CenterEnd,
+        Column {
+            Box {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = liveGameUiModel.leftTeamName,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 10.sp,
-                            maxFontSize = 16.sp,
-                            stepSize = 1.sp
-                        ),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = remember(liveGameUiModel.leftTeamName) {
-                            liveGameUiModel.leftTeamMaxLines
-                        },
-                        overflow = TextOverflow.Ellipsis,
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onAction(GameAction.OnLeftTeamClicked) }
+                            ),
+                        contentAlignment = Alignment.CenterEnd,
+                    ) {
+                        Text(
+                            text = liveGameUiModel.leftTeamName,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 10.sp,
+                                maxFontSize = 16.sp,
+                                stepSize = 1.sp
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = remember(liveGameUiModel.leftTeamName) {
+                                liveGameUiModel.leftTeamMaxLines
+                            },
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .size(24.dp)
+                            .background(
+                                color = parseHexColor(liveGameUiModel.leftTeamColor.hexColor),
+                                shape = RoundedCornerShape(6.dp),
+                            )
+                            .clip(RoundedCornerShape(6.dp))
+                            .border(
+                                width = if (liveGameUiModel.leftTeamColor == TeamColor.White) 1.dp else 0.dp,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                shape = RoundedCornerShape(6.dp),
+                            )
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onAction(GameAction.OnLeftTeamClicked) }
+                            )
                     )
-                }
-                Box(
-                    modifier = Modifier
-                        .padding(end = 4.dp)
-                        .size(24.dp)
-                        .background(
-                            color = parseHexColor(liveGameUiModel.leftTeamColor.hexColor),
-                            shape = RoundedCornerShape(6.dp),
-                        )
-                        .clip(RoundedCornerShape(6.dp))
-                        .border(
-                            width = if (liveGameUiModel.leftTeamColor == TeamColor.White) 1.dp else 0.dp,
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(6.dp),
-                        )
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { onAction(GameAction.OnLeftTeamClicked) }
-                        )
-                )
-                Text(
-                    text = liveGameUiModel.leftTeamGoals.toString(),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 32.sp,
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = {
-                                val liveGameResultUiModel = LiveGameResultUiModel(
-                                    liveGameUiModel = liveGameUiModel,
-                                    isLeftTeam = true,
-                                )
-                                onAction(GameAction.OnLiveGameResultClicked(liveGameResultUiModel))
-                            }
-                        )
-                )
-                if (liveGameUiModel.isLive) {
                     Text(
-                        text = "-",
+                        text = liveGameUiModel.leftTeamGoals.toString(),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyLarge,
                         fontSize = 32.sp,
-                    )
-                } else {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_replace_sides),
-                        contentDescription = "GameScreenChangeIcon",
-                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
-                            .size(24.dp)
-                            .clip(CircleShape)
-                            .clickable { onAction(GameAction.OnTeamChangeIconClicked) }
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    val liveGameResultUiModel = LiveGameResultUiModel(
+                                        liveGameUiModel = liveGameUiModel,
+                                        isLeftTeam = true,
+                                    )
+                                    onAction(GameAction.OnLiveGameResultClicked(liveGameResultUiModel))
+                                }
+                            )
                     )
-                }
-                Text(
-                    text = liveGameUiModel.rightTeamGoals.toString(),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontSize = 32.sp,
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = {
-                                val liveGameResultUiModel = LiveGameResultUiModel(
-                                    liveGameUiModel = liveGameUiModel,
-                                    isLeftTeam = false,
-                                )
-                                onAction(GameAction.OnLiveGameResultClicked(liveGameResultUiModel))
-                            }
+                    if (liveGameUiModel.isLive) {
+                        Text(
+                            text = "-",
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontSize = 32.sp,
                         )
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(start = 4.dp)
-                        .size(24.dp)
-                        .background(
-                            color = parseHexColor(liveGameUiModel.rightTeamColor.hexColor),
-                            shape = RoundedCornerShape(6.dp),
+                    } else {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_replace_sides),
+                            contentDescription = "GameScreenChangeIcon",
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clip(CircleShape)
+                                .clickable { onAction(GameAction.OnTeamChangeIconClicked) }
                         )
-                        .clip(RoundedCornerShape(6.dp))
-                        .border(
-                            width = if (liveGameUiModel.rightTeamColor == TeamColor.White) 1.dp else 0.dp,
-                            color = MaterialTheme.colorScheme.surfaceVariant,
-                            shape = RoundedCornerShape(6.dp),
-                        )
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { onAction(GameAction.OnRightTeamClicked) }
-                        )
-                )
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null,
-                            onClick = { onAction(GameAction.OnRightTeamClicked) }
-                        )
-                ) {
+                    }
                     Text(
-                        text = liveGameUiModel.rightTeamName,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = 10.sp,
-                            maxFontSize = 16.sp,
-                            stepSize = 1.sp
-                        ),
+                        text = liveGameUiModel.rightTeamGoals.toString(),
                         color = MaterialTheme.colorScheme.onSurface,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodySmall,
-                        maxLines = remember(liveGameUiModel.rightTeamName) {
-                            liveGameUiModel.rightTeamMaxLines
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontSize = 32.sp,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = {
+                                    val liveGameResultUiModel = LiveGameResultUiModel(
+                                        liveGameUiModel = liveGameUiModel,
+                                        isLeftTeam = false,
+                                    )
+                                    onAction(GameAction.OnLiveGameResultClicked(liveGameResultUiModel))
+                                }
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .size(24.dp)
+                            .background(
+                                color = parseHexColor(liveGameUiModel.rightTeamColor.hexColor),
+                                shape = RoundedCornerShape(6.dp),
+                            )
+                            .clip(RoundedCornerShape(6.dp))
+                            .border(
+                                width = if (liveGameUiModel.rightTeamColor == TeamColor.White) 1.dp else 0.dp,
+                                color = MaterialTheme.colorScheme.surfaceVariant,
+                                shape = RoundedCornerShape(6.dp),
+                            )
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onAction(GameAction.OnRightTeamClicked) }
+                            )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onAction(GameAction.OnRightTeamClicked) }
+                            )
+                    ) {
+                        Text(
+                            text = liveGameUiModel.rightTeamName,
+                            autoSize = TextAutoSize.StepBased(
+                                minFontSize = 10.sp,
+                                maxFontSize = 16.sp,
+                                stepSize = 1.sp
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.bodySmall,
+                            maxLines = remember(liveGameUiModel.rightTeamName) {
+                                liveGameUiModel.rightTeamMaxLines
+                            },
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+                when {
+                    uiState.showLeftTeamOptionsDropdown -> LeftTeamOptionsDropdown(onAction)
+                    uiState.showRightTeamOptionsDropdown -> RightTeamOptionsDropdown(onAction)
+                    uiState.showLeftTeamChangeDropdown -> LeftTeamChangeDropdown(
+                        teamUiModelList = uiState.teamUiModelList.filter {
+                            it.id !in listOf(
+                                liveGameUiModel.leftTeamId,
+                                liveGameUiModel.rightTeamId,
+                            )
                         },
-                        overflow = TextOverflow.Ellipsis,
+                        onAction = onAction,
+                    )
+                    uiState.showRightTeamChangeDropdown -> RightTeamChangeDropdown(
+                        teamUiModelList = uiState.teamUiModelList.filter {
+                            it.id !in listOf(
+                                liveGameUiModel.leftTeamId,
+                                liveGameUiModel.rightTeamId,
+                            )
+                        },
+                        onAction = onAction,
                     )
                 }
             }
-            when {
-                uiState.showLeftTeamOptionsDropdown -> LeftTeamOptionsDropdown(onAction)
-                uiState.showRightTeamOptionsDropdown -> RightTeamOptionsDropdown(onAction)
-                uiState.showLeftTeamChangeDropdown -> LeftTeamChangeDropdown(
-                    teamUiModelList = uiState.teamUiModelList.filter {
-                        it.id !in listOf(
-                            liveGameUiModel.leftTeamId,
-                            liveGameUiModel.rightTeamId,
-                        )
-                    },
-                    onAction = onAction,
-                )
-                uiState.showRightTeamChangeDropdown -> RightTeamChangeDropdown(
-                    teamUiModelList = uiState.teamUiModelList.filter {
-                        it.id !in listOf(
-                            liveGameUiModel.leftTeamId,
-                            liveGameUiModel.rightTeamId,
-                        )
-                    },
-                    onAction = onAction,
-                )
+
+            when (gameUiModel?.teamQuantity) {
+                TeamQuantity.Team3 -> when (gameUiModel.gameRule) {
+                    GameRuleTeam3.WINNER_STAY_3,
+                    GameRuleTeam3.WINNER_STAY_4,
+                    GameRuleTeam3.WINNER_STAY_UNLIMITED -> {
+                        Row {
+                            Text(
+                                text = stringResource(id = R.string.win_streak, liveGameUiModel.leftTeamWinCount.toString()),
+                                color = MaterialTheme.colorScheme.outline,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                            Text(
+                                text = stringResource(id = R.string.win_streak, liveGameUiModel.rightTeamWinCount.toString()),
+                                color = MaterialTheme.colorScheme.outline,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+                else -> Unit
             }
         }
 
@@ -267,11 +299,18 @@ fun LiveGameBlock(
                     style = MaterialTheme.typography.labelSmall,
                 )
             } else {
-                Text(
-                    text = stringResource(id = R.string.game_count, liveGameUiModel.gameCount.toString()),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelSmall,
-                )
+                when (gameUiModel?.teamQuantity) {
+                    TeamQuantity.Team2 -> Text(
+                        text = stringResource(id = R.string.half_count, liveGameUiModel.gameCount.toString()),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                    else -> Text(
+                        text = stringResource(id = R.string.game_count, liveGameUiModel.gameCount.toString()),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.labelSmall,
+                    )
+                }
             }
         }
 
