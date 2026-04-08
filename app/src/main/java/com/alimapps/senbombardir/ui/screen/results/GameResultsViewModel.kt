@@ -187,6 +187,7 @@ class GameResultsViewModel(
         }
 
         playerList.filter { it.yellowCards > 0 || it.redCards > 0 }
+            .reversed()
             .maxByOrNull { it.yellowCards + (it.redCards * 3) }
             ?.let { aggressivePlayer ->
                 bestPlayers.add(
