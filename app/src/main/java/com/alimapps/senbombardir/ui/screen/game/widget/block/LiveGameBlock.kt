@@ -265,6 +265,24 @@ fun LiveGameBlock(
                         }
                     }
                 }
+                TeamQuantity.Team4 -> {
+                    Row {
+                        Text(
+                            text = stringResource(id = R.string.win_streak, liveGameUiModel.leftTeamWinCount.toString()),
+                            color = MaterialTheme.colorScheme.outline,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                        Text(
+                            text = stringResource(id = R.string.win_streak, liveGameUiModel.rightTeamWinCount.toString()),
+                            color = MaterialTheme.colorScheme.outline,
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
                 else -> Unit
             }
         }
