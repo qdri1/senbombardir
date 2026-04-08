@@ -127,6 +127,7 @@
     <string name="open_activation_screen_snackbar_text">Активация бетіне өту үшін матчты аяқтау керек!</string>
     <string name="go_back_title">Бұл беттен шыққыңыз келе ме?</string>
     <string name="game_count">ойын ойналды: %s</string>
+    <string name="next_playing_teams">Келесі ойнайды</string>
 
     <string name="sound_limited_text">Дыбыстар тек қосымшаның толық нұсқасында қолжетімді</string>
     <string name="sound_league_chemp">Чемпиондар\nлигасы</string>

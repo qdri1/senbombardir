@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
-import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.NextPlayingTeamsUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.screen.game.GameAction
 import com.alimapps.senbombardir.ui.screen.game.GameUiState
@@ -50,7 +50,7 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 @Composable
 fun LiveGameBlock(
     liveGameUiModel: LiveGameUiModel,
-    restTeamUiModelList: List<TeamUiModel>,
+    nextPlayingTeamsUiModelList: List<NextPlayingTeamsUiModel>,
     uiState: GameUiState,
     onAction: (GameAction) -> Unit,
 ) {
@@ -275,49 +275,134 @@ fun LiveGameBlock(
             }
         }
 
-        if (restTeamUiModelList.isNotEmpty()) {
+        if (nextPlayingTeamsUiModelList.isNotEmpty()) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .height(1.dp)
-                        .fillMaxWidth()
-                        .padding(horizontal = 32.dp)
-                        .background(MaterialTheme.colorScheme.background)
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .weight(1f)
+                            .background(MaterialTheme.colorScheme.background)
+                    )
+                    Text(
+                        text = stringResource(R.string.next_playing_teams),
+                        color = MaterialTheme.colorScheme.outline,
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .weight(1f)
+                            .background(MaterialTheme.colorScheme.background)
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                restTeamUiModelList.forEach { teamUiModel ->
+                nextPlayingTeamsUiModelList.forEach { nextPlayingTeamsUiModel ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(12.dp)
-                                .background(
-                                    color = parseHexColor(teamUiModel.color.hexColor),
-                                    shape = RoundedCornerShape(4.dp),
-                                )
-                                .clip(RoundedCornerShape(4.dp))
-                                .border(
-                                    width = if (teamUiModel.color == TeamColor.White) 1.dp else 0.dp,
-                                    color = MaterialTheme.colorScheme.surfaceVariant,
-                                    shape = RoundedCornerShape(4.dp),
-                                )
-                        )
+                        nextPlayingTeamsUiModel.leftTeam?.let { leftTeam ->
+                            Text(
+                                text = leftTeam.name,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.labelSmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.End
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .background(
+                                        color = parseHexColor(leftTeam.color.hexColor),
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .border(
+                                        width = if (leftTeam.color == TeamColor.White) 1.dp else 0.dp,
+                                        color = MaterialTheme.colorScheme.surfaceVariant,
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                            )
+                        } ?: run {
+                            Box(
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .background(
+                                        color = parseHexColor(TeamColor.White.hexColor),
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                                    .clip(RoundedCornerShape(4.dp))
+                            )
+                            Text(
+                                text = "?",
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.End
+                            )
+                        }
+
                         Text(
-                            text = teamUiModel.name,
+                            text = "-",
                             color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.labelSmall,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
                             modifier = Modifier
                         )
+
+                        nextPlayingTeamsUiModel.rightTeam?.let { rightTeam ->
+                            Box(
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .background(
+                                        color = parseHexColor(rightTeam.color.hexColor),
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .border(
+                                        width = if (rightTeam.color == TeamColor.White) 1.dp else 0.dp,
+                                        color = MaterialTheme.colorScheme.surfaceVariant,
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                            )
+                            Text(
+                                text = rightTeam.name,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.labelSmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.weight(1f)
+                            )
+                        } ?: run {
+                            Text(
+                                text = "?",
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .background(
+                                        color = parseHexColor(TeamColor.White.hexColor),
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                                    .clip(RoundedCornerShape(4.dp))
+                            )
+                        }
                     }
                 }
             }

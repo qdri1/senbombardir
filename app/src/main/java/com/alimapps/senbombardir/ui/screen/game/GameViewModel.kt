@@ -48,6 +48,7 @@ import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.screen.add.game.result.UpdateGameResult
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.domain.model.BillingType
+import com.alimapps.senbombardir.ui.model.NextPlayingTeamsUiModel
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.utils.orDefault
@@ -101,9 +102,6 @@ class GameViewModel(
 
     private val timeInMinutes: Int
         get() = uiState.value.gameUiModel?.timeInMinutes.orDefault()
-
-    private val teamQuantity: TeamQuantity
-        get() = uiState.value.gameUiModel?.teamQuantity ?: TeamQuantity.Team2
 
     private var oldTeamId: Long = 0L
 
@@ -209,30 +207,152 @@ class GameViewModel(
                         liveGameUiModel = liveGameUiModel,
                     )
                 )
-                setRestTeamUiModelList()
+                setNextPlayingTeamsUiModelList()
                 setTimerValue()
                 setBillingType()
             }
         }
     }
 
-    private fun setRestTeamUiModelList() {
-        when (teamQuantity) {
+    private fun setNextPlayingTeamsUiModelList() {
+        val gameUiModel = uiState.value.gameUiModel ?: return
+
+        when (gameUiModel.teamQuantity) {
             TeamQuantity.Team2 -> Unit
-            TeamQuantity.Team3 -> Unit
-            TeamQuantity.Team4 -> {
-                uiState.value.liveGameUiModel?.let { liveGameUiModel ->
-                    val restTeamUiModelList = uiState.value.teamUiModelList.filter { teamUiModel ->
-                        teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
-                    }
-                    setState(
-                        uiState.value.copy(
-                            restTeamUiModelList = restTeamUiModelList.sortedBy { it.id == oldTeamId },
-                        )
+            TeamQuantity.Team3 -> when (gameUiModel.gameRule) {
+                GameRuleTeam3.ONLY_2_GAMES -> setTeam3Only2GamesNextPlayingTeams()
+                GameRuleTeam3.WINNER_STAY_2 -> setTeam3WinnerStayNextPlayingTeams(winCount = 1)
+                GameRuleTeam3.WINNER_STAY_3 -> setTeam3WinnerStayNextPlayingTeams(winCount = 2)
+                GameRuleTeam3.WINNER_STAY_4 -> setTeam3WinnerStayNextPlayingTeams(winCount = 3)
+                GameRuleTeam3.WINNER_STAY_UNLIMITED -> setTeam3WinnerStayNextPlayingTeams(winCount = 99)
+            }
+            TeamQuantity.Team4 -> Unit
+        }
+    }
+
+    private fun setTeam3Only2GamesNextPlayingTeams() {
+        val liveGameUiModel = uiState.value.liveGameUiModel ?: return
+        val teamUiModelList = uiState.value.teamUiModelList
+
+        val currentLeftTeam = teamUiModelList.find { it.id == liveGameUiModel.leftTeamId }
+        val currentRightTeam = teamUiModelList.find { it.id == liveGameUiModel.rightTeamId }
+        val restTeam = teamUiModelList.firstOrNull { teamUiModel ->
+            teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
+        }
+
+        val (firstNextPlayingTeams, secondNextPlayingTeams) =
+            if (liveGameUiModel.leftTeamWinCount > liveGameUiModel.rightTeamWinCount) {
+                Pair(
+                    first = NextPlayingTeamsUiModel(
+                        leftTeam = restTeam,
+                        rightTeam = currentRightTeam
+                    ),
+                    second = NextPlayingTeamsUiModel(
+                        leftTeam = restTeam,
+                        rightTeam = currentLeftTeam
+                    )
+                )
+            } else {
+                Pair(
+                    first = NextPlayingTeamsUiModel(
+                        leftTeam = currentLeftTeam,
+                        rightTeam = restTeam
+                    ),
+                    second = NextPlayingTeamsUiModel(
+                        leftTeam = currentRightTeam,
+                        rightTeam = restTeam
+                    )
+                )
+            }
+
+        setState(
+            uiState.value.copy(
+                nextPlayingTeamsUiModelList = listOf(
+                    firstNextPlayingTeams,
+                    secondNextPlayingTeams,
+                ),
+            )
+        )
+    }
+
+    private fun setTeam3WinnerStayNextPlayingTeams(winCount: Int) {
+        val liveGameUiModel = uiState.value.liveGameUiModel ?: return
+        val teamUiModelList = uiState.value.teamUiModelList
+
+        val currentLeftTeam = teamUiModelList.find { it.id == liveGameUiModel.leftTeamId }
+        val currentRightTeam = teamUiModelList.find { it.id == liveGameUiModel.rightTeamId }
+        val restTeam = teamUiModelList.firstOrNull { teamUiModel ->
+            teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
+        }
+
+        val nextPlayingTeams = if (liveGameUiModel.leftTeamWinCount >= winCount) {
+            NextPlayingTeamsUiModel(
+                leftTeam = restTeam,
+                rightTeam = currentRightTeam,
+            )
+        } else if (liveGameUiModel.rightTeamWinCount >= winCount) {
+            NextPlayingTeamsUiModel(
+                leftTeam = currentLeftTeam,
+                rightTeam = restTeam,
+            )
+        } else if (liveGameUiModel.leftTeamWinCount > liveGameUiModel.rightTeamWinCount) {
+            when {
+                liveGameUiModel.leftTeamGoals > liveGameUiModel.rightTeamGoals -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = currentLeftTeam?.copy(name = "?"),
+                        rightTeam = restTeam,
+                    )
+                }
+                else -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = restTeam,
+                        rightTeam = currentRightTeam?.copy(name = "?"),
+                    )
+                }
+            }
+        } else if (liveGameUiModel.leftTeamWinCount < liveGameUiModel.rightTeamWinCount) {
+            when {
+                liveGameUiModel.leftTeamGoals < liveGameUiModel.rightTeamGoals -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = restTeam,
+                        rightTeam = currentRightTeam?.copy(name = "?"),
+                    )
+                }
+                else -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = currentLeftTeam?.copy(name = "?"),
+                        rightTeam = restTeam,
+                    )
+                }
+            }
+        } else {
+            when {
+                liveGameUiModel.leftTeamGoals > liveGameUiModel.rightTeamGoals -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = currentLeftTeam?.copy(name = "?"),
+                        rightTeam = restTeam,
+                    )
+                }
+                liveGameUiModel.leftTeamGoals < liveGameUiModel.rightTeamGoals -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = restTeam,
+                        rightTeam = currentRightTeam?.copy(name = "?"),
+                    )
+                }
+                else -> {
+                    NextPlayingTeamsUiModel(
+                        leftTeam = restTeam,
+                        rightTeam = null,
                     )
                 }
             }
         }
+
+        setState(
+            uiState.value.copy(
+                nextPlayingTeamsUiModelList = listOf(nextPlayingTeams),
+            )
+        )
     }
 
     private fun setTimerValue() {
@@ -443,6 +563,7 @@ class GameViewModel(
             )
             setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
             liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+            setNextPlayingTeamsUiModelList()
         }
     }
 
@@ -500,7 +621,7 @@ class GameViewModel(
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
-                        setRestTeamUiModelList()
+                        setNextPlayingTeamsUiModelList()
                     }
                 }
             }
@@ -524,7 +645,7 @@ class GameViewModel(
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
-                        setRestTeamUiModelList()
+                        setNextPlayingTeamsUiModelList()
                     }
                 }
             }
@@ -605,6 +726,7 @@ class GameViewModel(
                     ).toPlayerHistoryModel()
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
+                setNextPlayingTeamsUiModelList()
 
                 speak(
                     text = context.getString(R.string.text_to_speech_goal, playerUiModel.name),
@@ -1280,7 +1402,7 @@ class GameViewModel(
     private suspend fun updateLiveGameBlock() {
         val liveGameUiModel = liveGameRepository.getLiveGame(gameId)
         setState(uiState.value.copy(liveGameUiModel = liveGameUiModel))
-        setRestTeamUiModelList()
+        setNextPlayingTeamsUiModelList()
     }
 
     private suspend fun updateTeamsBlock() {
@@ -1346,6 +1468,7 @@ class GameViewModel(
             TeamOption.Goal -> {
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(goals = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                setNextPlayingTeamsUiModelList()
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
                         val diffs = playerResultValue - playerResultUiModel.playerUiModel.goals
