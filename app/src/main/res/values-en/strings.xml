@@ -168,7 +168,7 @@
     <string name="live_game_info_pause_timer">Pause timer</string>
     <string name="live_game_info_play_timer">Resume timer</string>
     <string name="live_game_info_streak_title">streak</string>
-    <string name="live_game_info_streak_desc">game streak, games in a row on the field</string>
+    <string name="live_game_info_streak_desc">game streak, games in a row</string>
 
     <string name="teams_block_info_games">Games</string>
     <string name="teams_block_info_wins">Wins</string>

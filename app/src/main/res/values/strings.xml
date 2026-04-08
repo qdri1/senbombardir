@@ -167,7 +167,7 @@
     <string name="live_game_info_pause_timer">Таймерді тоқтату</string>
     <string name="live_game_info_play_timer">Таймерді жалғастыру</string>
     <string name="live_game_info_streak_title">серия</string>
-    <string name="live_game_info_streak_desc">ойын сериясы, алаңдағы қатарынан ойындар</string>
+    <string name="live_game_info_streak_desc">ойын сериясы, қатарынан ойындар</string>
 
     <string name="teams_block_info_games">Ойындар</string>
     <string name="teams_block_info_wins">Жеңістер</string>
