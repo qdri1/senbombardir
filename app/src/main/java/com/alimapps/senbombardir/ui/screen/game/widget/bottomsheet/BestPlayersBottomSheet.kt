@@ -1,13 +1,18 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,11 +22,15 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.types.BestPlayerOption
+import com.alimapps.senbombardir.ui.model.types.TeamColor
+import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,12 +65,31 @@ fun BestPlayersBottomSheet(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(
-                            text = best.playerUiModel.name,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(12.dp)
+                                    .background(
+                                        color = parseHexColor(best.playerUiModel.teamColor.hexColor),
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .border(
+                                        width = if (best.playerUiModel.teamColor == TeamColor.White) 1.dp else 0.dp,
+                                        color = MaterialTheme.colorScheme.surfaceVariant,
+                                        shape = RoundedCornerShape(4.dp),
+                                    )
+                            )
+                            Text(
+                                text = best.playerUiModel.name,
+                                color = MaterialTheme.colorScheme.onSurface,
+                                style = MaterialTheme.typography.labelSmall,
+                            )
+                        }
                         Text(
                             text = when(best.option) {
                                 BestPlayerOption.BestPlayer -> {
