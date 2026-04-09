@@ -66,7 +66,9 @@ fun LiveGameBlock(
             .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
-        Column {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Box {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
