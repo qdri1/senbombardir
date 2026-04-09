@@ -222,8 +222,8 @@ class GameViewModel(
             TeamQuantity.Team3 -> when (gameUiModel.gameRule) {
                 GameRuleTeam3.ONLY_2_GAMES -> setTeam3Only2GamesNextPlayingTeams()
                 GameRuleTeam3.WINNER_STAY_2 -> setTeam3WinnerStayNextPlayingTeams(winCount = 1)
-                GameRuleTeam3.WINNER_STAY_3 -> setTeam3WinnerStayNextPlayingTeams(winCount = 2)
-                GameRuleTeam3.WINNER_STAY_4 -> setTeam3WinnerStayNextPlayingTeams(winCount = 3)
+                GameRuleTeam3.WINNER_STAY_3 -> Unit
+                GameRuleTeam3.WINNER_STAY_4 -> Unit
                 GameRuleTeam3.WINNER_STAY_UNLIMITED -> Unit
             }
             TeamQuantity.Team4 -> Unit
