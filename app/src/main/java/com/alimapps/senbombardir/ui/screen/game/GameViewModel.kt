@@ -15,7 +15,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.data.model.GameHistoryActionEventModel
+import com.alimapps.senbombardir.data.model.GameHistoryEntryModel
 import com.alimapps.senbombardir.data.repository.BillingRepository
+import com.alimapps.senbombardir.data.repository.GameHistoryRepository
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
@@ -74,6 +77,7 @@ class GameViewModel(
     private val playerRepository: PlayerRepository,
     private val playerHistoryRepository: PlayerHistoryRepository,
     private val languageRepository: LanguageRepository,
+    private val gameHistoryRepository: GameHistoryRepository,
     private val billingRepository: BillingRepository,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
@@ -104,6 +108,16 @@ class GameViewModel(
         get() = uiState.value.gameUiModel?.timeInMinutes.orDefault()
 
     private var oldTeamId: Long = 0L
+    private var pendingGameDurationSeconds: Int = 0
+    private val currentGameActions = mutableListOf<PendingGameAction>()
+
+    private data class PendingGameAction(
+        val teamName: String,
+        val teamColor: String,
+        val playerName: String,
+        val actionType: String,
+        val elapsedSeconds: Int,
+    )
 
     init {
         fetchGame()
@@ -408,6 +422,7 @@ class GameViewModel(
             liveGameRepository.updateLiveGame(liveGameModel)
         }
 
+        gameHistoryRepository.deleteGameHistory(gameId)
         setModifiedAt()
         fetchGame()
     }
@@ -460,6 +475,46 @@ class GameViewModel(
             }
 
         setEffectSafely(GameEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
+    }
+
+    private fun onHistoryClicked() = viewModelScope.launch {
+        val history = gameHistoryRepository.getGameHistory(gameId)
+        setEffectSafely(GameEffect.ShowGameHistoryBottomSheet(history.reversed()))
+    }
+
+    private suspend fun saveGameHistory(liveGameUiModel: LiveGameUiModel) {
+        val winnerTeamName = when {
+            liveGameUiModel.isLeftTeamWin -> liveGameUiModel.leftTeamName
+            liveGameUiModel.isRightTeamWin -> liveGameUiModel.rightTeamName
+            else -> String.empty
+        }
+        val entryId = gameHistoryRepository.saveGameHistoryEntry(
+            GameHistoryEntryModel(
+                gameId = gameId,
+                gameNumber = liveGameUiModel.gameCount + 1,
+                leftTeamName = liveGameUiModel.leftTeamName,
+                leftTeamColor = liveGameUiModel.leftTeamColor.hexColor,
+                leftTeamGoals = liveGameUiModel.leftTeamGoals,
+                rightTeamName = liveGameUiModel.rightTeamName,
+                rightTeamColor = liveGameUiModel.rightTeamColor.hexColor,
+                rightTeamGoals = liveGameUiModel.rightTeamGoals,
+                winnerTeamName = winnerTeamName,
+                durationSeconds = pendingGameDurationSeconds,
+            )
+        )
+        currentGameActions.forEach { action ->
+            gameHistoryRepository.saveGameHistoryActionEvent(
+                GameHistoryActionEventModel(
+                    historyEntryId = entryId,
+                    teamName = action.teamName,
+                    teamColor = action.teamColor,
+                    playerName = action.playerName,
+                    actionType = action.actionType,
+                    elapsedSeconds = action.elapsedSeconds,
+                )
+            )
+        }
+        currentGameActions.clear()
     }
 
     private fun onEditGameClicked() {
@@ -682,6 +737,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "goal", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_goal, playerUiModel.name),
                     onComplete = { playGoalSound() },
@@ -698,6 +754,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "assist", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_assist, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.girls_applause) },
@@ -714,6 +771,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "dribble", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_dribble, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.bilgenin_istep_jatyr) },
@@ -730,6 +788,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "pass", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_pass, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.stadium_applause) },
@@ -746,6 +805,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "shot", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_shot, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.suiiiii) },
@@ -762,6 +822,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "save", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.goal_save) },
@@ -778,6 +839,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "yellowCard", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_yellow_card, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.sound_penalty_real_madrid) },
@@ -794,6 +856,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "redCard", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_red_card, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.sound_penalty_real_madrid) },
@@ -832,9 +895,16 @@ class GameViewModel(
         }
     }
 
+    private fun currentElapsedSeconds(): Int {
+        val totalMs = timeInMinutes.toMillis()
+        if (totalMs == 0L) return 0
+        return ((totalMs - timerValue) / 1000).toInt().coerceAtLeast(0)
+    }
+
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
         playMedia(resId = R.raw.start_match, free = true)
         startTimer()
+        currentGameActions.clear()
         viewModelScope.launch {
             val copyLiveGameUiModel = liveGameUiModel.copy(isLive = true)
             setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
@@ -845,6 +915,7 @@ class GameViewModel(
 
     private fun finishGame() {
         playMedia(resId = R.raw.finish, free = true)
+        pendingGameDurationSeconds = currentElapsedSeconds()
         resetTimer()
         uiState.value.gameUiModel?.let { gameUiModel ->
             uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -861,6 +932,7 @@ class GameViewModel(
         gameUiModel: GameUiModel,
         liveGameUiModel: LiveGameUiModel,
     ) = viewModelScope.launch {
+        saveGameHistory(liveGameUiModel)
         when (gameUiModel.gameRule) {
             GameRuleTeam2.AFTER_TIME_CHANGE_SIDE -> {
                 val copyLiveGameUiModel = liveGameUiModel.copy(
@@ -896,6 +968,7 @@ class GameViewModel(
         gameUiModel: GameUiModel,
         liveGameUiModel: LiveGameUiModel,
     ) = viewModelScope.launch {
+        saveGameHistory(liveGameUiModel)
         val ids = listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
 
         when (gameUiModel.gameRule) {
@@ -961,6 +1034,7 @@ class GameViewModel(
         gameUiModel: GameUiModel,
         liveGameUiModel: LiveGameUiModel,
     ) = viewModelScope.launch {
+        saveGameHistory(liveGameUiModel)
         val ids = listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId, oldTeamId)
 
         when (gameUiModel.gameRule) {
@@ -1556,6 +1630,7 @@ class GameViewModel(
     private fun onFunctionClicked(function: GameFunction) {
         when (function) {
             GameFunction.BestPlayers -> onBestPlayersClicked()
+            GameFunction.History -> onHistoryClicked()
             GameFunction.Edit -> onEditGameClicked()
             GameFunction.ClearResults -> onClearResultsClicked()
             GameFunction.Info -> onInfoClicked()

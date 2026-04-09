@@ -155,11 +155,19 @@
     <string name="sound_freed_from_desire">Freed From\nDesire</string>
 
     <string name="function_best_players">Best players</string>
+    <string name="function_history">History of games</string>
     <string name="function_edit">Edit game</string>
     <string name="function_clear_result">Clear this game results</string>
     <string name="function_info">Info</string>
     <string name="function_all_results">All games results</string>
     <string name="function_remove">Delete game</string>
+
+    <string name="game_history_game_number">Game #%d</string>
+    <string name="game_history_winner">Win</string>
+    <string name="game_history_loser">Lose</string>
+    <string name="game_history_draw">Draw</string>
+    <string name="game_history_empty">Empty history</string>
+    <string name="game_history_duration">⏱ %s</string>
 
     <string name="function_best_players_all_games">Best players of all games</string>
     <string name="function_clear_result_all_games">Clear all games results</string>

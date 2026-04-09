@@ -3,6 +3,7 @@ package com.alimapps.senbombardir.di
 import android.content.Context
 import androidx.room.Room
 import com.alimapps.senbombardir.data.repository.BillingRepository
+import com.alimapps.senbombardir.data.repository.GameHistoryRepository
 import com.alimapps.senbombardir.data.repository.GameRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
@@ -12,6 +13,7 @@ import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.data.source.AppDatabase
 import com.alimapps.senbombardir.data.source.GameDao
+import com.alimapps.senbombardir.data.source.GameHistoryDao
 import com.alimapps.senbombardir.data.source.LiveGameDao
 import com.alimapps.senbombardir.data.source.PlayerDao
 import com.alimapps.senbombardir.data.source.PlayerHistoryDao
@@ -40,6 +42,7 @@ val dataModule = module {
     single<PlayerDao> { get<AppDatabase>().playerDao() }
     single<TeamHistoryDao> { get<AppDatabase>().teamHistoryDao() }
     single<PlayerHistoryDao> { get<AppDatabase>().playerHistoryDao() }
+    single<GameHistoryDao> { get<AppDatabase>().gameHistoryDao() }
 
     single { Prefs(preferences = get<Context>().getSharedPreferences("PREFS", Context.MODE_PRIVATE)) }
 
@@ -65,6 +68,10 @@ val dataModule = module {
 
     single {
         PlayerHistoryRepository(teamHistoryDao = get(), playerHistoryDao = get())
+    }
+
+    single {
+        GameHistoryRepository(gameHistoryDao = get())
     }
 
     single {

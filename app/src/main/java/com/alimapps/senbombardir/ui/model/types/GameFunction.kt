@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ThumbUp
@@ -12,6 +13,7 @@ import com.alimapps.senbombardir.R
 
 enum class GameFunction(val icon: ImageVector, val stringRes: Int) {
     BestPlayers(icon = Icons.Filled.ThumbUp, stringRes = R.string.function_best_players),
+    History(icon = Icons.Filled.History, stringRes = R.string.function_history),
     Edit(icon = Icons.Filled.Edit, stringRes = R.string.function_edit),
     ClearResults(icon = Icons.Filled.Refresh, stringRes = R.string.function_clear_result),
     Info(icon = Icons.Filled.Info, stringRes = R.string.function_info),

@@ -50,6 +50,7 @@ val uiModule = module {
             teamHistoryRepository = get(),
             playerRepository = get(),
             playerHistoryRepository = get(),
+            gameHistoryRepository = get(),
             languageRepository = get(),
             billingRepository = get(),
             context = get(),

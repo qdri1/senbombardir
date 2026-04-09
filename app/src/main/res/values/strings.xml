@@ -154,11 +154,19 @@
     <string name="sound_freed_from_desire">Freed From\nDesire</string>
 
     <string name="function_best_players">Үздік ойыншылар</string>
+    <string name="function_history">Ойындар тарихы</string>
     <string name="function_edit">Ойынды өңдеу</string>
     <string name="function_clear_result">Осы ойынның нәтижелерін тазарту</string>
     <string name="function_info">Ақпарат</string>
     <string name="function_all_results">Барлық ойындардың нәтижелері</string>
     <string name="function_remove">Ойынды жою</string>
+
+    <string name="game_history_game_number">Ойын #%d</string>
+    <string name="game_history_winner">Жеңіc</string>
+    <string name="game_history_loser">Ұтылыс</string>
+    <string name="game_history_draw">Тең ойын</string>
+    <string name="game_history_empty">Тарих бос</string>
+    <string name="game_history_duration">⏱ %s</string>
 
     <string name="function_best_players_all_games">Барлық ойындардың үздік ойыншылары</string>
     <string name="function_clear_result_all_games">Барлық ойындардың нәтижелерін тазарту</string>
