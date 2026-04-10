@@ -38,7 +38,7 @@ fun FunctionsBlock(
             .padding(horizontal = 12.dp),
     ) {
         GameFunction.entries.forEach { function ->
-            val isFunctionLimited = function == GameFunction.BestPlayers && uiLimited
+            val isFunctionLimited = (function == GameFunction.BestPlayers || function == GameFunction.History) && uiLimited
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically,

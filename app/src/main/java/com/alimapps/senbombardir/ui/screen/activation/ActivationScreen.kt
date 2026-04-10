@@ -166,6 +166,11 @@ private fun ActivationTextContent(
         )
         ActivationTextItem(
             icon = painterResource(R.drawable.ic_star_shine),
+            text = stringResource(R.string.activation_text_history),
+            desc = stringResource(R.string.activation_desc_history),
+        )
+        ActivationTextItem(
+            icon = painterResource(R.drawable.ic_star_shine),
             text = stringResource(R.string.activation_text_3),
             desc = stringResource(R.string.activation_desc_3),
         )
