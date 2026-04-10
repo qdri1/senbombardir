@@ -109,6 +109,8 @@ class GameResultsViewModel(
                         passes = 0,
                         shots = 0,
                         saves = 0,
+                        yellowCards = 0,
+                        redCards = 0,
                     ).toPlayerHistoryModel()
 
                     playerHistoryRepository.updatePlayerHistory(playerHistoryModel)

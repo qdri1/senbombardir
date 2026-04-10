@@ -404,6 +404,8 @@ class GameViewModel(
                     passes = 0,
                     shots = 0,
                     saves = 0,
+                    yellowCards = 0,
+                    redCards = 0,
                 ).toPlayerModel()
                 playerRepository.updatePlayer(playerModel)
             }
