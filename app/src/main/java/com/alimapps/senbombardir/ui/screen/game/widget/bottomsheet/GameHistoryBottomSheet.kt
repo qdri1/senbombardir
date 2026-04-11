@@ -42,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -257,9 +258,27 @@ private fun ScrollButton(
 
 @Composable
 private fun GameHistoryEntryItem(entry: GameHistoryEntryUiModel) {
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val backgroundBrush = when {
+        entry.winnerTeamName.isEmpty() -> null
+        entry.winnerTeamName == entry.leftTeamName -> Brush.horizontalGradient(
+            listOf(
+                parseHexColor(entry.leftTeamColor.hexColor).copy(alpha = 0.25f),
+                surfaceColor,
+            )
+        )
+        else -> Brush.horizontalGradient(
+            listOf(
+                surfaceColor,
+                parseHexColor(entry.rightTeamColor.hexColor).copy(alpha = 0.25f),
+            )
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .then(if (backgroundBrush != null) Modifier.background(backgroundBrush) else Modifier)
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
