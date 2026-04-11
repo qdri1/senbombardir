@@ -7,7 +7,7 @@ enum class GameSounds(val stringRes: Int, val rawRes: Int) {
     StartMatch(stringRes = R.string.sound_start_match, rawRes = R.raw.start_match),
     PenaltyRealMadrid(stringRes = R.string.sound_penalty_real_madrid, rawRes = R.raw.sound_penalty_real_madrid),
     LeagueChemp(stringRes = R.string.sound_league_chemp, rawRes = R.raw.sound_league_chemp),
-    FreedFromDesire(stringRes = R.string.sound_freed_from_desire, rawRes = R.raw.sound_freed_from_desire),
+    FreedFromDesire(stringRes = R.string.sound_freed_from_desire, rawRes = R.raw.sound_freed_from_desire_more),
     GoalFans(stringRes = R.string.sound_goal_fans, rawRes = R.raw.sound_goal_fans),
     UoUoUo(stringRes = R.string.sound_uo_uo_uo, rawRes = R.raw.sound_uo_uo_uo),
     StadiumAtmosphere(stringRes = R.string.sound_stadium_atmosphere, rawRes = R.raw.sound_stadium_atmosphere),

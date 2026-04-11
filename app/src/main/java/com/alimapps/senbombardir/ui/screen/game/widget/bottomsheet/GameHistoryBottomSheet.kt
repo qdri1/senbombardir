@@ -1,8 +1,5 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet
 
-import android.content.Context
-import android.content.Intent
-import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,7 +42,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -57,7 +52,6 @@ import com.alimapps.senbombardir.ui.model.GameHistoryActionEventUiModel
 import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.utils.parseHexColor
-import androidx.compose.ui.platform.LocalResources
 import kotlinx.coroutines.delay
 
 private enum class AutoScrollDirection { None, Up, Down }
@@ -74,8 +68,6 @@ fun GameHistoryBottomSheet(
     gameHistory: List<GameHistoryEntryUiModel>,
     onDismissed: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val resources = LocalResources.current
     val scrollState = rememberScrollState()
     var autoScroll by remember { mutableStateOf(AutoScrollDirection.None) }
     var speed by remember { mutableStateOf(ScrollSpeed.X1) }
@@ -131,18 +123,6 @@ fun GameHistoryBottomSheet(
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.weight(1f),
                     )
-                    if (gameHistory.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Filled.Share,
-                            contentDescription = "ShareHistory",
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .clickable {
-                                    shareText(context, buildHistoryText(resources, gameHistory))
-                                }
-                        )
-                    }
                 }
 
                 if (gameHistory.isEmpty()) {
@@ -487,43 +467,4 @@ private fun actionTypeLabel(actionType: String): String = when (actionType) {
     "yellowCard" -> stringResource(R.string.text_yellow_card)
     "redCard" -> stringResource(R.string.text_red_card)
     else -> actionType
-}
-
-private fun buildHistoryText(resources: Resources, gameHistory: List<GameHistoryEntryUiModel>): String {
-    val sb = StringBuilder()
-    gameHistory.forEach { entry ->
-        sb.appendLine("──────────────")
-        sb.appendLine()
-        val durationPart = entry.durationFormatted?.let { " | ⏱ $it" } ?: ""
-        sb.appendLine("${resources.getString(R.string.game_history_game_number, entry.gameNumber)}$durationPart")
-        sb.appendLine()
-        sb.appendLine("${entry.leftTeamName}  ${entry.leftTeamGoals} - ${entry.rightTeamGoals}  ${entry.rightTeamName}")
-        if (entry.actionEvents.isNotEmpty()) {
-            sb.appendLine()
-            entry.actionEvents.forEach { event ->
-                val actionLabel = when (event.actionType) {
-                    "goal" -> "${resources.getString(R.string.text_goal)} ⚽"
-                    "assist" -> resources.getString(R.string.text_assist)
-                    "save" -> resources.getString(R.string.text_save)
-                    "dribble" -> resources.getString(R.string.text_dribble)
-                    "pass" -> resources.getString(R.string.text_pass)
-                    "shot" -> resources.getString(R.string.text_shot)
-                    "yellowCard" -> resources.getString(R.string.text_yellow_card)
-                    "redCard" -> resources.getString(R.string.text_red_card)
-                    else -> event.actionType
-                }
-                sb.appendLine("${event.elapsedFormatted}  ${event.playerName} — $actionLabel")
-            }
-        }
-        sb.appendLine()
-    }
-    return sb.toString().trimEnd()
-}
-
-private fun shareText(context: Context, text: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "text/plain"
-        putExtra(Intent.EXTRA_TEXT, text)
-    }
-    context.startActivity(Intent.createChooser(intent, null))
 }
