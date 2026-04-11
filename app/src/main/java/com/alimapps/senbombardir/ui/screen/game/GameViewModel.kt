@@ -1599,7 +1599,10 @@ class GameViewModel(
                 timerValue = millisUntilFinished
                 _timerValueState.value = millisUntilFinished.toStringTime()
             }
-            override fun onFinish() {}
+            override fun onFinish() {
+                timerValue = 0L
+                _timerValueState.value = 0L.toStringTime()
+            }
         }
         timer?.start()
     }

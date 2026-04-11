@@ -6,6 +6,7 @@ import android.content.res.Resources
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +16,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -29,9 +33,18 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +57,15 @@ import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.utils.parseHexColor
 import androidx.compose.ui.platform.LocalResources
+import kotlinx.coroutines.delay
+
+private enum class AutoScrollDirection { None, Up, Down }
+
+private enum class ScrollSpeed(val delta: Float, val label: String) {
+    X1(3f, "1x"),
+    X2(6f, "2x"),
+    X3(12f, "3x"),
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,62 +75,183 @@ fun GameHistoryBottomSheet(
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
+    val scrollState = rememberScrollState()
+    var autoScroll by remember { mutableStateOf(AutoScrollDirection.None) }
+    var speed by remember { mutableStateOf(ScrollSpeed.X1) }
+
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (source == NestedScrollSource.Drag) {
+                    autoScroll = AutoScrollDirection.None
+                }
+                return Offset.Zero
+            }
+        }
+    }
+
+    LaunchedEffect(autoScroll, speed) {
+        while (autoScroll != AutoScrollDirection.None) {
+            val delta = if (autoScroll == AutoScrollDirection.Down) speed.delta else -speed.delta
+            scrollState.scrollBy(delta)
+            if (autoScroll == AutoScrollDirection.Down && scrollState.value >= scrollState.maxValue) {
+                autoScroll = AutoScrollDirection.None
+            } else if (autoScroll == AutoScrollDirection.Up && scrollState.value <= 0) {
+                autoScroll = AutoScrollDirection.None
+            }
+            delay(16)
+        }
+    }
 
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         containerColor = MaterialTheme.colorScheme.surface,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(bottom = 24.dp),
-        ) {
-            Row(
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                    .weight(1f, fill = false)
+                    .nestedScroll(nestedScrollConnection)
+                    .verticalScroll(scrollState)
+                    .padding(bottom = 24.dp),
             ) {
-                Text(
-                    text = stringResource(R.string.function_history),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f),
-                )
-                if (gameHistory.isNotEmpty()) {
-                    Icon(
-                        imageVector = Icons.Filled.Share,
-                        contentDescription = "ShareHistory",
-                        tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .clickable {
-                                shareText(context, buildHistoryText(resources, gameHistory))
-                            }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(bottom = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        text = stringResource(R.string.function_history),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.weight(1f),
                     )
+                    if (gameHistory.isNotEmpty()) {
+                        Icon(
+                            imageVector = Icons.Filled.Share,
+                            contentDescription = "ShareHistory",
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier
+                                .clip(CircleShape)
+                                .clickable {
+                                    shareText(context, buildHistoryText(resources, gameHistory))
+                                }
+                        )
+                    }
+                }
+
+                if (gameHistory.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.game_history_empty),
+                        color = MaterialTheme.colorScheme.outline,
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 32.dp),
+                    )
+                } else {
+                    gameHistory.forEach { entry ->
+                        GameHistoryEntryItem(entry = entry)
+                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant, thickness = 1.dp)
+                    }
                 }
             }
 
-            if (gameHistory.isEmpty()) {
-                Text(
-                    text = stringResource(R.string.game_history_empty),
-                    color = MaterialTheme.colorScheme.outline,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
+            if (gameHistory.isNotEmpty()) {
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 32.dp),
-                )
-            } else {
-                gameHistory.forEach { entry ->
-                    GameHistoryEntryItem(entry = entry)
-                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant, thickness = 1.dp)
+                        .padding(vertical = 12.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    ScrollButton(
+                        active = autoScroll == AutoScrollDirection.Up,
+                        onClick = {
+                            autoScroll = if (autoScroll == AutoScrollDirection.Up) {
+                                AutoScrollDirection.None
+                            } else {
+                                AutoScrollDirection.Up
+                            }
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowUp,
+                            contentDescription = "Scroll up",
+                            tint = if (autoScroll == AutoScrollDirection.Up)
+                                MaterialTheme.colorScheme.onPrimary
+                            else
+                                MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    ScrollButton(
+                        active = false,
+                        onClick = {
+                            speed = when (speed) {
+                                ScrollSpeed.X1 -> ScrollSpeed.X2
+                                ScrollSpeed.X2 -> ScrollSpeed.X3
+                                ScrollSpeed.X3 -> ScrollSpeed.X1
+                            }
+                        },
+                    ) {
+                        Text(
+                            text = speed.label,
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
+                    Spacer(Modifier.width(16.dp))
+                    ScrollButton(
+                        active = autoScroll == AutoScrollDirection.Down,
+                        onClick = {
+                            autoScroll = if (autoScroll == AutoScrollDirection.Down) {
+                                AutoScrollDirection.None
+                            } else {
+                                AutoScrollDirection.Down
+                            }
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.KeyboardArrowDown,
+                            contentDescription = "Scroll down",
+                            tint = if (autoScroll == AutoScrollDirection.Down)
+                                MaterialTheme.colorScheme.onPrimary
+                            else
+                                MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ScrollButton(
+    active: Boolean,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .size(44.dp)
+            .background(
+                color = if (active) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.secondaryContainer,
+                shape = CircleShape,
+            )
+            .clip(CircleShape)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        content()
     }
 }
 
