@@ -102,6 +102,21 @@ fun GameHistoryBottomSheet(
         containerColor = MaterialTheme.colorScheme.surface,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = stringResource(R.string.function_history),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -110,21 +125,6 @@ fun GameHistoryBottomSheet(
                     .verticalScroll(scrollState)
                     .padding(bottom = 24.dp),
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(bottom = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = stringResource(R.string.function_history),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-
                 if (gameHistory.isEmpty()) {
                     Text(
                         text = stringResource(R.string.game_history_empty),
@@ -239,18 +239,27 @@ private fun ScrollButton(
 @Composable
 private fun GameHistoryEntryItem(entry: GameHistoryEntryUiModel) {
     val surfaceColor = MaterialTheme.colorScheme.surface
+    val surfaceVariantColor = MaterialTheme.colorScheme.surfaceVariant
     val backgroundBrush = when {
         entry.winnerTeamName.isEmpty() -> null
         entry.winnerTeamName == entry.leftTeamName -> Brush.horizontalGradient(
             listOf(
-                parseHexColor(entry.leftTeamColor.hexColor).copy(alpha = 0.25f),
+                if (entry.leftTeamColor == TeamColor.White) {
+                    surfaceVariantColor.copy(alpha = 0.5f)
+                } else {
+                    parseHexColor(entry.leftTeamColor.hexColor).copy(alpha = 0.25f)
+                },
                 surfaceColor,
             )
         )
         else -> Brush.horizontalGradient(
             listOf(
                 surfaceColor,
-                parseHexColor(entry.rightTeamColor.hexColor).copy(alpha = 0.25f),
+                if (entry.rightTeamColor == TeamColor.White) {
+                    surfaceVariantColor.copy(alpha = 0.5f)
+                } else {
+                    parseHexColor(entry.rightTeamColor.hexColor).copy(alpha = 0.25f)
+                },
             )
         )
     }
