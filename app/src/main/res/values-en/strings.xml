@@ -211,6 +211,7 @@
 
     <string name="activation_orange_text">You are using a limited version. Some features are unavailable. Upgrade to the full version.</string>
     <string name="activation_green_text">Limit after 5 games played</string>
+    <string name="activation_green_text_team2">Limit after 1 half played</string>
     <string name="activation_button">Upgrade</string>
     <string name="activation_title">Activation</string>
 

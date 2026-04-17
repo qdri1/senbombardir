@@ -189,6 +189,7 @@ private fun GameScreenContent(
             ) {
                 if (uiState.billingType == BillingType.Limited) {
                     ActivationInfoBlock(
+                        teamQuantity = uiState.gameUiModel?.teamQuantity,
                         onAction = onAction,
                     )
                 }

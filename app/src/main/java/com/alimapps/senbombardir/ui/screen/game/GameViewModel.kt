@@ -340,9 +340,14 @@ class GameViewModel(
 
     private fun setBillingType() {
         val billingType = billingRepository.getCurrentBillingType()
+        val teamQuantity = uiState.value.gameUiModel?.teamQuantity
         val gameCount = uiState.value.liveGameUiModel?.gameCount ?: 0
         val uiLimited = if (billingType == BillingType.Limited) {
-            gameCount >= 5
+            if (teamQuantity == TeamQuantity.Team2) {
+                gameCount >= 1
+            } else {
+                gameCount >= 5
+            }
         } else {
             false
         }

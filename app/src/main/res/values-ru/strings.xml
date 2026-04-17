@@ -209,6 +209,7 @@
 
     <string name="activation_orange_text">У вас ограниченная версия приложения. Некоторые функции могут быть недоступны. Активируйте полную версию.</string>
     <string name="activation_green_text">Ограничение после 5 сыгранных игр</string>
+    <string name="activation_green_text_team2">Ограничение после 1 сыгранного тайма</string>
     <string name="activation_button">Активировать</string>
     <string name="activation_title">Активация</string>
 

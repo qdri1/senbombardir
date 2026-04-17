@@ -18,11 +18,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.screen.game.GameAction
 import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @Composable
 fun ActivationInfoBlock(
+    teamQuantity: TeamQuantity?,
     onAction: (GameAction) -> Unit,
 ) {
     Column (
@@ -51,7 +53,11 @@ fun ActivationInfoBlock(
                 .padding(12.dp)
         )
         Text(
-            text = stringResource(id = R.string.activation_green_text),
+            text = if (teamQuantity == TeamQuantity.Team2) {
+                stringResource(id = R.string.activation_green_text_team2)
+            } else {
+                stringResource(id = R.string.activation_green_text)
+            },
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center,
