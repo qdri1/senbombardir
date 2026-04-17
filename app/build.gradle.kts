@@ -15,8 +15,8 @@ android {
         applicationId = "com.alimapps.senbombardir"
         minSdk = 24
         targetSdk = 36
-        versionCode = 58
-        versionName = "5.8"
+        versionCode = 59
+        versionName = "5.9"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
