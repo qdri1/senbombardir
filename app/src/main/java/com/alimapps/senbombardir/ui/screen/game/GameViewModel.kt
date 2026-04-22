@@ -240,7 +240,16 @@ class GameViewModel(
                 GameRuleTeam3.WINNER_STAY_4 -> Unit
                 GameRuleTeam3.WINNER_STAY_UNLIMITED -> Unit
             }
-            TeamQuantity.Team4 -> Unit
+            TeamQuantity.Team4 -> uiState.value.liveGameUiModel?.let { liveGameUiModel ->
+                val restTeamUiModelList = uiState.value.teamUiModelList.filter { teamUiModel ->
+                    teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
+                }
+                setState(
+                    uiState.value.copy(
+                        restTeamUiModelList = restTeamUiModelList.sortedBy { it.id == oldTeamId },
+                    )
+                )
+            }
         }
     }
 
@@ -633,8 +642,6 @@ class GameViewModel(
                             leftTeamColor = nextTeam.color,
                             leftTeamGoals = 0,
                             leftTeamWinCount = 0,
-                            rightTeamGoals = 0,
-                            rightTeamWinCount = 0,
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
@@ -652,8 +659,6 @@ class GameViewModel(
                 viewModelScope.launch {
                     uiState.value.teamUiModelList.find { it.id == teamId }?.let { nextTeam ->
                         val copyLiveGameUiModel = liveGameUiModel.copy(
-                            leftTeamGoals = 0,
-                            leftTeamWinCount = 0,
                             rightTeamId = nextTeam.id,
                             rightTeamName = nextTeam.name,
                             rightTeamColor = nextTeam.color,

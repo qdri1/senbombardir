@@ -211,6 +211,7 @@ private fun GameScreenContent(
                         gameUiModel = uiState.gameUiModel,
                         liveGameUiModel = liveGameUiModel,
                         nextPlayingTeamsUiModelList = uiState.nextPlayingTeamsUiModelList,
+                        restTeamUiModelList = uiState.restTeamUiModelList,
                         uiState = uiState,
                         onAction = onAction,
                     )

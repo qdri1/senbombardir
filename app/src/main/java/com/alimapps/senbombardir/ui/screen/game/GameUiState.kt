@@ -12,6 +12,7 @@ data class GameUiState(
     val liveGameUiModel: LiveGameUiModel? = null,
     val teamUiModelList: List<TeamUiModel> = emptyList(),
     val nextPlayingTeamsUiModelList: List<NextPlayingTeamsUiModel> = emptyList(),
+    val restTeamUiModelList: List<TeamUiModel> = emptyList(),
     val playerUiModelList: List<PlayerUiModel> = emptyList(),
     val showLeftTeamOptionsDropdown: Boolean = false,
     val showRightTeamOptionsDropdown: Boolean = false,

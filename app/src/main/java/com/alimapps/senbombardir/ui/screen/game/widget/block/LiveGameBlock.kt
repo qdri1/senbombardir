@@ -39,6 +39,7 @@ import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.NextPlayingTeamsUiModel
+import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
@@ -55,6 +56,7 @@ fun LiveGameBlock(
     gameUiModel: GameUiModel?,
     liveGameUiModel: LiveGameUiModel,
     nextPlayingTeamsUiModelList: List<NextPlayingTeamsUiModel>,
+    restTeamUiModelList: List<TeamUiModel>,
     uiState: GameUiState,
     onAction: (GameAction) -> Unit,
 ) {
@@ -462,6 +464,69 @@ fun LiveGameBlock(
                                     .clip(RoundedCornerShape(4.dp))
                             )
                         }
+                    }
+                }
+            }
+        } else if (restTeamUiModelList.isNotEmpty()) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .weight(1f)
+                            .background(MaterialTheme.colorScheme.background)
+                    )
+                    Text(
+                        text = stringResource(R.string.next_playing_teams),
+                        color = MaterialTheme.colorScheme.outline,
+                        style = MaterialTheme.typography.labelSmall,
+                        modifier = Modifier
+                    )
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .height(1.dp)
+                            .weight(1f)
+                            .background(MaterialTheme.colorScheme.background)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                restTeamUiModelList.forEach { teamUiModel ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(12.dp)
+                                .background(
+                                    color = parseHexColor(teamUiModel.color.hexColor),
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                                .clip(RoundedCornerShape(4.dp))
+                                .border(
+                                    width = if (teamUiModel.color == TeamColor.White) 1.dp else 0.dp,
+                                    color = MaterialTheme.colorScheme.surfaceVariant,
+                                    shape = RoundedCornerShape(4.dp),
+                                )
+                        )
+                        Text(
+                            text = teamUiModel.name,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.labelSmall,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier
+                        )
                     }
                 }
             }
