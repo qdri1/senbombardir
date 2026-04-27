@@ -2,6 +2,8 @@ package com.alimapps.senbombardir.ui.screen.game.widget.block
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,7 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -30,6 +33,7 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 @Composable
 fun TeamsResultsBlock(
     teamUiModelList: List<TeamUiModel>,
+    onTeamResultClicked: (TeamUiModel) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -252,6 +256,12 @@ fun TeamsResultsBlock(
                         text = teamUiModel.points.toString(),
                         color = textColor,
                         style = textStyleBold,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                                onClick = { onTeamResultClicked(teamUiModel) }
+                            )
                     )
                 }
             }

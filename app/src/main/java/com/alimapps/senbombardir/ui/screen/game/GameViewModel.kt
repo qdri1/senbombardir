@@ -166,6 +166,8 @@ class GameViewModel(
             is GameAction.OnInterceptionNavigationResult -> onInterceptionNavigationResult(action.result)
             is GameAction.OnPlayerResultClicked -> setEffectSafely(GameEffect.ShowPlayerResultBottomSheet(action.playerResultUiModel))
             is GameAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
+            is GameAction.OnTeamResultClicked -> setEffectSafely(GameEffect.ShowTeamResultBottomSheet(action.teamUiModel))
+            is GameAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamUiModel, action.pointsValue)
             is GameAction.OnLiveGameResultClicked -> onLiveGameResultClicked(action.liveGameResultUiModel)
             is GameAction.OnSaveLiveGameResultClicked -> onSaveLiveGameResultClicked(action.liveGameResultUiModel, action.teamGoalsValue)
             is GameAction.OnActivateClicked -> openActivationScreen()
@@ -1595,6 +1597,22 @@ class GameViewModel(
             }
         }
         updatePlayersBlock()
+        setEffect(GameEffect.ShowSnackbar(R.string.save_success))
+    }
+
+    private fun onSaveTeamResultClicked(
+        teamUiModel: TeamUiModel,
+        pointsValue: Int,
+    ) = viewModelScope.launch {
+        val updatedTeam = teamUiModel.copy(points = pointsValue)
+        teamRepository.updateTeam(updatedTeam.toTeamModel())
+        teamHistoryRepository.getTeamHistory(teamUiModel.id)?.let { teamHistoryUiModel ->
+            val diff = pointsValue - teamUiModel.points
+            teamHistoryRepository.updateTeamHistory(
+                teamHistoryUiModel.copy(points = teamHistoryUiModel.points + diff).toTeamHistoryModel()
+            )
+        }
+        updateTeamsBlock()
         setEffect(GameEffect.ShowSnackbar(R.string.save_success))
     }
 

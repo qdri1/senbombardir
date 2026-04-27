@@ -38,12 +38,14 @@ import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.TeamResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.widget.GameResultsFunctionsBlock
 import kotlinx.coroutines.flow.collectLatest
 
@@ -71,6 +73,7 @@ private fun GameResultsScreenContent(
 
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
+    var teamResultUiModel by remember { mutableStateOf<TeamUiModel?>(null) }
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
     var playerToRemove by remember { mutableStateOf<PlayerUiModel?>(null) }
 
@@ -132,6 +135,7 @@ private fun GameResultsScreenContent(
                 if (uiState.teamUiModelList.size > 2) {
                     TeamsResultsBlock(
                         teamUiModelList = uiState.teamUiModelList,
+                        onTeamResultClicked = { teamResultUiModel = it },
                     )
                 }
 
@@ -153,6 +157,16 @@ private fun GameResultsScreenContent(
     }
 
     when {
+        teamResultUiModel != null -> teamResultUiModel?.let {
+            TeamResultBottomSheet(
+                teamUiModel = it,
+                onSaveTeamResultClicked = { team, points ->
+                    teamResultUiModel = null
+                    onAction(GameResultsAction.OnSaveTeamResultClicked(teamUiModel = team, pointsValue = points))
+                },
+                onDismissed = { teamResultUiModel = null },
+            )
+        }
         playerResultUiModel != null -> playerResultUiModel?.let {
             PlayerResultBottomSheet(
                 playerResultUiModel = it,

@@ -3,6 +3,7 @@ package com.alimapps.senbombardir.ui.screen.game
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameSounds
 import com.alimapps.senbombardir.ui.model.types.TeamOption
@@ -46,6 +47,12 @@ sealed interface GameAction {
     class OnSavePlayerResultClicked(
         val playerResultUiModel: PlayerResultUiModel,
         val playerResultValue: Int,
+    ) : GameAction
+
+    class OnTeamResultClicked(val teamUiModel: TeamUiModel) : GameAction
+    class OnSaveTeamResultClicked(
+        val teamUiModel: TeamUiModel,
+        val pointsValue: Int,
     ) : GameAction
 
     class OnLiveGameResultClicked(val liveGameResultUiModel: LiveGameResultUiModel) : GameAction

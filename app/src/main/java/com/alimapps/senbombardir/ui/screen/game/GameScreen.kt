@@ -42,6 +42,7 @@ import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
+import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
@@ -63,6 +64,7 @@ import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.LiveGameResul
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.OptionPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.StayTeamSelectionBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.TeamResultBottomSheet
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
@@ -101,6 +103,7 @@ private fun GameScreenContent(
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
     var gameHistory by remember { mutableStateOf<List<GameHistoryEntryUiModel>?>(null) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
+    var teamResultUiModel by remember { mutableStateOf<TeamUiModel?>(null) }
     var liveGameResultUiModel by remember { mutableStateOf<LiveGameResultUiModel?>(null) }
 
     BackHandler {
@@ -130,6 +133,7 @@ private fun GameScreenContent(
                 is GameEffect.OpenGameResultsScreen -> navController.navigate(NavigationItem.GameResults.createRoute(effect.gameId))
                 is GameEffect.ShowOptionPlayersBottomSheet -> optionPlayersUiModel = effect.optionPlayersUiModel
                 is GameEffect.ShowPlayerResultBottomSheet -> playerResultUiModel = effect.playerResultUiModel
+                is GameEffect.ShowTeamResultBottomSheet -> teamResultUiModel = effect.teamUiModel
                 is GameEffect.ShowLiveGameResultBottomSheet -> liveGameResultUiModel = effect.liveGameResultUiModel
                 is GameEffect.ShowStayTeamSelectionBottomSheet -> showStayTeamSelection = true
                 is GameEffect.ShowDeleteGameConfirmationBottomSheet -> showDeleteGameConfirmation = true
@@ -224,6 +228,7 @@ private fun GameScreenContent(
                 if (uiState.teamUiModelList.isNotEmpty() && uiState.gameUiModel?.teamQuantity != TeamQuantity.Team2) {
                     TeamsResultsBlock(
                         teamUiModelList = uiState.teamUiModelList,
+                        onTeamResultClicked = { onAction(GameAction.OnTeamResultClicked(teamUiModel = it)) },
                     )
                 }
 
@@ -255,6 +260,16 @@ private fun GameScreenContent(
                     onAction(action)
                 },
                 onDismissed = { optionPlayersUiModel = null },
+            )
+        }
+        teamResultUiModel != null -> teamResultUiModel?.let {
+            TeamResultBottomSheet(
+                teamUiModel = it,
+                onSaveTeamResultClicked = { team, points ->
+                    teamResultUiModel = null
+                    onAction(GameAction.OnSaveTeamResultClicked(teamUiModel = team, pointsValue = points))
+                },
+                onDismissed = { teamResultUiModel = null },
             )
         }
         playerResultUiModel != null -> playerResultUiModel?.let {

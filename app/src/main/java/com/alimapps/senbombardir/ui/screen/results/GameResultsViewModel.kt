@@ -52,6 +52,7 @@ class GameResultsViewModel(
             is GameResultsAction.OnActivateClicked -> setEffectSafely(GameResultsEffect.OpenActivationScreen)
             is GameResultsAction.OnRemovePlayerHistoryClicked -> setEffectSafely(GameResultsEffect.ShowRemovePlayerConfirmationBottomSheet(action.playerUiModel))
             is GameResultsAction.OnRemovePlayerHistoryConfirmationClicked -> onRemovePlayerHistoryConfirmationClicked(action.playerUiModel)
+            is GameResultsAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamUiModel, action.pointsValue)
         }
     }
 
@@ -136,6 +137,17 @@ class GameResultsViewModel(
 
         viewModelScope.launch {
             playerHistoryRepository.updatePlayerHistory(playerUiModel.toPlayerHistoryModel())
+            fetchGameHistory()
+            setEffect(GameResultsEffect.ShowSnackbar(R.string.save_success))
+        }
+    }
+
+    private fun onSaveTeamResultClicked(
+        teamUiModel: TeamUiModel,
+        pointsValue: Int,
+    ) {
+        viewModelScope.launch {
+            teamHistoryRepository.updateTeamHistory(teamUiModel.copy(points = pointsValue).toTeamHistoryModel())
             fetchGameHistory()
             setEffect(GameResultsEffect.ShowSnackbar(R.string.save_success))
         }

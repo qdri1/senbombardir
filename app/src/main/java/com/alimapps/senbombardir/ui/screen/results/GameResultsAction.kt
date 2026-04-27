@@ -2,6 +2,7 @@ package com.alimapps.senbombardir.ui.screen.results
 
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.GameResultsFunction
 
 sealed interface GameResultsAction {
@@ -10,6 +11,11 @@ sealed interface GameResultsAction {
     class OnSavePlayerResultClicked(
         val playerResultUiModel: PlayerResultUiModel,
         val playerResultValue: Int,
+    ) : GameResultsAction
+
+    class OnSaveTeamResultClicked(
+        val teamUiModel: TeamUiModel,
+        val pointsValue: Int,
     ) : GameResultsAction
 
     class OnFunctionClicked(val function: GameResultsFunction) : GameResultsAction
