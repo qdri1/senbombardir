@@ -190,53 +190,53 @@ private fun AddGameScreenContent(
                     .padding(horizontal = 16.dp)
             )
 
-            if (viewModel.screenStateType.value == ScreenStateType.Add) {
-                Column(
+            Column(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .background(MaterialTheme.colorScheme.surface),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.game_format),
+                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
+                        .padding(horizontal = 16.dp)
                         .padding(top = 16.dp)
-                        .background(MaterialTheme.colorScheme.surface),
+                        .padding(bottom = 8.dp),
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .horizontalScroll(rememberScrollState())
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.game_format),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 16.dp)
-                            .padding(bottom = 8.dp),
-                    )
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState())
-                            .padding(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        GameFormat.entries.forEach { format ->
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                Text(
-                                    text = format.format,
-                                    color = if (format == viewModel.gameFormatState.value) {
-                                        MaterialTheme.colorScheme.primary
-                                    } else {
-                                        MaterialTheme.colorScheme.surfaceVariant
-                                    },
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
-                                RadioButton(
-                                    selected = format == viewModel.gameFormatState.value,
-                                    onClick = { onAction(AddGameAction.OnGameFormatSelected(format)) },
-                                    colors = RadioButtonDefaults.colors(
-                                        unselectedColor = MaterialTheme.colorScheme.surfaceVariant,
-                                    ),
-                                )
-                            }
+                    GameFormat.entries.forEach { format ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            Text(
+                                text = format.format,
+                                color = if (format == viewModel.gameFormatState.value) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.surfaceVariant
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                            RadioButton(
+                                selected = format == viewModel.gameFormatState.value,
+                                onClick = { onAction(AddGameAction.OnGameFormatSelected(format)) },
+                                colors = RadioButtonDefaults.colors(
+                                    unselectedColor = MaterialTheme.colorScheme.surfaceVariant,
+                                ),
+                            )
                         }
                     }
                 }
+            }
 
+            if (viewModel.screenStateType.value == ScreenStateType.Add) {
                 Column(
                     modifier = Modifier
                         .padding(top = 16.dp)
@@ -282,37 +282,37 @@ private fun AddGameScreenContent(
                         }
                     }
                 }
+            }
 
+            Column(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .background(MaterialTheme.colorScheme.surface),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.game_rules),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp),
+                )
                 Column(
                     modifier = Modifier
-                        .padding(top = 16.dp)
-                        .background(MaterialTheme.colorScheme.surface),
+                        .fillMaxWidth()
+                        .padding(8.dp),
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.game_rules),
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 16.dp),
-                    )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                    ) {
-                        val rules = when (viewModel.gameRuleState.value) {
-                            is GameRuleTeam2 -> GameRuleTeam2.entries
-                            is GameRuleTeam3 -> GameRuleTeam3.entries
-                            is GameRuleTeam4 -> GameRuleTeam4.entries
-                            else -> emptyList()
-                        }
-                        rules.forEach { rule ->
-                            GameRulesItemWidget(
-                                rule = rule,
-                                selectedGameRule = viewModel.gameRuleState.value,
-                                onAction = onAction,
-                            )
-                        }
+                    val rules = when (viewModel.gameRuleState.value) {
+                        is GameRuleTeam2 -> GameRuleTeam2.entries
+                        is GameRuleTeam3 -> GameRuleTeam3.entries
+                        is GameRuleTeam4 -> GameRuleTeam4.entries
+                        else -> emptyList()
+                    }
+                    rules.forEach { rule ->
+                        GameRulesItemWidget(
+                            rule = rule,
+                            selectedGameRule = viewModel.gameRuleState.value,
+                            onAction = onAction,
+                        )
                     }
                 }
             }

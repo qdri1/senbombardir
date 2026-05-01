@@ -159,8 +159,11 @@ class AddGameViewModel(
 
     private fun onGameFormatSelected(format: GameFormat) {
         _gameFormatState.value = format
-        playersTextFields = List(teamQuantityState.value.quantity) {
-            mutableStateListOf<String>().apply { repeat(format.playerQuantity) { add(String.empty) } }
+
+        if (screenStateType.value == ScreenStateType.Add) {
+            playersTextFields = List(teamQuantityState.value.quantity) {
+                mutableStateListOf<String>().apply { repeat(format.playerQuantity) { add(String.empty) } }
+            }
         }
     }
 
@@ -291,9 +294,18 @@ class AddGameViewModel(
 
     private suspend fun updateGame() {
         gameId?.let { gameId ->
+            val rule = when (val gameRule = gameRuleState.value) {
+                is GameRuleTeam2 -> gameRule.name
+                is GameRuleTeam3 -> gameRule.name
+                is GameRuleTeam4 -> gameRule.name
+                else -> String.empty
+            }
+
             gameUiModel?.let { gameUiModel ->
                 val gameModel = gameUiModel.toGameModel().copy(
                     name = gameNameFieldState.value.trim(),
+                    format = gameFormatState.value.format,
+                    rule = rule,
                     timeInMinutes = timeInMinuteFieldState.value.toIntOrNull() ?: DEFAULT_TIME_IN_MINUTES,
                     modifiedAt = System.currentTimeMillis(),
                 )
