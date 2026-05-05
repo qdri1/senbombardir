@@ -240,6 +240,7 @@
     <string name="activation_plan_activated_text">У вас полная версия</string>
     <string name="activation_plan_activated_button">Управление подпиской</string>
     <string name="activation_plan_badge_save">Экономия %d%%</string>
+    <string name="activation_lifetime_description">Пожизненный доступ</string>
     <string name="activation_plan_4">1 день</string>
     <string name="activation_oneday_time_remaining">Оставшееся время</string>
     <string name="activation_oneday_hours_abbr">ч</string>

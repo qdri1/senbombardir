@@ -294,6 +294,17 @@ private fun ActivatedContent(
             style = MaterialTheme.typography.displayLarge,
             textAlign = TextAlign.Center,
         )
+        if (uiState.billingType == BillingType.Lifetime) {
+            Text(
+                text = stringResource(R.string.activation_lifetime_description),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 8.dp),
+            )
+        }
         if (uiState.billingType == BillingType.OneDay) {
             OnedayRemainingView(
                 expirationDate = uiState.onedayExpirationDate,

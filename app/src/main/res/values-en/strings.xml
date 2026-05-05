@@ -242,6 +242,7 @@
     <string name="activation_plan_activated_text">You have the full version</string>
     <string name="activation_plan_activated_button">Manage subscription</string>
     <string name="activation_plan_badge_save">Save %d%%</string>
+    <string name="activation_lifetime_description">Lifetime access</string>
     <string name="activation_plan_4">One Day Access</string>
     <string name="activation_oneday_time_remaining">Time remaining</string>
     <string name="activation_oneday_hours_abbr">h</string>

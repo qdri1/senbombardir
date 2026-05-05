@@ -241,6 +241,7 @@
     <string name="activation_plan_activated_text">Сізде толық нұсқа</string>
     <string name="activation_plan_activated_button">Жазылымды басқару</string>
     <string name="activation_plan_badge_save">Үнемдеу %d%%</string>
+    <string name="activation_lifetime_description">Өмір бойы қолжетімділік</string>
     <string name="activation_plan_4">1 күн</string>
     <string name="activation_oneday_time_remaining">Қалған уақыт</string>
     <string name="activation_oneday_hours_abbr">сағ</string>
