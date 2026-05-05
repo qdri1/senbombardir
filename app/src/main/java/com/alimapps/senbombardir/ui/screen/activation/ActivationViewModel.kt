@@ -46,6 +46,8 @@ class ActivationViewModel(
                 monthlyPrice = billingRepository.getMonthlyPrice(),
                 yearlyPrice = billingRepository.getYearlyPrice(),
                 unlimitedPrice = billingRepository.getUnlimitedPrice(),
+                onedayPrice = billingRepository.getOnedayPrice(),
+                onedayExpirationDate = if (billingType == BillingType.OneDay) billingRepository.getOnedayExpirationDate() else null,
             )
         )
     }

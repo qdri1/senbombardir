@@ -2,11 +2,13 @@ package com.alimapps.senbombardir.ui.utils
 
 import android.app.Activity
 import android.content.Context
+import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
@@ -31,13 +33,21 @@ class BillingManager(
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             purchases.find { it.purchaseState == Purchase.PurchaseState.PURCHASED }?.let { purchase ->
-                if (purchase.isAcknowledged.not()) {
+                if (purchase.products.contains(ActivationPlan.OneDay.productId)) {
+                    val consumeParams = ConsumeParams.newBuilder()
+                        .setPurchaseToken(purchase.purchaseToken)
+                        .build()
+                    billingClient.consumeAsync(consumeParams) { result, _ ->
+                        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                            listener.onPurchaseSuccess()
+                        }
+                    }
+                } else if (purchase.isAcknowledged.not()) {
                     val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
                         .setPurchaseToken(purchase.purchaseToken)
                         .build()
-
-                    billingClient.acknowledgePurchase(acknowledgeParams) { billingResult ->
-                        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    billingClient.acknowledgePurchase(acknowledgeParams) { result ->
+                        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
                             listener.onPurchaseSuccess()
                         }
                     }

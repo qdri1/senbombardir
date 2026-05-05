@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
         RemoteConfig.configureAndActivate()
         val selectedLanguage = languageRepository.getSelectedLanguage()
         selectedLanguage?.let { setLocale(this, it) }
+        billingRepository.checkAndUpdateOnedayExpiration()
         checkPurchase()
         setContent {
             AppTheme {
@@ -85,9 +86,15 @@ class MainActivity : ComponentActivity() {
         initBillingManager()
         billingManager?.startConnection(
             onConnected = {
+                val productType = when (activationPlan) {
+                    ActivationPlan.Monthly,
+                    ActivationPlan.Yearly -> BillingClient.ProductType.SUBS
+                    ActivationPlan.Unlimited,
+                    ActivationPlan.OneDay -> BillingClient.ProductType.INAPP
+                }
                 billingManager?.queryProducts(
                     productIds = listOf(activationPlan.productId),
-                    type = if (activationPlan == ActivationPlan.Unlimited) BillingClient.ProductType.INAPP else BillingClient.ProductType.SUBS,
+                    type = productType,
                     onResult = { products ->
                         if (products.isNotEmpty()) {
                             billingManager?.launchPurchase(this, products.first())
@@ -104,14 +111,20 @@ class MainActivity : ComponentActivity() {
             onConnected = {
                 val billingType = billingRepository.getCurrentBillingType()
 
-                if (billingType == BillingType.Lifetime || billingType == BillingType.Limited) {
+                if (billingType == BillingType.Lifetime || billingType == BillingType.Limited || billingType == BillingType.OneDay) {
                     billingManager?.queryProducts(
-                        productIds = listOf(ActivationPlan.Unlimited.productId),
+                        productIds = listOf(ActivationPlan.Unlimited.productId, ActivationPlan.OneDay.productId),
                         type = BillingClient.ProductType.INAPP,
                         onResult = { products ->
-                            val price = products.firstOrNull()?.oneTimePurchaseOfferDetails?.formattedPrice
-                            billingRepository.setUnlimitedPrice(price)
-                            billingManager?.checkPurchase(BillingClient.ProductType.INAPP)
+                            val unlimitedPrice = products.find { it.productId == ActivationPlan.Unlimited.productId }
+                                ?.oneTimePurchaseOfferDetails?.formattedPrice
+                            val oneDayPrice = products.find { it.productId == ActivationPlan.OneDay.productId }
+                                ?.oneTimePurchaseOfferDetails?.formattedPrice
+                            billingRepository.setUnlimitedPrice(unlimitedPrice)
+                            billingRepository.setOnedayPrice(oneDayPrice)
+                            if (billingType != BillingType.OneDay) {
+                                billingManager?.checkPurchase(BillingClient.ProductType.INAPP)
+                            }
                         }
                     )
                 }
@@ -122,12 +135,14 @@ class MainActivity : ComponentActivity() {
                         type = BillingClient.ProductType.SUBS,
                         onResult = { products ->
                             val monthlyPrice =
-                                products.getOrNull(0)?.subscriptionOfferDetails?.firstOrNull()
+                                products.find { it.productId == ActivationPlan.Monthly.productId }
+                                    ?.subscriptionOfferDetails?.firstOrNull()
                                     ?.pricingPhases?.pricingPhaseList?.firstOrNull()
                                     ?.formattedPrice
 
                             val yearlyPrice =
-                                products.getOrNull(1)?.subscriptionOfferDetails?.firstOrNull()
+                                products.find { it.productId == ActivationPlan.Yearly.productId }
+                                    ?.subscriptionOfferDetails?.firstOrNull()
                                     ?.pricingPhases?.pricingPhaseList?.firstOrNull()
                                     ?.formattedPrice
 
@@ -150,6 +165,10 @@ class MainActivity : ComponentActivity() {
                         ActivationPlan.Monthly,
                         ActivationPlan.Yearly -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
                         ActivationPlan.Unlimited -> billingRepository.setCurrentBillingType(BillingType.Lifetime)
+                        ActivationPlan.OneDay -> {
+                            billingRepository.setOnedayExpirationDate(System.currentTimeMillis() + 24 * 60 * 60 * 1000L)
+                            billingRepository.setCurrentBillingType(BillingType.OneDay)
+                        }
                         else -> Unit
                     }
                     restartApp()
@@ -220,6 +239,13 @@ class MainActivity : ComponentActivity() {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             }
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (billingRepository.checkAndUpdateOnedayExpiration()) {
+            restartApp()
+        }
     }
 
     override fun onDestroy() {

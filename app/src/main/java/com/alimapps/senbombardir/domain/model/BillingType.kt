@@ -4,4 +4,5 @@ enum class BillingType {
     Limited,
     Subscribe,
     Lifetime,
+    OneDay,
 }

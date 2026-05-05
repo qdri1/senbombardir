@@ -32,7 +32,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,7 +50,7 @@ import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.domain.model.BillingType
-import com.alimapps.senbombardir.ui.utils.parseHexColor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -250,6 +252,14 @@ private fun ActivationPlanContent(
             plan = ActivationPlan.Unlimited,
             onAction = onAction,
         )
+        ActivationPlanItem(
+            text = stringResource(R.string.activation_plan_4),
+            desc = stringResource(R.string.activation_plan_desc_one_day),
+            price = uiState.onedayPrice ?: "0",
+            checked = uiState.selectedPlan == ActivationPlan.OneDay,
+            plan = ActivationPlan.OneDay,
+            onAction = onAction,
+        )
         Button(
             onClick = { onAction(ActivationAction.BuyButtonClicked) },
             contentPadding = PaddingValues(
@@ -284,6 +294,12 @@ private fun ActivatedContent(
             style = MaterialTheme.typography.displayLarge,
             textAlign = TextAlign.Center,
         )
+        if (uiState.billingType == BillingType.OneDay) {
+            OnedayRemainingView(
+                expirationDate = uiState.onedayExpirationDate,
+                modifier = Modifier.padding(top = 16.dp),
+            )
+        }
         if (uiState.billingType == BillingType.Subscribe) {
             Button(
                 onClick = { onAction(ActivationAction.ManageSubscriptionsButtonClicked) },
@@ -430,6 +446,50 @@ private fun PlanBadge(text: String, isPrimary: Boolean) {
             color = if (isPrimary) MaterialTheme.colorScheme.onPrimary
                     else MaterialTheme.colorScheme.onTertiary,
             style = MaterialTheme.typography.labelSmall,
+        )
+    }
+}
+
+@Composable
+private fun OnedayRemainingView(expirationDate: Long?, modifier: Modifier = Modifier) {
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(60_000L)
+            now = System.currentTimeMillis()
+        }
+    }
+
+    val remaining = if (expirationDate != null) maxOf(0L, expirationDate - now) else 0L
+    val hours = (remaining / 3_600_000L).toInt()
+    val minutes = ((remaining % 3_600_000L) / 60_000L).toInt()
+    val hAbbr = stringResource(R.string.activation_oneday_hours_abbr)
+    val minAbbr = stringResource(R.string.activation_oneday_minutes_abbr)
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.activation_oneday_time_remaining),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = "$hours $hAbbr $minutes $minAbbr",
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.displayLarge,
+        )
+        Text(
+            text = stringResource(R.string.activation_oneday_not_subscription),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 4.dp),
         )
     }
 }

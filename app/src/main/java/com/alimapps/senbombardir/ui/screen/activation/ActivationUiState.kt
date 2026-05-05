@@ -10,4 +10,6 @@ data class ActivationUiState(
     val monthlyPrice: String? = null,
     val yearlyPrice: String? = null,
     val unlimitedPrice: String? = null,
+    val onedayPrice: String? = null,
+    val onedayExpirationDate: Long? = null,
 )

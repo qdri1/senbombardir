@@ -32,4 +32,12 @@ class Prefs(private val preferences: SharedPreferences) {
     var unlimitedPrice: String?
         get() = preferences.getString("UNLIMITED_PRICE", null)
         set(value) = preferences.edit { putString("UNLIMITED_PRICE", value) }
+
+    var onedayPrice: String?
+        get() = preferences.getString("ONEDAY_PRICE", null)
+        set(value) = preferences.edit { putString("ONEDAY_PRICE", value) }
+
+    var onedayExpirationDate: Long
+        get() = preferences.getLong("ONEDAY_EXPIRATION_DATE", 0L)
+        set(value) = preferences.edit { putLong("ONEDAY_EXPIRATION_DATE", value) }
 }

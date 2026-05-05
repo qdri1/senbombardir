@@ -46,4 +46,33 @@ class BillingRepository(
     fun setUnlimitedPrice(price: String?) {
         prefs.unlimitedPrice = price
     }
+
+    fun getOnedayPrice(): String? = prefs.onedayPrice
+
+    fun setOnedayPrice(price: String?) {
+        prefs.onedayPrice = price
+    }
+
+    fun getOnedayExpirationDate(): Long? {
+        val value = prefs.onedayExpirationDate
+        return if (value == 0L) null else value
+    }
+
+    fun setOnedayExpirationDate(value: Long) {
+        prefs.onedayExpirationDate = value
+    }
+
+    fun hasValidOnedayAccess(): Boolean {
+        val expiration = prefs.onedayExpirationDate
+        return expiration > 0L && expiration > System.currentTimeMillis()
+    }
+
+    fun checkAndUpdateOnedayExpiration(): Boolean {
+        if (getCurrentBillingType() == BillingType.OneDay && !hasValidOnedayAccess()) {
+            prefs.onedayExpirationDate = 0L
+            setCurrentBillingType(BillingType.Limited)
+            return true
+        }
+        return false
+    }
 }
