@@ -235,7 +235,7 @@
     <string name="activation_plan_button">Купить</string>
     <string name="activation_plan_desc_subscribe">Подписка</string>
     <string name="activation_plan_desc_lifetime">Одноразовая покупка</string>
-    <string name="activation_plan_desc_one_day">Одноразовая покупка, доступ на один день</string>
+    <string name="activation_plan_desc_one_day">Одноразовая покупка (доступ на один день)</string>
     <string name="activation_plan_select_error_text">Выберите план</string>
     <string name="activation_plan_activated_text">У вас полная версия</string>
     <string name="activation_plan_activated_button">Управление подпиской</string>

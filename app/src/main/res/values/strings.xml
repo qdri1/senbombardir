@@ -236,7 +236,7 @@
     <string name="activation_plan_button">Сатып алу</string>
     <string name="activation_plan_desc_subscribe">Жазылым</string>
     <string name="activation_plan_desc_lifetime">Бір реттік сатып алу</string>
-    <string name="activation_plan_desc_one_day">Бір реттік сатып алу, бір күнге қолжетімділік</string>
+    <string name="activation_plan_desc_one_day">Бір реттік сатып алу (бір күнге қолжетімділік)</string>
     <string name="activation_plan_select_error_text">Тарифті таңдаңыз</string>
     <string name="activation_plan_activated_text">Сізде толық нұсқа</string>
     <string name="activation_plan_activated_button">Жазылымды басқару</string>
