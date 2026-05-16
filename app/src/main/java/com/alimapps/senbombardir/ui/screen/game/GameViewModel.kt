@@ -157,7 +157,7 @@ class GameViewModel(
             is GameAction.OnLeftTeamChangeClicked -> onLeftTeamChangeClicked(action.teamId)
             is GameAction.OnRightTeamChangeClicked -> onRightTeamChangeClicked(action.teamId)
             is GameAction.OnOptionPlayersSelected -> onOptionPlayersSelected(action.teamId, action.playerUiModel, action.option)
-            is GameAction.OnOptionPlayersAutoGoalSelected -> onOptionPlayersAutoGoalSelected(action.teamId)
+            is GameAction.OnOptionPlayersAutoGoalSelected -> onOptionPlayersAutoGoalSelected(action.teamId, action.text)
             is GameAction.OnStayTeamSelectionBottomSheetDismissed -> onStayTeamSelectionBottomSheetDismissed()
             is GameAction.OnLeftTeamStayClicked -> onLeftTeamStayClicked()
             is GameAction.OnRightTeamStayClicked -> onRightTeamStayClicked()
@@ -878,18 +878,20 @@ class GameViewModel(
         updatePlayersBlock()
     }
 
-    private fun onOptionPlayersAutoGoalSelected(teamId: Long) = viewModelScope.launch {
+    private fun onOptionPlayersAutoGoalSelected(teamId: Long, text: String) = viewModelScope.launch {
         uiState.value.liveGameUiModel?.let { liveGameUiModel ->
             when (teamId) {
                 liveGameUiModel.leftTeamId -> {
                     val copyLiveGameUiModel = liveGameUiModel.copy(leftTeamGoals = liveGameUiModel.leftTeamGoals + 1)
                     setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                     liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+                    currentGameActions.add(PendingGameAction(teamName = liveGameUiModel.leftTeamName, teamColor = liveGameUiModel.leftTeamColor.hexColor, playerName = text, actionType = "goal", elapsedSeconds = currentElapsedSeconds()))
                 }
                 liveGameUiModel.rightTeamId -> {
                     val copyLiveGameUiModel = liveGameUiModel.copy(rightTeamGoals = liveGameUiModel.rightTeamGoals + 1)
                     setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                     liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+                    currentGameActions.add(PendingGameAction(teamName = liveGameUiModel.rightTeamName, teamColor = liveGameUiModel.rightTeamColor.hexColor, playerName = text, actionType = "goal", elapsedSeconds = currentElapsedSeconds()))
                 }
                 else -> Unit
             }

@@ -74,8 +74,9 @@ fun OptionPlayersBottomSheet(
                 HorizontalDivider()
             }
             if (optionPlayersUiModel.option == TeamOption.Goal) {
+                val text = stringResource(id = R.string.team_option_players_auto_goal)
                 Text(
-                    text = stringResource(id = R.string.team_option_players_auto_goal),
+                    text = text,
                     color = parseHexColor(TeamColor.Orange.hexColor),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
@@ -84,6 +85,7 @@ fun OptionPlayersBottomSheet(
                             onAction(
                                 GameAction.OnOptionPlayersAutoGoalSelected(
                                     teamId = optionPlayersUiModel.teamId,
+                                    text = text,
                                 )
                             )
                         }

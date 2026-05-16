@@ -33,6 +33,7 @@ sealed interface GameAction {
 
     class OnOptionPlayersAutoGoalSelected(
         val teamId: Long,
+        val text: String,
     ) : GameAction
 
     data object OnStayTeamSelectionBottomSheetDismissed : GameAction
