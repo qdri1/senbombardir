@@ -20,8 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
+import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.GameAction
+import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +76,7 @@ fun OptionPlayersBottomSheet(
             if (optionPlayersUiModel.option == TeamOption.Goal) {
                 Text(
                     text = stringResource(id = R.string.team_option_players_auto_goal),
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = parseHexColor(TeamColor.Orange.hexColor),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier
                         .fillMaxWidth()

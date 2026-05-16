@@ -71,7 +71,7 @@ fun StayTeamSelectionBottomSheet(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(20.dp)
                         .background(
                             color = parseHexColor(liveGameUiModel.leftTeamColor.hexColor),
                             shape = RoundedCornerShape(6.dp),
@@ -101,7 +101,7 @@ fun StayTeamSelectionBottomSheet(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(20.dp)
                         .background(
                             color = parseHexColor(liveGameUiModel.rightTeamColor.hexColor),
                             shape = RoundedCornerShape(6.dp),

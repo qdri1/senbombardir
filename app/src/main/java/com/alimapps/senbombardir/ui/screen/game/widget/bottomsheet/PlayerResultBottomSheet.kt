@@ -1,13 +1,20 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -30,7 +37,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
+import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.model.types.TeamOption
+import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,13 +65,33 @@ fun PlayerResultBottomSheet(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         containerColor = MaterialTheme.colorScheme.surface,
     ) {
-        Text(
-            text = "${playerResultUiModel.playerUiModel.name} - ${stringResource(id = playerResultUiModel.option.stringRes)}",
-            style = MaterialTheme.typography.bodyMedium,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 8.dp),
-        )
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(20.dp)
+                    .background(
+                        color = parseHexColor(playerResultUiModel.playerUiModel.teamColor.hexColor),
+                        shape = RoundedCornerShape(6.dp),
+                    )
+                    .clip(RoundedCornerShape(6.dp))
+                    .border(
+                        width = if (playerResultUiModel.playerUiModel.teamColor == TeamColor.White) 1.dp else 0.dp,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        shape = RoundedCornerShape(6.dp),
+                    )
+            )
+            Text(
+                text = "${playerResultUiModel.playerUiModel.name} - ${stringResource(id = playerResultUiModel.option.stringRes)}",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
