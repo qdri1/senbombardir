@@ -170,10 +170,12 @@ fun AppNavigation(
                     )
                 }
                 composable(NavigationItem.Activation.route) {
+                    val fromSettings = navController.previousBackStackEntry?.destination?.route == BottomNavItem.Settings.route
                     ActivationScreen(
                         navController = navController,
                         viewModel = koinViewModel<ActivationViewModel>(),
                         onActivationPlanSelected = onActivationPlanSelected,
+                        showOneDay = fromSettings,
                     )
                 }
             }

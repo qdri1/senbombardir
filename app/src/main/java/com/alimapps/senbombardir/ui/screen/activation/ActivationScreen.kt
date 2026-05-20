@@ -58,12 +58,14 @@ fun ActivationScreen(
     navController: NavController,
     viewModel: ActivationViewModel,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
+    showOneDay: Boolean = false,
 ) {
     ActivationScreenContent(
         navController = navController,
         viewModel = viewModel,
         onAction = viewModel::action,
         onActivationPlanSelected = onActivationPlanSelected,
+        showOneDay = showOneDay,
     )
 }
 
@@ -73,6 +75,7 @@ private fun ActivationScreenContent(
     viewModel: ActivationViewModel,
     onAction: (ActivationAction) -> Unit,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
+    showOneDay: Boolean = false,
 ) {
     BackHandler { onAction(ActivationAction.OnBackClicked) }
 
@@ -130,7 +133,7 @@ private fun ActivationScreenContent(
             if (uiState.billingType == BillingType.Limited) {
                 when (uiState.pageIndex) {
                     0 -> ActivationTextContent(onAction = onAction)
-                    1 -> ActivationPlanContent(uiState = uiState, onAction = onAction)
+                    1 -> ActivationPlanContent(uiState = uiState, onAction = onAction, showOneDay = showOneDay)
                 }
             } else {
                 ActivatedContent(uiState = uiState, onAction = onAction)
@@ -206,6 +209,7 @@ private fun ActivationTextContent(
 private fun ActivationPlanContent(
     uiState: ActivationUiState,
     onAction: (ActivationAction) -> Unit,
+    showOneDay: Boolean = false,
 ) {
     val economyPercent = calculateEconomy(uiState.monthlyPrice, uiState.yearlyPrice)
     val yearlyBadges = buildList {
@@ -252,14 +256,16 @@ private fun ActivationPlanContent(
             plan = ActivationPlan.Unlimited,
             onAction = onAction,
         )
-        ActivationPlanItem(
-            text = stringResource(R.string.activation_plan_4),
-            desc = stringResource(R.string.activation_plan_desc_one_day),
-            price = uiState.onedayPrice ?: "0",
-            checked = uiState.selectedPlan == ActivationPlan.OneDay,
-            plan = ActivationPlan.OneDay,
-            onAction = onAction,
-        )
+        if (showOneDay) {
+            ActivationPlanItem(
+                text = stringResource(R.string.activation_plan_4),
+                desc = stringResource(R.string.activation_plan_desc_one_day),
+                price = uiState.onedayPrice ?: "0",
+                checked = uiState.selectedPlan == ActivationPlan.OneDay,
+                plan = ActivationPlan.OneDay,
+                onAction = onAction,
+            )
+        }
         Button(
             onClick = { onAction(ActivationAction.BuyButtonClicked) },
             contentPadding = PaddingValues(

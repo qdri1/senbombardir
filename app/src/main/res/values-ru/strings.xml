@@ -217,7 +217,7 @@
     <string name="activation_text_1">Результаты игроков</string>
     <string name="activation_desc_1">Доступны результаты всех игроков.</string>
     <string name="activation_text_2">Лучшие игроки</string>
-    <string name="activation_desc_2">Мы подготовили для вас список лучших игроков.</string>
+    <string name="activation_desc_2">Мы определим для вас список лучших игроков.</string>
     <string name="activation_text_history">История игр</string>
     <string name="activation_desc_history">Счёт, победитель, время игры и все ключевые события.</string>
     <string name="activation_text_3">Озвучка имени и звуки празднования</string>
