@@ -175,7 +175,7 @@ fun AppNavigation(
                         navController = navController,
                         viewModel = koinViewModel<ActivationViewModel>(),
                         onActivationPlanSelected = onActivationPlanSelected,
-                        showOneDay = fromSettings,
+                        showOneDay = true,
                     )
                 }
             }
