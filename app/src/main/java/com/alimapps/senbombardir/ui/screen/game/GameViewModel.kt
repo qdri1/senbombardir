@@ -749,7 +749,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "goal", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "goal", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_goal, playerUiModel.name),
                     onComplete = { playGoalSound() },
@@ -766,7 +766,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "assist", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "assist", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_assist, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.girls_applause) },
@@ -783,7 +783,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "dribble", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "dribble", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_dribble, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.bilgenin_istep_jatyr) },
@@ -800,7 +800,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "pass", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "pass", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_pass, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.stadium_applause) },
@@ -817,7 +817,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "shot", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "shot", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_shot, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.suiiiii) },
@@ -834,7 +834,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "save", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "save", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.goal_save) },
@@ -851,7 +851,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "yellowCard", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "yellowCard", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_yellow_card, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.sound_penalty_real_madrid) },
@@ -868,7 +868,7 @@ class GameViewModel(
                     playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
                 }
 
-                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, actionType = "redCard", elapsedSeconds = currentElapsedSeconds()))
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name, actionType = "redCard", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_red_card, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.sound_penalty_real_madrid) },

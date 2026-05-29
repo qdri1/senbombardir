@@ -34,6 +34,7 @@ class PlayerHistoryRepository(
                 saves = it.saves,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
+                number = it.number,
             )
         }
 
@@ -58,6 +59,7 @@ class PlayerHistoryRepository(
                 saves = it.saves,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
+                number = it.number,
             )
         }
     }
@@ -80,6 +82,7 @@ class PlayerHistoryRepository(
                 saves = it.saves,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
+                number = it.number,
             )
         }
     }

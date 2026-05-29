@@ -84,7 +84,7 @@ fun BestPlayersBottomSheet(
                                     )
                             )
                             Text(
-                                text = best.playerUiModel.name,
+                                text = best.playerUiModel.number?.let { "№$it ${best.playerUiModel.name}" } ?: best.playerUiModel.name,
                                 color = MaterialTheme.colorScheme.onSurface,
                                 style = MaterialTheme.typography.labelSmall,
                             )

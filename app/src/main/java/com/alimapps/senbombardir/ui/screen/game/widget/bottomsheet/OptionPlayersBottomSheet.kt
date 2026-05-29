@@ -54,7 +54,7 @@ fun OptionPlayersBottomSheet(
             HorizontalDivider()
             optionPlayersUiModel.playerUiModelList.forEach { playerUiModel ->
                 Text(
-                    text = playerUiModel.name,
+                    text = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier

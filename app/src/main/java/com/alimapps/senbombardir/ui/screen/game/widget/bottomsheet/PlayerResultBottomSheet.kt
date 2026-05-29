@@ -86,8 +86,10 @@ fun PlayerResultBottomSheet(
                         shape = RoundedCornerShape(6.dp),
                     )
             )
+            val playerDisplayName = playerResultUiModel.playerUiModel.number?.let { "№$it ${playerResultUiModel.playerUiModel.name}" }
+                ?: playerResultUiModel.playerUiModel.name
             Text(
-                text = "${playerResultUiModel.playerUiModel.name} - ${stringResource(id = playerResultUiModel.option.stringRes)}",
+                text = "$playerDisplayName - ${stringResource(id = playerResultUiModel.option.stringRes)}",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

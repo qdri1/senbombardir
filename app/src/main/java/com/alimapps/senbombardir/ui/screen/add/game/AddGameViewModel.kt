@@ -26,6 +26,7 @@ import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toGameModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
+import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toPlayerModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
@@ -400,6 +401,7 @@ class AddGameViewModel(
                                                 saves = playerHistoryUiModel.saves,
                                                 yellowCards = playerHistoryUiModel.yellowCards,
                                                 redCards = playerHistoryUiModel.redCards,
+                                                number = newPlayerModel.number,
                                             )
                                         } else {
                                             PlayerHistoryModel(
@@ -414,11 +416,15 @@ class AddGameViewModel(
                                                 saves = 0,
                                                 yellowCards = 0,
                                                 redCards = 0,
+                                                number = newPlayerModel.number,
                                             )
                                         }
                                         playerHistoryRepository.savePlayerHistory(playerHistoryModel)
                                     } else if (newNumber != playerUiModel.number) {
                                         playerRepository.updatePlayer(playerUiModel.toPlayerModel().copy(number = newNumber))
+                                        playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { historyUiModel ->
+                                            playerHistoryRepository.updatePlayerHistory(historyUiModel.toPlayerHistoryModel().copy(number = newNumber))
+                                        }
                                     }
                                 } else {
                                     playerRepository.deletePlayer(playerUiModel.id)
@@ -457,6 +463,7 @@ class AddGameViewModel(
                                         saves = playerHistoryUiModel.saves,
                                         yellowCards = playerHistoryUiModel.yellowCards,
                                         redCards = playerHistoryUiModel.redCards,
+                                        number = newPlayerModel.number,
                                     )
                                 } else {
                                     PlayerHistoryModel(
@@ -471,6 +478,7 @@ class AddGameViewModel(
                                         saves = 0,
                                         yellowCards = 0,
                                         redCards = 0,
+                                        number = newPlayerModel.number,
                                     )
                                 }
                                 playerHistoryRepository.savePlayerHistory(playerHistoryModel)
