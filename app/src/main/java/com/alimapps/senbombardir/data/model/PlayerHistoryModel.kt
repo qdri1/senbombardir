@@ -32,4 +32,5 @@ data class PlayerHistoryModel(
     val saves: Int,
     val yellowCards: Int,
     val redCards: Int,
+    val number: Int? = null,
 )

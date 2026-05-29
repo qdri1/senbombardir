@@ -17,6 +17,7 @@ sealed interface AddGameAction {
     class OnTeamColorSelected(val color: TeamColor) : AddGameAction
     class OnTeamNameValueChanged(val tabIndex: Int, val value: String) : AddGameAction
     class OnPlayerNameValueChanged(val tabIndex: Int, val fieldIndex: Int, val value: String) : AddGameAction
+    class OnPlayerNumberValueChanged(val tabIndex: Int, val fieldIndex: Int, val value: String) : AddGameAction
     class OnAddPlayerClicked(val tabIndex: Int) : AddGameAction
     data object OnFinishClicked : AddGameAction
 }

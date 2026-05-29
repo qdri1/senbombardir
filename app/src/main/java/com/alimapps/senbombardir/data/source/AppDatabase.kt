@@ -24,7 +24,7 @@ import com.alimapps.senbombardir.data.model.TeamModel
         GameHistoryEntryModel::class,
         GameHistoryActionEventModel::class,
     ],
-    version = 5,
+    version = 6,
     exportSchema = true,
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -92,6 +92,13 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        val MIGRATIONS = arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE players ADD COLUMN number INTEGER")
+                db.execSQL("ALTER TABLE players_history ADD COLUMN number INTEGER")
+            }
+        }
+
+        val MIGRATIONS = arrayOf(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
     }
 }

@@ -34,6 +34,7 @@ class PlayerRepository(
                 saves = it.saves,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
+                number = it.number,
             )
         }
 
@@ -60,6 +61,7 @@ class PlayerRepository(
                 saves = it.saves,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
+                number = it.number,
             )
         }
     }

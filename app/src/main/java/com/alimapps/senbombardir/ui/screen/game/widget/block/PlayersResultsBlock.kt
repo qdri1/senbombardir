@@ -150,8 +150,13 @@ fun PlayersResultsBlock(
                                     modifier = Modifier.weight(1f),
                                     contentAlignment = Alignment.Center,
                                 ) {
+                                    val displayName = if (playerUiModel.number != null) {
+                                        "№${playerUiModel.number} ${playerUiModel.name}"
+                                    } else {
+                                        playerUiModel.name
+                                    }
                                     Text(
-                                        text = playerUiModel.name,
+                                        text = displayName,
                                         color = textColor,
                                         style = textStyle,
                                         maxLines = 1,
@@ -159,7 +164,7 @@ fun PlayersResultsBlock(
                                         modifier = Modifier.fillMaxWidth().alpha(0f)
                                     )
                                     Text(
-                                        text = playerUiModel.name,
+                                        text = displayName,
                                         autoSize = TextAutoSize.StepBased(
                                             minFontSize = 10.sp,
                                             maxFontSize = 14.sp,

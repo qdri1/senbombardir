@@ -26,6 +26,7 @@ import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toGameModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
+import com.alimapps.senbombardir.ui.model.toPlayerModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
 import com.alimapps.senbombardir.ui.model.types.GameFormat
@@ -99,6 +100,15 @@ class AddGameViewModel(
             }
         }
     )
+    var playersNumberFields by mutableStateOf(
+        List(teamQuantityState.value.quantity) {
+            mutableStateListOf<String>().apply {
+                repeat(gameFormatState.value.playerQuantity) {
+                    add(String.empty)
+                }
+            }
+        }
+    )
 
     private val _effect = MutableSharedFlow<AddGameEffect>()
     val effect: Flow<AddGameEffect> get() = _effect.debounceEffect()
@@ -124,6 +134,7 @@ class AddGameViewModel(
             is AddGameAction.OnTeamColorSelected -> onTeamColorSelected(action.color)
             is AddGameAction.OnTeamNameValueChanged -> onTeamNameValueChanged(action.tabIndex, action.value)
             is AddGameAction.OnPlayerNameValueChanged -> onPlayerNameValueChanged(action.tabIndex, action.fieldIndex, action.value)
+            is AddGameAction.OnPlayerNumberValueChanged -> onPlayerNumberValueChanged(action.tabIndex, action.fieldIndex, action.value)
             is AddGameAction.OnAddPlayerClicked -> addPlayerFieldToTab(action.tabIndex)
             is AddGameAction.OnFinishClicked -> onFinishClicked()
         }
@@ -144,12 +155,15 @@ class AddGameViewModel(
                     teamColors = List(teamUiModelList.size) { index -> mutableStateOf(teamUiModelList[index].color) }
                     teamNameFields = List(teamUiModelList.size) { index -> mutableStateOf(teamUiModelList[index].name) }
 
+                    val teamPlayersList = teamUiModelList.map { playerRepository.getPlayers(it.id) }
                     playersTextFields = List(teamUiModelList.size) { index ->
-                        val playerUiModelList = playerRepository.getPlayers(teamUiModelList[index].id)
                         mutableStateListOf<String>().apply {
-                            repeat(playerUiModelList.size) { index ->
-                                add(playerUiModelList[index].name)
-                            }
+                            teamPlayersList[index].forEach { add(it.name) }
+                        }
+                    }
+                    playersNumberFields = List(teamUiModelList.size) { index ->
+                        mutableStateListOf<String>().apply {
+                            teamPlayersList[index].forEach { add(it.number?.toString() ?: String.empty) }
                         }
                     }
                 }
@@ -162,6 +176,9 @@ class AddGameViewModel(
 
         if (screenStateType.value == ScreenStateType.Add) {
             playersTextFields = List(teamQuantityState.value.quantity) {
+                mutableStateListOf<String>().apply { repeat(format.playerQuantity) { add(String.empty) } }
+            }
+            playersNumberFields = List(teamQuantityState.value.quantity) {
                 mutableStateListOf<String>().apply { repeat(format.playerQuantity) { add(String.empty) } }
             }
         }
@@ -184,6 +201,9 @@ class AddGameViewModel(
         playersTextFields = List(teamQuantity.quantity) {
             mutableStateListOf<String>().apply { repeat(gameFormatState.value.playerQuantity) { add(String.empty) } }
         }
+        playersNumberFields = List(teamQuantity.quantity) {
+            mutableStateListOf<String>().apply { repeat(gameFormatState.value.playerQuantity) { add(String.empty) } }
+        }
     }
 
     private fun onTeamColorSelected(color: TeamColor) {
@@ -198,8 +218,13 @@ class AddGameViewModel(
         playersTextFields[tabIndex][fieldIndex] = value
     }
 
+    private fun onPlayerNumberValueChanged(tabIndex: Int, fieldIndex: Int, value: String) {
+        playersNumberFields[tabIndex][fieldIndex] = value
+    }
+
     private fun addPlayerFieldToTab(tabIndex: Int) {
         playersTextFields[tabIndex].add(String.empty)
+        playersNumberFields[tabIndex].add(String.empty)
     }
 
     private fun onFinishClicked() = viewModelScope.launch {
@@ -248,23 +273,27 @@ class AddGameViewModel(
             teamHistoryRepository.saveTeamHistory(teamModel.toTeamHistoryModel(teamId))
 
             playersTextFields.getOrNull(index)?.let { players ->
-                players.filter { it.isNotEmpty() }.map { playerNameValue ->
-                    PlayerModel(
-                        teamId = teamId,
-                        name = playerNameValue.trim(),
-                        goals = 0,
-                        assists = 0,
-                        dribbles = 0,
-                        passes = 0,
-                        shots = 0,
-                        saves = 0,
-                        yellowCards = 0,
-                        redCards = 0,
-                    )
-                }.forEach { playerModel ->
-                    val playerId = playerRepository.savePlayer(playerModel)
-                    playerHistoryRepository.savePlayerHistory(playerModel.toPlayerHistoryModel(playerId))
-                }
+                val numberValues = playersNumberFields.getOrNull(index)
+                players.mapIndexed { i, name -> name to (numberValues?.getOrNull(i) ?: String.empty) }
+                    .filter { (name, _) -> name.isNotEmpty() }
+                    .map { (playerNameValue, playerNumberValue) ->
+                        PlayerModel(
+                            teamId = teamId,
+                            name = playerNameValue.trim(),
+                            number = playerNumberValue.toIntOrNull(),
+                            goals = 0,
+                            assists = 0,
+                            dribbles = 0,
+                            passes = 0,
+                            shots = 0,
+                            saves = 0,
+                            yellowCards = 0,
+                            redCards = 0,
+                        )
+                    }.forEach { playerModel ->
+                        val playerId = playerRepository.savePlayer(playerModel)
+                        playerHistoryRepository.savePlayerHistory(playerModel.toPlayerHistoryModel(playerId))
+                    }
             }
         }
 
@@ -328,9 +357,11 @@ class AddGameViewModel(
                     }
 
                     playersTextFields.getOrNull(index)?.let { playerNameValues ->
+                        val playerNumberValues = playersNumberFields.getOrNull(index)
                         val playerUiModelList = playerRepository.getPlayers(teamModel.id)
                         playerNameValues.forEachIndexed { index, playerNameValue ->
                             val playerUiModel = playerUiModelList.getOrNull(index)
+                            val newNumber = playerNumberValues?.getOrNull(index)?.toIntOrNull()
 
                             if (playerUiModel != null) {
                                 if (playerNameValue.isNotEmpty()) {
@@ -339,6 +370,7 @@ class AddGameViewModel(
                                         val newPlayerModel = PlayerModel(
                                             teamId = teamModel.id,
                                             name = playerNameValue.trim(),
+                                            number = newNumber,
                                             goals = playerUiModel.goals,
                                             assists = playerUiModel.assists,
                                             dribbles = playerUiModel.dribbles,
@@ -385,6 +417,8 @@ class AddGameViewModel(
                                             )
                                         }
                                         playerHistoryRepository.savePlayerHistory(playerHistoryModel)
+                                    } else if (newNumber != playerUiModel.number) {
+                                        playerRepository.updatePlayer(playerUiModel.toPlayerModel().copy(number = newNumber))
                                     }
                                 } else {
                                     playerRepository.deletePlayer(playerUiModel.id)
@@ -393,6 +427,7 @@ class AddGameViewModel(
                                 val newPlayerModel = PlayerModel(
                                     teamId = teamModel.id,
                                     name = playerNameValue.trim(),
+                                    number = newNumber,
                                     goals = 0,
                                     assists = 0,
                                     dribbles = 0,

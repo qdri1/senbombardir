@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -415,6 +416,7 @@ fun TabContent(
     val tabTeamNameFieldValue = viewModel.teamNameFields[tabIndex]
     val tabTeamColor = viewModel.teamColors[tabIndex]
     val tabPlayersTextFields = viewModel.playersTextFields[tabIndex]
+    val tabPlayersNumberFields = viewModel.playersNumberFields[tabIndex]
 
     Column(
         modifier = Modifier
@@ -446,13 +448,31 @@ fun TabContent(
         }
 
         tabPlayersTextFields.forEachIndexed { fieldIndex, fieldValue ->
-            TextFieldWidget(
-                value = fieldValue,
-                onValueChange = { value -> onAction(AddGameAction.OnPlayerNameValueChanged(tabIndex, fieldIndex, value)) },
-                hint = stringResource(id = R.string.player_number, "${fieldIndex + 1}"),
-                imeAction = if (fieldIndex < tabPlayersTextFields.lastIndex) ImeAction.Next else ImeAction.Done,
-                modifier = Modifier.fillMaxWidth()
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextFieldWidget(
+                    value = tabPlayersNumberFields.getOrElse(fieldIndex) { "" },
+                    onValueChange = { value ->
+                        if (value.length <= 2) {
+                            onAction(AddGameAction.OnPlayerNumberValueChanged(tabIndex, fieldIndex, value))
+                        }
+                    },
+                    hint = "№",
+                    isTrailingIconNeed = false,
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next,
+                    modifier = Modifier.width(56.dp)
+                )
+                TextFieldWidget(
+                    value = fieldValue,
+                    onValueChange = { value -> onAction(AddGameAction.OnPlayerNameValueChanged(tabIndex, fieldIndex, value)) },
+                    hint = stringResource(id = R.string.player_number, "${fieldIndex + 1}"),
+                    imeAction = if (fieldIndex < tabPlayersTextFields.lastIndex) ImeAction.Next else ImeAction.Done,
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
 
         Button(
@@ -530,6 +550,7 @@ private fun TextFieldWidget(
     value: String,
     onValueChange: (String) -> Unit,
     hint: String,
+    isTrailingIconNeed: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Unspecified,
     imeAction: ImeAction = ImeAction.Default,
     modifier: Modifier = Modifier,
@@ -547,16 +568,20 @@ private fun TextFieldWidget(
                 style = MaterialTheme.typography.bodyMedium,
             )
         },
-        trailingIcon = {
-            if (value.isNotEmpty()) {
-                IconButton(onClick = { onValueChange("") }) {
-                    Icon(
-                        imageVector = Icons.Filled.Clear,
-                        contentDescription = null,
-                        tint = Color.Black,
-                    )
+        trailingIcon = if (isTrailingIconNeed) {
+            {
+                if (value.isNotEmpty()) {
+                    IconButton(onClick = { onValueChange("") }) {
+                        Icon(
+                            imageVector = Icons.Filled.Clear,
+                            contentDescription = null,
+                            tint = Color.Black,
+                        )
+                    }
                 }
             }
+        } else {
+            null
         },
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
