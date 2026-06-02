@@ -42,21 +42,27 @@ import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
+import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
+import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.CustomizeColumnsBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.TeamResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.widget.GameResultsFunctionsBlock
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.compose.koinInject
 
 @Composable
 fun GameResultsScreen(
     navController: NavController,
     viewModel: GameResultsViewModel,
+    hiddenColumnsStorage: HiddenColumnsStorage = koinInject(),
 ) {
     GameResultsScreenContent(
         navController = navController,
         viewModel = viewModel,
+        hiddenColumnsStorage = hiddenColumnsStorage,
         onAction = viewModel::action,
     )
 }
@@ -65,11 +71,15 @@ fun GameResultsScreen(
 private fun GameResultsScreenContent(
     navController: NavController,
     viewModel: GameResultsViewModel,
+    hiddenColumnsStorage: HiddenColumnsStorage,
     onAction: (GameResultsAction) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+
+    var hiddenOptions by remember { mutableStateOf(hiddenColumnsStorage.load(viewModel.gameId)) }
+    var showCustomizeColumns by remember { mutableStateOf(false) }
 
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
@@ -143,8 +153,10 @@ private fun GameResultsScreenContent(
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
                         uiLimited = uiState.uiLimited,
+                        hiddenOptions = hiddenOptions,
                         onPlayerResultClicked = { playerResultUiModel = it },
                         onRemovePlayerClicked = { onAction(GameResultsAction.OnRemovePlayerHistoryClicked(it)) },
+                        onCustomizeClicked = { showCustomizeColumns = true },
                     )
                 }
 
@@ -203,6 +215,20 @@ private fun GameResultsScreenContent(
             BestPlayersBottomSheet(
                 bestPlayers = bestPlayers,
                 onDismissed = { bestPlayers = emptyList() },
+            )
+        }
+        showCustomizeColumns -> {
+            CustomizeColumnsBottomSheet(
+                hiddenOptions = hiddenOptions,
+                onToggleOption = { option ->
+                    hiddenOptions = if (hiddenOptions.contains(option)) {
+                        hiddenOptions - option
+                    } else {
+                        hiddenOptions + option
+                    }
+                    hiddenColumnsStorage.save(viewModel.gameId, hiddenOptions)
+                },
+                onDismissed = { showCustomizeColumns = false },
             )
         }
     }

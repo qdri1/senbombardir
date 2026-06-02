@@ -69,7 +69,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 class GameViewModel(
-    private val gameId: Long,
+    val gameId: Long,
     private val gameRepository: GameRepository,
     private val liveGameRepository: LiveGameRepository,
     private val teamRepository: TeamRepository,

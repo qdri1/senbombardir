@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class GameResultsViewModel(
-    private val gameId: Long,
+    val gameId: Long,
     private val teamHistoryRepository: TeamHistoryRepository,
     private val playerHistoryRepository: PlayerHistoryRepository,
     private val playerRepository: PlayerRepository,

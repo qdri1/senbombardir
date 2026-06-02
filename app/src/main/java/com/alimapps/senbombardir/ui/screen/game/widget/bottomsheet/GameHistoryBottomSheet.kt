@@ -48,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.composable.PlayerTeamBadge
 import com.alimapps.senbombardir.ui.model.GameHistoryActionEventUiModel
 import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
@@ -412,7 +413,7 @@ private fun ActionEventRow(event: GameHistoryActionEventUiModel) {
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.outline,
         )
-        PlayerTeamColorDot(teamColor = event.teamColor)
+        PlayerTeamBadge(teamColor = event.teamColor, number = event.playerNumber)
         Text(
             text = event.playerName,
             style = MaterialTheme.typography.labelSmall,
@@ -447,23 +448,6 @@ private fun TeamColorDot(teamColor: TeamColor) {
     )
 }
 
-@Composable
-private fun PlayerTeamColorDot(teamColor: TeamColor) {
-    Box(
-        modifier = Modifier
-            .size(12.dp)
-            .background(
-                color = parseHexColor(teamColor.hexColor),
-                shape = RoundedCornerShape(4.dp),
-            )
-            .clip(RoundedCornerShape(4.dp))
-            .border(
-                width = if (teamColor == TeamColor.White) 1.dp else 0.dp,
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                shape = RoundedCornerShape(4.dp),
-            )
-    )
-}
 
 @Composable
 private fun actionTypeLabel(actionType: String): String = when (actionType) {

@@ -14,10 +14,12 @@ class GameHistoryRepository(
     suspend fun getGameHistory(gameId: Long): List<GameHistoryEntryUiModel> {
         return gameHistoryDao.getGameHistoryEntries(gameId).map { entry ->
             val actionEvents = gameHistoryDao.getGameHistoryActionEvents(entry.id).map { event ->
+                val (parsedName, parsedNumber) = parsePlayerName(event.playerName)
                 GameHistoryActionEventUiModel(
                     teamName = event.teamName,
                     teamColor = TeamColor.getTeamColor(event.teamColor),
-                    playerName = event.playerName,
+                    playerName = parsedName,
+                    playerNumber = parsedNumber,
                     actionType = event.actionType,
                     elapsedSeconds = event.elapsedSeconds,
                 )
@@ -35,6 +37,15 @@ class GameHistoryRepository(
                 actionEvents = actionEvents,
             )
         }
+    }
+
+    private fun parsePlayerName(stored: String): Pair<String, Int?> {
+        if (!stored.startsWith("№")) return Pair(stored, null)
+        val withoutPrefix = stored.removePrefix("№")
+        val spaceIndex = withoutPrefix.indexOf(' ')
+        if (spaceIndex < 0) return Pair(stored, null)
+        val number = withoutPrefix.substring(0, spaceIndex).toIntOrNull() ?: return Pair(stored, null)
+        return Pair(withoutPrefix.substring(spaceIndex + 1), number)
     }
 
     suspend fun saveGameHistoryEntry(entry: GameHistoryEntryModel): Long {

@@ -56,7 +56,10 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.SoundsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TimerBlock
+import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
+import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.CustomizeColumnsBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameHistoryBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameInfoBottomSheet
@@ -73,11 +76,13 @@ fun GameScreen(
     navController: NavController,
     viewModel: GameViewModel,
     navigationResultManager: NavigationResultManager = koinInject(),
+    hiddenColumnsStorage: HiddenColumnsStorage = koinInject(),
 ) {
     GameScreenContent(
         navController = navController,
         navigationResultManager = navigationResultManager,
         viewModel = viewModel,
+        hiddenColumnsStorage = hiddenColumnsStorage,
         onAction = viewModel::action,
     )
 }
@@ -87,11 +92,15 @@ private fun GameScreenContent(
     navController: NavController,
     navigationResultManager: NavigationResultManager,
     viewModel: GameViewModel,
+    hiddenColumnsStorage: HiddenColumnsStorage,
     onAction: (GameAction) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+
+    var hiddenOptions by remember { mutableStateOf(hiddenColumnsStorage.load(viewModel.gameId)) }
+    var showCustomizeColumns by remember { mutableStateOf(false) }
 
     var optionPlayersUiModel by remember { mutableStateOf<OptionPlayersUiModel?>(null) }
     var showStayTeamSelection by remember { mutableStateOf(false) }
@@ -236,8 +245,10 @@ private fun GameScreenContent(
                     PlayersResultsBlock(
                         playerUiModelList = uiState.playerUiModelList,
                         uiLimited = uiState.uiLimited,
+                        hiddenOptions = hiddenOptions,
                         onPlayerResultClicked = { onAction(GameAction.OnPlayerResultClicked(playerResultUiModel = it)) },
                         onRemovePlayerClicked = {},
+                        onCustomizeClicked = { showCustomizeColumns = true },
                     )
                 }
 
@@ -360,6 +371,20 @@ private fun GameScreenContent(
             GameHistoryBottomSheet(
                 gameHistory = gameHistory.orEmpty(),
                 onDismissed = { gameHistory = null },
+            )
+        }
+        showCustomizeColumns -> {
+            CustomizeColumnsBottomSheet(
+                hiddenOptions = hiddenOptions,
+                onToggleOption = { option ->
+                    hiddenOptions = if (hiddenOptions.contains(option)) {
+                        hiddenOptions - option
+                    } else {
+                        hiddenOptions + option
+                    }
+                    hiddenColumnsStorage.save(viewModel.gameId, hiddenOptions)
+                },
+                onDismissed = { showCustomizeColumns = false },
             )
         }
     }

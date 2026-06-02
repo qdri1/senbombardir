@@ -27,6 +27,7 @@ data class GameHistoryActionEventUiModel(
     val teamName: String,
     val teamColor: TeamColor,
     val playerName: String,
+    val playerNumber: Int?,
     val actionType: String,
     val elapsedSeconds: Int,
 ) {

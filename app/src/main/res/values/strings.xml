@@ -87,6 +87,11 @@
     <string name="team_option_players_title">Авторды таңдаңыз</string>
     <string name="team_option_players_auto_goal">Автогол</string>
 
+    <string name="customize_columns">Баптау</string>
+    <string name="customize_columns_title">Бағандарды баптау</string>
+    <string name="customize_columns_subtitle">Статистика бағандарын көрсету немесе жасыру</string>
+    <string name="done">Дайын</string>
+
     <string name="best_player_option_best_player">Үздік ойыншы 🔥</string>
     <string name="best_player_option_goals">Үздік бомбардир️ ⚽️</string>
     <string name="best_player_option_assists">Үздік ассист</string>

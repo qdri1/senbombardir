@@ -17,6 +17,7 @@ import com.alimapps.senbombardir.data.source.GameHistoryDao
 import com.alimapps.senbombardir.data.source.LiveGameDao
 import com.alimapps.senbombardir.data.source.PlayerDao
 import com.alimapps.senbombardir.data.source.PlayerHistoryDao
+import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.data.source.Prefs
 import com.alimapps.senbombardir.data.source.TeamDao
 import com.alimapps.senbombardir.data.source.TeamHistoryDao
@@ -45,6 +46,7 @@ val dataModule = module {
     single<GameHistoryDao> { get<AppDatabase>().gameHistoryDao() }
 
     single { Prefs(preferences = get<Context>().getSharedPreferences("PREFS", Context.MODE_PRIVATE)) }
+    single { HiddenColumnsStorage(preferences = get<Context>().getSharedPreferences("HIDDEN_COLUMNS", Context.MODE_PRIVATE)) }
 
     single {
         GameRepository(gameDao = get())

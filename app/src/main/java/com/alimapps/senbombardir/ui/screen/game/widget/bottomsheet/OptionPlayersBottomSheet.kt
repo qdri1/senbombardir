@@ -1,7 +1,9 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,10 +17,12 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.composable.PlayerTeamBadge
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.model.types.TeamOption
@@ -29,6 +33,7 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 @Composable
 fun OptionPlayersBottomSheet(
     optionPlayersUiModel: OptionPlayersUiModel,
+    hiddenOptions: Set<TeamOption> = emptySet(),
     onAction: (GameAction) -> Unit,
     onDismissed: () -> Unit,
 ) {
@@ -53,10 +58,7 @@ fun OptionPlayersBottomSheet(
         ) {
             HorizontalDivider()
             optionPlayersUiModel.playerUiModelList.forEach { playerUiModel ->
-                Text(
-                    text = playerUiModel.number?.let { "№$it ${playerUiModel.name}" } ?: playerUiModel.name,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    style = MaterialTheme.typography.bodySmall,
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
@@ -69,8 +71,20 @@ fun OptionPlayersBottomSheet(
                             )
                         }
                         .padding(horizontal = 8.dp)
-                        .padding(vertical = 16.dp)
-                )
+                        .padding(vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    PlayerTeamBadge(
+                        teamColor = playerUiModel.teamColor,
+                        number = playerUiModel.number,
+                    )
+                    Text(
+                        text = playerUiModel.name,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
                 HorizontalDivider()
             }
             if (optionPlayersUiModel.option == TeamOption.Goal) {
