@@ -89,7 +89,7 @@ fun TeamsResultsBlock(
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(12.dp)
+                                .size(16.dp)
                                 .background(
                                     color = parseHexColor(teamUiModel.color.hexColor),
                                     shape = RoundedCornerShape(4.dp),
