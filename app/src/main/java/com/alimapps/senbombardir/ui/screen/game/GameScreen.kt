@@ -226,6 +226,7 @@ private fun GameScreenContent(
                         nextPlayingTeamsUiModelList = uiState.nextPlayingTeamsUiModelList,
                         restTeamUiModelList = uiState.restTeamUiModelList,
                         uiState = uiState,
+                        hiddenOptions = hiddenOptions,
                         onAction = onAction,
                     )
                     SoundsBlock(

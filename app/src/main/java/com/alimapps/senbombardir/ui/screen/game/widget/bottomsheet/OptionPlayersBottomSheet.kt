@@ -33,7 +33,6 @@ import com.alimapps.senbombardir.ui.utils.parseHexColor
 @Composable
 fun OptionPlayersBottomSheet(
     optionPlayersUiModel: OptionPlayersUiModel,
-    hiddenOptions: Set<TeamOption> = emptySet(),
     onAction: (GameAction) -> Unit,
     onDismissed: () -> Unit,
 ) {

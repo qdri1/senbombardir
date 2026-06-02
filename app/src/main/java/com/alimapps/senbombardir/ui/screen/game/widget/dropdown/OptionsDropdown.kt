@@ -21,6 +21,7 @@ import com.alimapps.senbombardir.ui.screen.game.GameAction
 
 @Composable
 fun LeftTeamOptionsDropdown(
+    hiddenOptions: Set<TeamOption>,
     onAction: (GameAction) -> Unit,
 ) {
     Popup(
@@ -39,7 +40,7 @@ fun LeftTeamOptionsDropdown(
                 modifier = Modifier.padding(4.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                TeamOption.entries.forEach { option ->
+                TeamOption.entries.filter { it !in hiddenOptions }.forEach { option ->
                     Text(
                         text = stringResource(id = option.stringRes),
                         color = MaterialTheme.colorScheme.surface,
@@ -57,6 +58,7 @@ fun LeftTeamOptionsDropdown(
 
 @Composable
 fun RightTeamOptionsDropdown(
+    hiddenOptions: Set<TeamOption>,
     onAction: (GameAction) -> Unit,
 ) {
     Popup(
@@ -75,7 +77,7 @@ fun RightTeamOptionsDropdown(
                 modifier = Modifier.padding(4.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                TeamOption.entries.forEach { option ->
+                TeamOption.entries.filter { it !in hiddenOptions }.forEach { option ->
                     Text(
                         text = stringResource(id = option.stringRes),
                         color = MaterialTheme.colorScheme.surface,

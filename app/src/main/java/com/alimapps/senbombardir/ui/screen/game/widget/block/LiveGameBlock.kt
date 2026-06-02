@@ -43,6 +43,7 @@ import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
+import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.GameAction
 import com.alimapps.senbombardir.ui.screen.game.GameUiState
 import com.alimapps.senbombardir.ui.screen.game.widget.dropdown.LeftTeamChangeDropdown
@@ -58,6 +59,7 @@ fun LiveGameBlock(
     nextPlayingTeamsUiModelList: List<NextPlayingTeamsUiModel>,
     restTeamUiModelList: List<TeamUiModel>,
     uiState: GameUiState,
+    hiddenOptions: Set<TeamOption>,
     onAction: (GameAction) -> Unit,
 ) {
     Column(
@@ -223,8 +225,8 @@ fun LiveGameBlock(
                     }
                 }
                 when {
-                    uiState.showLeftTeamOptionsDropdown -> LeftTeamOptionsDropdown(onAction)
-                    uiState.showRightTeamOptionsDropdown -> RightTeamOptionsDropdown(onAction)
+                    uiState.showLeftTeamOptionsDropdown -> LeftTeamOptionsDropdown(hiddenOptions, onAction)
+                    uiState.showRightTeamOptionsDropdown -> RightTeamOptionsDropdown(hiddenOptions, onAction)
                     uiState.showLeftTeamChangeDropdown -> LeftTeamChangeDropdown(
                         teamUiModelList = uiState.teamUiModelList.filter {
                             it.id !in listOf(
