@@ -41,6 +41,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -153,13 +154,13 @@ private fun AddGameScreenContent(
                         .weight(1f)
                         .padding(horizontal = 16.dp),
                 )
-                Icon(
-                    imageVector = Icons.Filled.Done,
-                    contentDescription = "AddGameScreenDoneIcon",
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .clickable { onAction(AddGameAction.OnFinishClicked) }
-                )
+                TextButton(onClick = { onAction(AddGameAction.OnFinishClicked) }) {
+                    Text(
+                        text = stringResource(R.string.done),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
