@@ -213,6 +213,7 @@ class GameViewModel(
                     .thenByDescending { it.teamPoints }
                     .thenByDescending { it.teamGoalsDifference }
                     .thenBy { it.teamName }
+                    .thenBy { it.number }
                     .thenBy { it.name }
                 )
                 val liveGameUiModel = liveGameRepository.getLiveGame(gameId)
@@ -621,7 +622,11 @@ class GameViewModel(
             uiState.value.liveGameUiModel?.let { liveGameUiModel ->
                 val playerUiModelList = uiState.value.playerUiModelList.filter { playerUiModel ->
                     playerUiModel.teamId == liveGameUiModel.leftTeamId
-                }.sortedBy { it.name }
+                }.sortedWith(
+                    compareBy<PlayerUiModel> { it.number == null }
+                        .thenBy { it.number ?: Int.MAX_VALUE }
+                        .thenBy { it.name }
+                )
                 val optionPlayersUiModel = OptionPlayersUiModel(
                     option = option,
                     teamId = liveGameUiModel.leftTeamId,
@@ -682,7 +687,11 @@ class GameViewModel(
             uiState.value.liveGameUiModel?.let { liveGameUiModel ->
                 val playerUiModelList = uiState.value.playerUiModelList.filter { playerUiModel ->
                     playerUiModel.teamId == liveGameUiModel.rightTeamId
-                }.sortedBy { it.name }
+                }.sortedWith(
+                    compareBy<PlayerUiModel> { it.number == null }
+                        .thenBy { it.number ?: Int.MAX_VALUE }
+                        .thenBy { it.name }
+                )
                 val optionPlayersUiModel = OptionPlayersUiModel(
                     option = option,
                     teamId = liveGameUiModel.rightTeamId,
@@ -1470,6 +1479,7 @@ class GameViewModel(
             .thenByDescending { it.teamPoints }
             .thenByDescending { it.teamGoalsDifference }
             .thenBy { it.teamName }
+            .thenBy { it.number }
             .thenBy { it.name }
         )
         setState(uiState.value.copy(playerUiModelList = playerUiModelList))

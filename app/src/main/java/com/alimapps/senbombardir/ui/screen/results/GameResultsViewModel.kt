@@ -75,6 +75,7 @@ class GameResultsViewModel(
             .thenByDescending { it.teamPoints }
             .thenByDescending { it.teamGoalsDifference }
             .thenBy { it.teamName }
+            .thenBy { it.number }
             .thenBy { it.name }
         )
         val billingType = billingRepository.getCurrentBillingType()
