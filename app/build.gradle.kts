@@ -15,8 +15,8 @@ android {
         applicationId = "com.alimapps.senbombardir"
         minSdk = 24
         targetSdk = 36
-        versionCode = 70
-        versionName = "7.0"
+        versionCode = 71
+        versionName = "7.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -24,7 +24,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
