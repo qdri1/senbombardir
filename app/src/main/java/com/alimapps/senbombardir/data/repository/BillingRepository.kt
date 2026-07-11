@@ -68,7 +68,7 @@ class BillingRepository(
     }
 
     fun checkAndUpdateOnedayExpiration(): Boolean {
-        if (getCurrentBillingType() == BillingType.OneDay && !hasValidOnedayAccess()) {
+        if (getCurrentBillingType() == BillingType.OneDay && hasValidOnedayAccess().not()) {
             prefs.onedayExpirationDate = 0L
             setCurrentBillingType(BillingType.Limited)
             return true

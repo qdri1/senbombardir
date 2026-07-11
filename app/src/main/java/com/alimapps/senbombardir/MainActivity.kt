@@ -26,7 +26,7 @@ import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager
 import com.alimapps.senbombardir.ui.utils.RemoteConfig
-import com.android.billingclient.api.BillingClient
+import com.revenuecat.purchases.ProductType
 import org.koin.android.ext.android.inject
 import java.util.Locale
 
@@ -84,77 +84,64 @@ class MainActivity : ComponentActivity() {
 
     private fun startPurchase(activationPlan: ActivationPlan) {
         initBillingManager()
-        billingManager?.startConnection(
-            onConnected = {
-                val productType = when (activationPlan) {
-                    ActivationPlan.Monthly,
-                    ActivationPlan.Yearly -> BillingClient.ProductType.SUBS
-                    ActivationPlan.Unlimited,
-                    ActivationPlan.OneDay -> BillingClient.ProductType.INAPP
+        val productType = when (activationPlan) {
+            ActivationPlan.Monthly,
+            ActivationPlan.Yearly -> ProductType.SUBS
+            ActivationPlan.Unlimited,
+            ActivationPlan.OneDay -> ProductType.INAPP
+        }
+        billingManager?.queryProducts(
+            productIds = listOf(activationPlan.productId),
+            type = productType,
+            onResult = { products ->
+                if (products.isNotEmpty()) {
+                    billingManager?.launchPurchase(this, products.first())
                 }
-                billingManager?.queryProducts(
-                    productIds = listOf(activationPlan.productId),
-                    type = productType,
-                    onResult = { products ->
-                        if (products.isNotEmpty()) {
-                            billingManager?.launchPurchase(this, products.first())
-                        }
-                    }
-                )
             }
         )
     }
 
     private fun checkPurchase() {
         initBillingManager()
-        billingManager?.startConnection(
-            onConnected = {
-                val billingType = billingRepository.getCurrentBillingType()
+        val billingType = billingRepository.getCurrentBillingType()
 
-                if (billingType == BillingType.Lifetime || billingType == BillingType.Limited || billingType == BillingType.OneDay) {
-                    billingManager?.queryProducts(
-                        productIds = listOf(ActivationPlan.Unlimited.productId, ActivationPlan.OneDay.productId),
-                        type = BillingClient.ProductType.INAPP,
-                        onResult = { products ->
-                            val unlimitedPrice = products.find { it.productId == ActivationPlan.Unlimited.productId }
-                                ?.oneTimePurchaseOfferDetails?.formattedPrice
-                            val oneDayPrice = products.find { it.productId == ActivationPlan.OneDay.productId }
-                                ?.oneTimePurchaseOfferDetails?.formattedPrice
-                            billingRepository.setUnlimitedPrice(unlimitedPrice)
-                            billingRepository.setOnedayPrice(oneDayPrice)
-                            if (billingType != BillingType.OneDay) {
-                                billingManager?.checkPurchase(BillingClient.ProductType.INAPP)
-                            }
-                        }
+        if (billingType == BillingType.Lifetime || billingType == BillingType.Limited) {
+            billingManager?.queryProducts(
+                productIds = listOf(ActivationPlan.Unlimited.productId, ActivationPlan.OneDay.productId),
+                type = ProductType.INAPP,
+                onResult = { products ->
+                    val unlimitedPrice = products.find { it.purchasingData.productId == ActivationPlan.Unlimited.productId }?.price?.formatted
+                    val oneDayPrice = products.find { it.purchasingData.productId == ActivationPlan.OneDay.productId }?.price?.formatted
+
+                    billingRepository.setUnlimitedPrice(unlimitedPrice)
+                    billingRepository.setOnedayPrice(oneDayPrice)
+
+                    billingManager?.checkPurchase(
+                        productIds = listOf(ActivationPlan.Unlimited.productId),
+                        type = ProductType.INAPP,
                     )
                 }
+            )
+        }
 
-                if (billingType == BillingType.Subscribe || billingType == BillingType.Limited) {
-                    billingManager?.queryProducts(
+        if (billingType == BillingType.Subscribe || billingType == BillingType.Limited) {
+            billingManager?.queryProducts(
+                productIds = listOf(ActivationPlan.Monthly.productId, ActivationPlan.Yearly.productId),
+                type = ProductType.SUBS,
+                onResult = { products ->
+                    val monthlyPrice = products.find { it.purchasingData.productId == ActivationPlan.Monthly.productId }?.price?.formatted
+                    val yearlyPrice = products.find { it.purchasingData.productId == ActivationPlan.Yearly.productId }?.price?.formatted
+
+                    billingRepository.setMonthlyPrice(monthlyPrice)
+                    billingRepository.setYearlyPrice(yearlyPrice)
+
+                    billingManager?.checkPurchase(
                         productIds = listOf(ActivationPlan.Monthly.productId, ActivationPlan.Yearly.productId),
-                        type = BillingClient.ProductType.SUBS,
-                        onResult = { products ->
-                            val monthlyPrice =
-                                products.find { it.productId == ActivationPlan.Monthly.productId }
-                                    ?.subscriptionOfferDetails?.firstOrNull()
-                                    ?.pricingPhases?.pricingPhaseList?.firstOrNull()
-                                    ?.formattedPrice
-
-                            val yearlyPrice =
-                                products.find { it.productId == ActivationPlan.Yearly.productId }
-                                    ?.subscriptionOfferDetails?.firstOrNull()
-                                    ?.pricingPhases?.pricingPhaseList?.firstOrNull()
-                                    ?.formattedPrice
-
-                            billingRepository.setMonthlyPrice(monthlyPrice)
-                            billingRepository.setYearlyPrice(yearlyPrice)
-
-                            billingManager?.checkPurchase(BillingClient.ProductType.SUBS)
-                        }
+                        type = ProductType.SUBS,
                     )
                 }
-            }
-        )
+            )
+        }
     }
 
     private fun initBillingManager() {
@@ -169,33 +156,35 @@ class MainActivity : ComponentActivity() {
                             billingRepository.setOnedayExpirationDate(System.currentTimeMillis() + 24 * 60 * 60 * 1000L)
                             billingRepository.setCurrentBillingType(BillingType.OneDay)
                         }
-                        else -> Unit
+                        null -> Unit
                     }
                     restartApp()
                 }
 
-                override fun onPurchaseCheckSuccess(productType: String) {
+                override fun onPurchaseCheckSuccess(productType: ProductType) {
                     when (productType) {
-                        BillingClient.ProductType.INAPP -> billingRepository.setCurrentBillingType(BillingType.Lifetime)
-                        BillingClient.ProductType.SUBS -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
+                        ProductType.INAPP -> billingRepository.setCurrentBillingType(BillingType.Lifetime)
+                        ProductType.SUBS -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
+                        ProductType.UNKNOWN -> Unit
                     }
                 }
 
-                override fun onPurchaseCheckNoPurchase(productType: String) {
+                override fun onPurchaseCheckNoPurchase(productType: ProductType) {
                     when (productType) {
-                        BillingClient.ProductType.INAPP -> {
+                        ProductType.INAPP -> {
                             val billingType = billingRepository.getCurrentBillingType()
                             val isSecretActivated = billingRepository.isSecretActivated()
                             if (billingType == BillingType.Lifetime && isSecretActivated.not()) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
                             }
                         }
-                        BillingClient.ProductType.SUBS -> {
+                        ProductType.SUBS -> {
                             val billingType = billingRepository.getCurrentBillingType()
                             if (billingType == BillingType.Subscribe) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
                             }
                         }
+                        ProductType.UNKNOWN -> Unit
                     }
                 }
             })
@@ -249,7 +238,6 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        billingManager?.endConnection()
         billingManager = null
         super.onDestroy()
     }

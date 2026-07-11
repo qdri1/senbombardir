@@ -2,148 +2,67 @@ package com.alimapps.senbombardir.ui.utils
 
 import android.app.Activity
 import android.content.Context
-import com.alimapps.senbombardir.domain.model.ActivationPlan
-import com.android.billingclient.api.AcknowledgePurchaseParams
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.ConsumeParams
-import com.android.billingclient.api.PendingPurchasesParams
-import com.android.billingclient.api.ProductDetails
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.QueryProductDetailsParams
-import com.android.billingclient.api.QueryPurchasesParams
+import com.revenuecat.purchases.ProductType
+import com.revenuecat.purchases.PurchaseParams
+import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesConfiguration
+import com.revenuecat.purchases.getCustomerInfoWith
+import com.revenuecat.purchases.getProductsWith
+import com.revenuecat.purchases.models.StoreProduct
+import com.revenuecat.purchases.purchaseWith
+
+private const val REVENUECAT_API_KEY = "goog_cUzqpjmnAOPcoKJDcaILIbIQAbw"
 
 class BillingManager(
     context: Context,
     private val listener: BillingUpdatesListener
-) : PurchasesUpdatedListener {
+) {
 
-    private val billingClient: BillingClient = BillingClient.newBuilder(context)
-        .setListener(this)
-        .enablePendingPurchases(
-            PendingPurchasesParams.newBuilder()
-                .enableOneTimeProducts()
-                .build()
-        )
-        .build()
-
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
-        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-            purchases.find { it.purchaseState == Purchase.PurchaseState.PURCHASED }?.let { purchase ->
-                if (purchase.products.contains(ActivationPlan.OneDay.productId)) {
-                    val consumeParams = ConsumeParams.newBuilder()
-                        .setPurchaseToken(purchase.purchaseToken)
-                        .build()
-                    billingClient.consumeAsync(consumeParams) { result, _ ->
-                        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                            listener.onPurchaseSuccess()
-                        }
-                    }
-                } else if (purchase.isAcknowledged.not()) {
-                    val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
-                        .setPurchaseToken(purchase.purchaseToken)
-                        .build()
-                    billingClient.acknowledgePurchase(acknowledgeParams) { result ->
-                        if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                            listener.onPurchaseSuccess()
-                        }
-                    }
-                }
-            }
+    init {
+        if (Purchases.isConfigured.not()) {
+            Purchases.configure(PurchasesConfiguration.Builder(context, REVENUECAT_API_KEY).build())
         }
-    }
-
-    fun startConnection(onConnected: (() -> Unit)) {
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    onConnected()
-                }
-            }
-            override fun onBillingServiceDisconnected() {}
-        })
-    }
-
-    fun endConnection() {
-        billingClient.endConnection()
     }
 
     fun queryProducts(
         productIds: List<String>,
-        type: String,
-        onResult: (List<ProductDetails>) -> Unit,
+        type: ProductType,
+        onResult: (List<StoreProduct>) -> Unit,
     ) {
-        val productList = productIds.map { productId ->
-            QueryProductDetailsParams.Product.newBuilder()
-                .setProductId(productId)
-                .setProductType(type)
-                .build()
-        }
-        val params = QueryProductDetailsParams.newBuilder()
-            .setProductList(productList)
-            .build()
-
-        billingClient.queryProductDetailsAsync(params) { billingResult, productDetailsList ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                onResult(productDetailsList.productDetailsList)
-            } else {
-                onResult(emptyList())
-            }
-        }
-    }
-
-    fun launchPurchase(activity: Activity, productDetails: ProductDetails) {
-        val offerToken = productDetails.subscriptionOfferDetails?.firstOrNull()?.offerToken
-
-        val productDetailsParamsList = listOf(
-            BillingFlowParams.ProductDetailsParams.newBuilder()
-                .setProductDetails(productDetails)
-                .apply { if (offerToken != null) setOfferToken(offerToken) }
-                .build()
+        Purchases.sharedInstance.getProductsWith(
+            productIds = productIds,
+            type = type,
+            onGetStoreProducts = { products -> onResult(products) },
         )
-
-        val params = BillingFlowParams.newBuilder()
-            .setProductDetailsParamsList(productDetailsParamsList)
-            .build()
-
-        billingClient.launchBillingFlow(activity, params)
     }
 
-    fun checkPurchase(productType: String) {
-        val params = QueryPurchasesParams.newBuilder()
-            .setProductType(productType)
-            .build()
+    fun launchPurchase(activity: Activity, storeProduct: StoreProduct) {
+        Purchases.sharedInstance.purchaseWith(
+            purchaseParams = PurchaseParams.Builder(activity, storeProduct).build(),
+            onSuccess = { _, _ -> listener.onPurchaseSuccess() },
+        )
+    }
 
-        billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val purchase = purchases.find { it.purchaseState == Purchase.PurchaseState.PURCHASED }
-                if (purchase != null) {
-                    if (purchase.isAcknowledged) {
-                        listener.onPurchaseCheckSuccess(productType)
-                    } else {
-                        val acknowledgeParams = AcknowledgePurchaseParams.newBuilder()
-                            .setPurchaseToken(purchase.purchaseToken)
-                            .build()
-
-                        billingClient.acknowledgePurchase(acknowledgeParams) { billingResult ->
-                            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                                listener.onPurchaseCheckSuccess(productType)
-                            }
-                        }
-                    }
-                } else {
-                    listener.onPurchaseCheckNoPurchase(productType)
+    fun checkPurchase(productIds: List<String>, type: ProductType) {
+        Purchases.sharedInstance.getCustomerInfoWith { customerInfo ->
+            val isPurchased = when (type) {
+                ProductType.SUBS -> customerInfo.activeSubscriptions.any { activeId ->
+                    productIds.any { activeId == it || activeId.startsWith("$it:") }
                 }
+                ProductType.INAPP -> customerInfo.nonSubscriptionTransactions.any { it.productIdentifier in productIds }
+                ProductType.UNKNOWN -> false
+            }
+            if (isPurchased) {
+                listener.onPurchaseCheckSuccess(type)
+            } else {
+                listener.onPurchaseCheckNoPurchase(type)
             }
         }
     }
 
     interface BillingUpdatesListener {
         fun onPurchaseSuccess()
-        fun onPurchaseCheckSuccess(productType: String)
-        fun onPurchaseCheckNoPurchase(productType: String)
+        fun onPurchaseCheckSuccess(productType: ProductType)
+        fun onPurchaseCheckNoPurchase(productType: ProductType)
     }
 }
