@@ -13,6 +13,8 @@ import com.revenuecat.purchases.purchaseWith
 
 private const val REVENUECAT_API_KEY = "goog_cUzqpjmnAOPcoKJDcaILIbIQAbw"
 
+const val LIFETIME_ENTITLEMENT_ID = "dop_tep_pro"
+
 class BillingManager(
     context: Context,
     private val listener: BillingUpdatesListener
@@ -49,7 +51,12 @@ class BillingManager(
                 ProductType.SUBS -> customerInfo.activeSubscriptions.any { activeId ->
                     productIds.any { activeId == it || activeId.startsWith("$it:") }
                 }
-                ProductType.INAPP -> customerInfo.nonSubscriptionTransactions.any { it.productIdentifier in productIds }
+                ProductType.INAPP -> {
+                    val hasLifetimeTransaction = customerInfo.nonSubscriptionTransactions.any { it.productIdentifier in productIds }
+                    val isEntitlementActive = customerInfo.activeSubscriptions.isEmpty() && customerInfo.entitlements[LIFETIME_ENTITLEMENT_ID]?.isActive == true
+
+                    hasLifetimeTransaction && isEntitlementActive
+                }
                 ProductType.UNKNOWN -> false
             }
             if (isPurchased) {
