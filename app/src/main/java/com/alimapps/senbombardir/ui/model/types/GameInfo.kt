@@ -22,6 +22,7 @@ enum class PlayersBlockInfo(val stringRes: Int, val descriptionRes: Int) {
     Goals(stringRes = R.string.player_result_goals, descriptionRes = R.string.players_block_info_goals),
     Assists(stringRes = R.string.player_result_assists, descriptionRes = R.string.players_block_info_assists),
     Saves(stringRes = R.string.player_result_saves, descriptionRes = R.string.players_block_info_saves),
+    Tackles(stringRes = R.string.player_result_tackles, descriptionRes = R.string.players_block_info_tackles),
     Dribbles(stringRes = R.string.player_result_dribbles, descriptionRes = R.string.players_block_info_dribbles),
     Shots(stringRes = R.string.player_result_shots, descriptionRes = R.string.players_block_info_shots),
     Passes(stringRes = R.string.player_result_passes, descriptionRes = R.string.players_block_info_passes),

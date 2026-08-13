@@ -247,6 +247,27 @@ fun PlayersResultsBlock(
                             }
                         }
 
+                        if (!hiddenOptions.contains(TeamOption.Tackle)) {
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(verticalSpace),
+                            ) {
+                                Text(text = stringResource(id = R.string.player_result_tackles), color = headerTextColor, style = headerTextStyle)
+                                playerUiModelList.forEach { playerUiModel ->
+                                    Text(
+                                        text = playerUiModel.tackles.toString(),
+                                        color = textColor,
+                                        style = textStyle,
+                                        modifier = Modifier.clickable(
+                                            interactionSource = remember { MutableInteractionSource() },
+                                            indication = null,
+                                            onClick = { onPlayerResultClicked(PlayerResultUiModel(playerUiModel, TeamOption.Tackle)) }
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
                         if (!hiddenOptions.contains(TeamOption.Dribble)) {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,

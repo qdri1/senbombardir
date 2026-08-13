@@ -6,6 +6,7 @@ enum class TeamOption(val stringRes: Int) {
     Goal(stringRes = R.string.team_option_goal),
     Assist(stringRes = R.string.team_option_assist),
     Save(stringRes = R.string.team_option_save),
+    Tackle(stringRes = R.string.team_option_tackle),
     Dribble(stringRes = R.string.team_option_dribble),
     Shot(stringRes = R.string.team_option_shot),
     Pass(stringRes = R.string.team_option_pass),

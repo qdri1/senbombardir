@@ -69,7 +69,7 @@ class GameResultsViewModel(
         }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
             .thenByDescending { it.assists }
             .thenByDescending { it.saves }
-            .thenByDescending { it.dribbles + it.shots + it.passes }
+            .thenByDescending { it.tackles + it.dribbles + it.shots + it.passes }
             .thenBy { it.redCards }
             .thenBy { it.yellowCards }
             .thenByDescending { it.teamPoints }
@@ -111,6 +111,7 @@ class GameResultsViewModel(
                         passes = 0,
                         shots = 0,
                         saves = 0,
+                        tackles = 0,
                         yellowCards = 0,
                         redCards = 0,
                     ).toPlayerHistoryModel()
@@ -129,6 +130,7 @@ class GameResultsViewModel(
             TeamOption.Goal -> playerResultUiModel.playerUiModel.copy(goals = playerResultValue)
             TeamOption.Assist -> playerResultUiModel.playerUiModel.copy(assists = playerResultValue)
             TeamOption.Save -> playerResultUiModel.playerUiModel.copy(saves = playerResultValue)
+            TeamOption.Tackle -> playerResultUiModel.playerUiModel.copy(tackles = playerResultValue)
             TeamOption.Dribble -> playerResultUiModel.playerUiModel.copy(dribbles = playerResultValue)
             TeamOption.Shot -> playerResultUiModel.playerUiModel.copy(shots = playerResultValue)
             TeamOption.Pass -> playerResultUiModel.playerUiModel.copy(passes = playerResultValue)
@@ -171,7 +173,7 @@ class GameResultsViewModel(
         val playerList = uiState.value.playerUiModelList
 
         playerList.maxByOrNull {
-            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots - it.yellowCards - (it.redCards * 3)
+            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.tackles + it.dribbles + it.passes + it.shots - it.yellowCards - (it.redCards * 3)
         }?.let { best ->
             bestPlayers.add(
                 BestPlayerUiModel(
@@ -185,6 +187,7 @@ class GameResultsViewModel(
             Triple(BestPlayerOption.Goals, { it: PlayerUiModel -> it.goals > 0 }, { it: PlayerUiModel -> it.goals }),
             Triple(BestPlayerOption.Assists, { it: PlayerUiModel -> it.assists > 0 }, { it: PlayerUiModel -> it.assists }),
             Triple(BestPlayerOption.Saves, { it: PlayerUiModel -> it.saves > 0 }, { it: PlayerUiModel -> it.saves }),
+            Triple(BestPlayerOption.Tackles, { it: PlayerUiModel -> it.tackles > 0 }, { it: PlayerUiModel -> it.tackles }),
             Triple(BestPlayerOption.Dribbles, { it: PlayerUiModel -> it.dribbles > 0 }, { it: PlayerUiModel -> it.dribbles }),
             Triple(BestPlayerOption.Passes, { it: PlayerUiModel -> it.passes > 0 }, { it: PlayerUiModel -> it.passes }),
             Triple(BestPlayerOption.Shots, { it: PlayerUiModel -> it.shots > 0 }, { it: PlayerUiModel -> it.shots }),

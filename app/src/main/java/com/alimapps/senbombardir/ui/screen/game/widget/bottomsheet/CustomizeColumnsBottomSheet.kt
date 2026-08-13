@@ -27,6 +27,7 @@ import com.alimapps.senbombardir.ui.model.types.TeamOption
 
 private val toggleableOptions = listOf(
     TeamOption.Save,
+    TeamOption.Tackle,
     TeamOption.Dribble,
     TeamOption.Shot,
     TeamOption.Pass,

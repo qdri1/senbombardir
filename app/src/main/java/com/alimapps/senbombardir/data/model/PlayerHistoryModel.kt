@@ -30,6 +30,7 @@ data class PlayerHistoryModel(
     val passes: Int,
     val shots: Int,
     val saves: Int,
+    val tackles: Int,
     val yellowCards: Int,
     val redCards: Int,
     val number: Int? = null,

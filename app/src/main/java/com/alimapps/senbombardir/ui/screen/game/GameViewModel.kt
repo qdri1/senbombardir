@@ -207,7 +207,7 @@ class GameViewModel(
                 }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
                     .thenByDescending { it.assists }
                     .thenByDescending { it.saves }
-                    .thenByDescending { it.dribbles + it.shots + it.passes }
+                    .thenByDescending { it.tackles + it.dribbles + it.shots + it.passes }
                     .thenBy { it.redCards }
                     .thenBy { it.yellowCards }
                     .thenByDescending { it.teamPoints }
@@ -420,6 +420,7 @@ class GameViewModel(
                     passes = 0,
                     shots = 0,
                     saves = 0,
+                    tackles = 0,
                     yellowCards = 0,
                     redCards = 0,
                 ).toPlayerModel()
@@ -450,7 +451,7 @@ class GameViewModel(
         val playerList = uiState.value.playerUiModelList
 
         playerList.maxByOrNull {
-            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.dribbles + it.passes + it.shots - it.yellowCards - (it.redCards * 3)
+            (it.goals * 3) + (it.assists * 2) + (it.saves * 2) + it.tackles + it.dribbles + it.passes + it.shots - it.yellowCards - (it.redCards * 3)
         }?.let { best ->
             bestPlayers.add(
                 BestPlayerUiModel(
@@ -464,6 +465,7 @@ class GameViewModel(
             Triple(BestPlayerOption.Goals, { it: PlayerUiModel -> it.goals > 0 }, { it: PlayerUiModel -> it.goals }),
             Triple(BestPlayerOption.Assists, { it: PlayerUiModel -> it.assists > 0 }, { it: PlayerUiModel -> it.assists }),
             Triple(BestPlayerOption.Saves, { it: PlayerUiModel -> it.saves > 0 }, { it: PlayerUiModel -> it.saves }),
+            Triple(BestPlayerOption.Tackles, { it: PlayerUiModel -> it.tackles > 0 }, { it: PlayerUiModel -> it.tackles }),
             Triple(BestPlayerOption.Dribbles, { it: PlayerUiModel -> it.dribbles > 0 }, { it: PlayerUiModel -> it.dribbles }),
             Triple(BestPlayerOption.Passes, { it: PlayerUiModel -> it.passes > 0 }, { it: PlayerUiModel -> it.passes }),
             Triple(BestPlayerOption.Shots, { it: PlayerUiModel -> it.shots > 0 }, { it: PlayerUiModel -> it.shots }),
@@ -849,6 +851,23 @@ class GameViewModel(
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
                     onComplete = { playMedia(resId = R.raw.goal_save) },
+                )
+            }
+            TeamOption.Tackle -> {
+                val copyPlayerUiModel = playerUiModel.copy(tackles = playerUiModel.tackles + 1)
+                playerRepository.updatePlayer(copyPlayerUiModel.toPlayerModel())
+
+                playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                    val copyPlayerHistoryModel = playerHistoryUiModel.copy(
+                        tackles = playerHistoryUiModel.tackles + 1,
+                    ).toPlayerHistoryModel()
+                    playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryModel)
+                }
+
+                currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, playerNumber = playerUiModel.number, actionType = "tackle", elapsedSeconds = currentElapsedSeconds()))
+                speak(
+                    text = context.getString(R.string.text_to_speech_tackle, playerUiModel.name),
+                    onComplete = { playMedia(resId = R.raw.girls_applause) },
                 )
             }
             TeamOption.YellowCard -> {
@@ -1473,7 +1492,7 @@ class GameViewModel(
         }.sortedWith(compareByDescending<PlayerUiModel> { it.goals }
             .thenByDescending { it.assists }
             .thenByDescending { it.saves }
-            .thenByDescending { it.dribbles + it.shots + it.passes }
+            .thenByDescending { it.tackles + it.dribbles + it.shots + it.passes }
             .thenBy { it.redCards }
             .thenBy { it.yellowCards }
             .thenByDescending { it.teamPoints }
@@ -1548,6 +1567,17 @@ class GameViewModel(
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
                         val diffs = playerResultValue - playerResultUiModel.playerUiModel.saves
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(saves = playerHistoryUiModel.saves.plus(diffs))
+                        playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
+                    }
+                }
+            }
+            TeamOption.Tackle -> {
+                val playerUiModel = playerResultUiModel.playerUiModel.copy(tackles = playerResultValue)
+                playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                launch(Dispatchers.IO) {
+                    playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
+                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.tackles
+                        val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(tackles = playerHistoryUiModel.tackles.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }

@@ -7,6 +7,7 @@ enum class BestPlayerOption(val stringRes: Int) {
     Goals(stringRes = R.string.best_player_option_goals),
     Assists(stringRes = R.string.best_player_option_assists),
     Saves(stringRes = R.string.best_player_option_saves),
+    Tackles(stringRes = R.string.best_player_option_tackles),
     Dribbles(stringRes = R.string.best_player_option_dribbles),
     Passes(stringRes = R.string.best_player_option_passes),
     Shots(stringRes = R.string.best_player_option_shots),

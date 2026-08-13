@@ -32,6 +32,7 @@ class PlayerRepository(
                 passes = it.passes,
                 shots = it.shots,
                 saves = it.saves,
+                tackles = it.tackles,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
                 number = it.number,
@@ -59,13 +60,14 @@ class PlayerRepository(
                 passes = it.passes,
                 shots = it.shots,
                 saves = it.saves,
+                tackles = it.tackles,
                 yellowCards = it.yellowCards,
                 redCards = it.redCards,
                 number = it.number,
             )
         }
     }
-    
+
     suspend fun savePlayer(playerModel: PlayerModel): Long = playerDao.insertPlayer(playerModel)
 
     suspend fun updatePlayer(playerModel: PlayerModel) { playerDao.updatePlayer(playerModel) }

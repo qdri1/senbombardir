@@ -74,6 +74,7 @@
     <string name="player_result_passes">P</string>
     <string name="player_result_shots">SH</string>
     <string name="player_result_saves">SV</string>
+    <string name="player_result_tackles">T</string>
     <string name="player_result_yellow_card">🟨</string>
     <string name="player_result_red_card">🟥</string>
 
@@ -83,6 +84,7 @@
     <string name="team_option_pass">Pass</string>
     <string name="team_option_shot">Shot</string>
     <string name="team_option_save">Save</string>
+    <string name="team_option_tackle">Tackle</string>
     <string name="team_option_yellow_card">Yellow 🟨</string>
     <string name="team_option_red_card">Red 🟥</string>
     <string name="team_option_players_title">Select player</string>
@@ -97,6 +99,7 @@
     <string name="best_player_option_goals">Top scorer ⚽️</string>
     <string name="best_player_option_assists">Best assists</string>
     <string name="best_player_option_saves">Best saves</string>
+    <string name="best_player_option_tackles">Best tackles</string>
     <string name="best_player_option_dribbles">Best dribbles</string>
     <string name="best_player_option_passes">Best passes</string>
     <string name="best_player_option_shots">Best shots</string>
@@ -108,6 +111,7 @@
     <string name="text_pass">pass</string>
     <string name="text_shot">shot</string>
     <string name="text_save">save</string>
+    <string name="text_tackle">tackle</string>
     <string name="text_yellow_card">yellow 🟨</string>
     <string name="text_red_card">red 🟥</string>
 
@@ -117,6 +121,7 @@
     <string name="text_to_speech_pass">Great pass by %s</string>
     <string name="text_to_speech_shot">Powerful shot by %s</string>
     <string name="text_to_speech_save">Great save by %s</string>
+    <string name="text_to_speech_tackle">Great tackle by %s</string>
     <string name="text_to_speech_yellow_card">Yellow card %s</string>
     <string name="text_to_speech_red_card">Red card %s</string>
 
@@ -194,6 +199,7 @@
     <string name="players_block_info_goals">Goal</string>
     <string name="players_block_info_assists">Assist</string>
     <string name="players_block_info_saves">Best save</string>
+    <string name="players_block_info_tackles">Nice tackle</string>
     <string name="players_block_info_dribbles">Nice dribble</string>
     <string name="players_block_info_shots">Powerful accurate shot</string>
     <string name="players_block_info_passes">Nice pass</string>

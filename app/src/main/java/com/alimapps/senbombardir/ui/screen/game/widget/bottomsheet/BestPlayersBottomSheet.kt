@@ -79,6 +79,7 @@ fun BestPlayersBottomSheet(
                                         best.playerUiModel.goals.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_goal)}" },
                                         best.playerUiModel.assists.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_assist)}" },
                                         best.playerUiModel.saves.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_save)}" },
+                                        best.playerUiModel.tackles.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_tackle)}" },
                                         best.playerUiModel.dribbles.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_dribble)}" },
                                         best.playerUiModel.passes.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_pass)}" },
                                         best.playerUiModel.shots.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_shot)}" },
@@ -89,6 +90,7 @@ fun BestPlayersBottomSheet(
                                 BestPlayerOption.Goals -> "${best.playerUiModel.goals} ${stringResource(R.string.text_goal)}"
                                 BestPlayerOption.Assists -> "${best.playerUiModel.assists} ${stringResource(R.string.text_assist)}"
                                 BestPlayerOption.Saves -> "${best.playerUiModel.saves} ${stringResource(R.string.text_save)}"
+                                BestPlayerOption.Tackles -> "${best.playerUiModel.tackles} ${stringResource(R.string.text_tackle)}"
                                 BestPlayerOption.Dribbles -> "${best.playerUiModel.dribbles} ${stringResource(R.string.text_dribble)}"
                                 BestPlayerOption.Passes -> "${best.playerUiModel.passes} ${stringResource(R.string.text_pass)}"
                                 BestPlayerOption.Shots -> "${best.playerUiModel.shots} ${stringResource(R.string.text_shot)}"

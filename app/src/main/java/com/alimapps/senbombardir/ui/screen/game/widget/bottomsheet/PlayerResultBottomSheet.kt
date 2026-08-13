@@ -46,6 +46,7 @@ fun PlayerResultBottomSheet(
         TeamOption.Goal -> playerResultUiModel.playerUiModel.goals
         TeamOption.Assist -> playerResultUiModel.playerUiModel.assists
         TeamOption.Save -> playerResultUiModel.playerUiModel.saves
+        TeamOption.Tackle -> playerResultUiModel.playerUiModel.tackles
         TeamOption.Dribble -> playerResultUiModel.playerUiModel.dribbles
         TeamOption.Shot -> playerResultUiModel.playerUiModel.shots
         TeamOption.Pass -> playerResultUiModel.playerUiModel.passes

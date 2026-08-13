@@ -73,6 +73,7 @@
     <string name="player_result_passes">П</string>
     <string name="player_result_shots">У</string>
     <string name="player_result_saves">С</string>
+    <string name="player_result_tackles">О</string>
     <string name="player_result_yellow_card">🟨</string>
     <string name="player_result_red_card">🟥</string>
 
@@ -82,6 +83,7 @@
     <string name="team_option_pass">Пас</string>
     <string name="team_option_shot">Удар</string>
     <string name="team_option_save">Сейв</string>
+    <string name="team_option_tackle">Отбор мяча</string>
     <string name="team_option_yellow_card">Жёлтая 🟨</string>
     <string name="team_option_red_card">Красная 🟥</string>
     <string name="team_option_players_title">выберите автора</string>
@@ -96,6 +98,7 @@
     <string name="best_player_option_goals">Лучший бомбардир️ ⚽️</string>
     <string name="best_player_option_assists">Лучший ассист️</string>
     <string name="best_player_option_saves">Лучший сейв</string>
+    <string name="best_player_option_tackles">Лучший отбор</string>
     <string name="best_player_option_dribbles">Лучший дриблинг</string>
     <string name="best_player_option_passes">Лучший пас</string>
     <string name="best_player_option_shots">Лучший удар</string>
@@ -107,6 +110,7 @@
     <string name="text_pass">пас</string>
     <string name="text_shot">удар</string>
     <string name="text_save">сейв</string>
+    <string name="text_tackle">отбор</string>
     <string name="text_yellow_card">жёлтая 🟨</string>
     <string name="text_red_card">красная 🟥</string>
 
@@ -116,6 +120,7 @@
     <string name="text_to_speech_pass">Красивый пас от %s</string>
     <string name="text_to_speech_shot">Мощьный удар от %s</string>
     <string name="text_to_speech_save">Лучший сейв от %s</string>
+    <string name="text_to_speech_tackle">Красивый отбор мяча от %s</string>
     <string name="text_to_speech_yellow_card">Жёлтая карточка %s</string>
     <string name="text_to_speech_red_card">Красная карточка %s</string>
 
@@ -193,6 +198,7 @@
     <string name="players_block_info_goals">Гол</string>
     <string name="players_block_info_assists">Ассист</string>
     <string name="players_block_info_saves">Лучший сейв</string>
+    <string name="players_block_info_tackles">Красивый отбор мяча</string>
     <string name="players_block_info_dribbles">Красивый проход/дриблинг</string>
     <string name="players_block_info_shots">Мощьный точный удар</string>
     <string name="players_block_info_passes">Красивый пас</string>
