@@ -945,6 +945,34 @@ class GameViewModel(
         return ((totalMs - timerValue) / 1000).toInt().coerceAtLeast(0)
     }
 
+    private fun adjustCurrentGameActions(diffs: Int, actionType: String, playerUiModel: PlayerUiModel) {
+        when {
+            diffs > 0 -> repeat(diffs) {
+                currentGameActions.add(
+                    PendingGameAction(
+                        teamName = playerUiModel.teamName,
+                        teamColor = playerUiModel.teamColor.hexColor,
+                        playerName = playerUiModel.name,
+                        playerNumber = playerUiModel.number,
+                        actionType = actionType,
+                        elapsedSeconds = currentElapsedSeconds(),
+                    )
+                )
+            }
+            diffs < 0 -> repeat(-diffs) {
+                val index = currentGameActions.indexOfLast { action ->
+                    action.actionType == actionType &&
+                        action.teamName == playerUiModel.teamName &&
+                        action.playerName == playerUiModel.name &&
+                        action.playerNumber == playerUiModel.number
+                }
+                if (index != -1) {
+                    currentGameActions.removeAt(index)
+                }
+            }
+        }
+    }
+
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
         playMedia(resId = R.raw.start_match, free = true)
         startTimer()
@@ -1539,99 +1567,108 @@ class GameViewModel(
     ) = viewModelScope.launch {
         when (playerResultUiModel.option) {
             TeamOption.Goal -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.goals
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(goals = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "goal", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.goals
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(goals = playerHistoryUiModel.goals.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.Assist -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.assists
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(assists = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "assist", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.assists
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(assists = playerHistoryUiModel.assists.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.Save -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.saves
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(saves = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "save", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.saves
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(saves = playerHistoryUiModel.saves.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.Tackle -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.tackles
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(tackles = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "tackle", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.tackles
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(tackles = playerHistoryUiModel.tackles.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.Dribble -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.dribbles
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(dribbles = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "dribble", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.dribbles
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(dribbles = playerHistoryUiModel.dribbles.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.Shot -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.shots
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(shots = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "shot", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.shots
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(shots = playerHistoryUiModel.shots.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.Pass -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.passes
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(passes = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "pass", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.passes
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(passes = playerHistoryUiModel.passes.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.YellowCard -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.yellowCards
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(yellowCards = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "yellowCard", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.yellowCards
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(yellowCards = playerHistoryUiModel.yellowCards.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
                 }
             }
             TeamOption.RedCard -> {
+                val diffs = playerResultValue - playerResultUiModel.playerUiModel.redCards
                 val playerUiModel = playerResultUiModel.playerUiModel.copy(redCards = playerResultValue)
                 playerRepository.updatePlayer(playerUiModel.toPlayerModel())
+                adjustCurrentGameActions(diffs, "redCard", playerUiModel)
                 launch(Dispatchers.IO) {
                     playerHistoryRepository.getPlayerHistory(playerUiModel.id)?.let { playerHistoryUiModel ->
-                        val diffs = playerResultValue - playerResultUiModel.playerUiModel.redCards
                         val copyPlayerHistoryUiModel = playerHistoryUiModel.copy(redCards = playerHistoryUiModel.redCards.plus(diffs))
                         playerHistoryRepository.updatePlayerHistory(copyPlayerHistoryUiModel.toPlayerHistoryModel())
                     }
