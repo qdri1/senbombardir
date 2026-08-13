@@ -41,6 +41,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +54,7 @@ import com.alimapps.senbombardir.ui.model.GameHistoryActionEventUiModel
 import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.utils.parseHexColor
+import com.alimapps.senbombardir.ui.utils.shareGameHistoryAsPdf
 import kotlinx.coroutines.delay
 
 private enum class AutoScrollDirection { None, Up, Down }
@@ -115,6 +118,18 @@ fun GameHistoryBottomSheet(
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.weight(1f),
                 )
+                if (gameHistory.isNotEmpty()) {
+                    val context = LocalContext.current
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_share),
+                        contentDescription = "ShareGameHistory",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .size(22.dp)
+                            .clip(CircleShape)
+                            .clickable { shareGameHistoryAsPdf(context, gameHistory) }
+                    )
+                }
             }
 
             Column(
