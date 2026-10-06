@@ -437,7 +437,7 @@ private fun TeamColorDot(teamColor: TeamColor) {
 
 @Composable
 private fun actionTypeLabel(actionType: String): String = when (actionType) {
-    "goal" -> stringResource(R.string.text_goal) + " ⚽\uFE0F"
+    "goal" -> stringResource(R.string.text_goal)
     "assist" -> stringResource(R.string.text_assist)
     "save" -> stringResource(R.string.text_save)
     "tackle" -> stringResource(R.string.text_tackle)

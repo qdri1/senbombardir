@@ -94,7 +94,7 @@
     <string name="customize_columns_subtitle">Показать или скрыть столбцы статистики</string>
     <string name="done">Готово</string>
 
-    <string name="best_player_option_best_player">Лучший игрок 🔥</string>
+    <string name="best_player_option_best_player">Лучший игрок</string>
     <string name="best_player_option_goals">Лучший бомбардир️ ⚽️</string>
     <string name="best_player_option_assists">Лучший ассист️</string>
     <string name="best_player_option_saves">Лучший сейв</string>
@@ -104,7 +104,7 @@
     <string name="best_player_option_shots">Лучший удар</string>
     <string name="best_player_option_aggressive_player">Самый грубый игрок 👎</string>
 
-    <string name="text_goal">гол</string>
+    <string name="text_goal">гол ⚽️</string>
     <string name="text_assist">ассист</string>
     <string name="text_dribble">дриблинг</string>
     <string name="text_pass">пас</string>
