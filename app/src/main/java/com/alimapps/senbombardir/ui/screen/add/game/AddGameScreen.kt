@@ -26,7 +26,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,6 +52,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -422,6 +424,13 @@ fun TabContent(
     val tabPlayersTextFields = viewModel.playersTextFields[tabIndex]
     val tabPlayersNumberFields = viewModel.playersNumberFields[tabIndex]
 
+    // "Next" on the keyboard: team name -> player names one by one,
+    // player number -> next player number (names and numbers are separate chains).
+    val playersCount = tabPlayersTextFields.size
+    val playerNameFocusRequesters = remember(tabIndex, playersCount) { List(playersCount) { FocusRequester() } }
+    val playerNumberFocusRequesters = remember(tabIndex, playersCount) { List(playersCount) { FocusRequester() } }
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -446,7 +455,8 @@ fun TabContent(
                 value = tabTeamNameFieldValue.value,
                 onValueChange = { value -> onAction(AddGameAction.OnTeamNameValueChanged(tabIndex, value)) },
                 hint = stringResource(id = R.string.team_name),
-                imeAction = ImeAction.Next,
+                imeAction = if (playersCount > 0) ImeAction.Next else ImeAction.Done,
+                onNext = { playerNameFocusRequesters.firstOrNull()?.requestFocus() ?: focusManager.clearFocus() },
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -466,15 +476,27 @@ fun TabContent(
                     hint = "№",
                     isTrailingIconNeed = false,
                     keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next,
-                    modifier = Modifier.width(56.dp)
+                    imeAction = if (fieldIndex < tabPlayersTextFields.lastIndex) ImeAction.Next else ImeAction.Done,
+                    onNext = {
+                        playerNumberFocusRequesters.getOrNull(fieldIndex + 1)?.requestFocus()
+                            ?: focusManager.clearFocus()
+                    },
+                    modifier = Modifier
+                        .width(56.dp)
+                        .focusRequester(playerNumberFocusRequesters[fieldIndex])
                 )
                 TextFieldWidget(
                     value = fieldValue,
                     onValueChange = { value -> onAction(AddGameAction.OnPlayerNameValueChanged(tabIndex, fieldIndex, value)) },
                     hint = stringResource(id = R.string.player_number, "${fieldIndex + 1}"),
                     imeAction = if (fieldIndex < tabPlayersTextFields.lastIndex) ImeAction.Next else ImeAction.Done,
-                    modifier = Modifier.weight(1f)
+                    onNext = {
+                        playerNameFocusRequesters.getOrNull(fieldIndex + 1)?.requestFocus()
+                            ?: focusManager.clearFocus()
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .focusRequester(playerNameFocusRequesters[fieldIndex])
                 )
             }
         }
@@ -557,6 +579,7 @@ private fun TextFieldWidget(
     isTrailingIconNeed: Boolean = true,
     keyboardType: KeyboardType = KeyboardType.Unspecified,
     imeAction: ImeAction = ImeAction.Default,
+    onNext: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -593,6 +616,7 @@ private fun TextFieldWidget(
             imeAction = imeAction,
         ),
         keyboardActions = KeyboardActions(
+            onNext = { onNext?.invoke() ?: focusManager.moveFocus(FocusDirection.Next) },
             onDone = { focusManager.clearFocus() },
         ),
         colors = TextFieldDefaults.colors(
