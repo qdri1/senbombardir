@@ -214,12 +214,6 @@ private fun GameScreenContent(
                 }
 
                 uiState.liveGameUiModel?.let { liveGameUiModel ->
-                    TimerBlock(
-                        liveGameUiModel = liveGameUiModel,
-                        timerValueState = viewModel.timerValueState,
-                        uiState = uiState,
-                        onAction = onAction,
-                    )
                     LiveGameBlock(
                         gameUiModel = uiState.gameUiModel,
                         liveGameUiModel = liveGameUiModel,
@@ -227,6 +221,12 @@ private fun GameScreenContent(
                         restTeamUiModelList = uiState.restTeamUiModelList,
                         uiState = uiState,
                         hiddenOptions = hiddenOptions,
+                        onAction = onAction,
+                    )
+                    TimerBlock(
+                        liveGameUiModel = liveGameUiModel,
+                        timerValueState = viewModel.timerValueState,
+                        uiState = uiState,
                         onAction = onAction,
                     )
                     SoundsBlock(
