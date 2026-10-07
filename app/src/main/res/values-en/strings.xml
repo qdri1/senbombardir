@@ -271,4 +271,21 @@
     <string name="activation_code_success">Activated!</string>
     <string name="activation_code_error">Invalid code</string>
 
+    <!-- Sound settings -->
+    <string name="function_settings">Settings</string>
+    <string name="sound_settings_title">Sound settings</string>
+    <string name="sound_settings_all">All automatic sounds</string>
+    <string name="sound_settings_all_description">Turn all sounds and voice-overs on or off at once</string>
+    <string name="sound_setting_start_match">Match start</string>
+    <string name="sound_setting_start_match_description">Whistle when the game starts</string>
+    <string name="sound_setting_finish_match">Match end</string>
+    <string name="sound_setting_finish_match_description">Sound when the game finishes</string>
+    <string name="sound_setting_one_minute_left">1 minute left</string>
+    <string name="sound_setting_one_minute_left_description">Audio alert one minute before the end of the game</string>
+    <string name="sound_setting_ten_seconds_left">10 seconds left</string>
+    <string name="sound_setting_ten_seconds_left_description">Audio alert 10 seconds before the end of the game</string>
+    <string name="sound_setting_action_voice">Action voice-over</string>
+    <string name="sound_setting_action_voice_description">Announces the player on goals, passes, saves and other actions</string>
+    <string name="sound_setting_action_sounds">Sounds after actions</string>
+    <string name="sound_setting_action_sounds_description">Crowd sounds after goals, passes and other actions</string>
 </resources>

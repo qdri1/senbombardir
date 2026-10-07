@@ -45,6 +45,7 @@ import com.alimapps.senbombardir.ui.screen.language.LanguageBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.GameResultsScreen
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import com.alimapps.senbombardir.ui.screen.settings.SettingsScreen
+import com.alimapps.senbombardir.ui.screen.soundsettings.SoundSettingsScreen
 import com.alimapps.senbombardir.utils.orDefault
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -166,6 +167,9 @@ fun AppNavigation(
                         navController = navController,
                         viewModel = koinViewModel<GameResultsViewModel> { parametersOf(gameId) }
                     )
+                }
+                composable(NavigationItem.SoundSettings.route) {
+                    SoundSettingsScreen(navController = navController)
                 }
                 composable(NavigationItem.Activation.route) {
                     val fromSettings = navController.previousBackStackEntry?.destination?.route == BottomNavItem.Settings.route

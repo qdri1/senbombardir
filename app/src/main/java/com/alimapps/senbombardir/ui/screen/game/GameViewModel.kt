@@ -24,6 +24,7 @@ import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
 import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
+import com.alimapps.senbombardir.data.repository.SoundSettingsRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
@@ -45,6 +46,7 @@ import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam4
+import com.alimapps.senbombardir.ui.model.types.GameSoundSetting
 import com.alimapps.senbombardir.ui.model.types.GameSounds
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
@@ -79,6 +81,7 @@ class GameViewModel(
     private val languageRepository: LanguageRepository,
     private val gameHistoryRepository: GameHistoryRepository,
     private val billingRepository: BillingRepository,
+    private val soundSettingsRepository: SoundSettingsRepository,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
 
@@ -175,8 +178,21 @@ class GameViewModel(
         }
     }
 
+    /**
+     * Voice-over for a player action, followed by its sound ([onComplete]).
+     * Each part can be switched off on the sound settings screen.
+     */
     private fun speak(text: String, onComplete: () -> Unit) {
         if (uiLimited) {
+            return
+        }
+
+        val onVoiceComplete = {
+            if (isSoundEnabled(GameSoundSetting.ActionSounds)) onComplete()
+        }
+
+        if (!isSoundEnabled(GameSoundSetting.ActionVoice)) {
+            onVoiceComplete()
             return
         }
 
@@ -185,7 +201,7 @@ class GameViewModel(
 
             textToSpeech.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(utteranceId: String?) {}
-                override fun onDone(utteranceId: String?) { onComplete() }
+                override fun onDone(utteranceId: String?) { onVoiceComplete() }
                 @Deprecated("Deprecated in Java")
                 override fun onError(utteranceId: String?) {}
             })
@@ -974,7 +990,9 @@ class GameViewModel(
     }
 
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
-        playMedia(resId = R.raw.start_match, free = true)
+        if (isSoundEnabled(GameSoundSetting.StartMatch)) {
+            playMedia(resId = R.raw.start_match, free = true)
+        }
         startTimer()
         currentGameActions.clear()
         viewModelScope.launch {
@@ -986,7 +1004,9 @@ class GameViewModel(
     }
 
     private fun finishGame() {
-        playMedia(resId = R.raw.finish, free = true)
+        if (isSoundEnabled(GameSoundSetting.FinishMatch)) {
+            playMedia(resId = R.raw.finish, free = true)
+        }
         pendingGameDurationSeconds = currentElapsedSeconds()
         resetTimer()
         uiState.value.gameUiModel?.let { gameUiModel ->
@@ -1700,8 +1720,8 @@ class GameViewModel(
         timer = object : CountDownTimer(timerValue, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 when (millisUntilFinished) {
-                    in 60000L..60999L -> playMedia(resId = R.raw.minuta)
-                    in 10000L..10999L -> playMedia(resId = R.raw.do_auta)
+                    in 60000L..60999L -> if (isSoundEnabled(GameSoundSetting.OneMinuteLeft)) playMedia(resId = R.raw.minuta)
+                    in 10000L..10999L -> if (isSoundEnabled(GameSoundSetting.TenSecondsLeft)) playMedia(resId = R.raw.do_auta)
                 }
                 timerValue = millisUntilFinished
                 _timerValueState.value = millisUntilFinished.toStringTime()
@@ -1735,6 +1755,9 @@ class GameViewModel(
         }
     }
 
+    private fun isSoundEnabled(setting: GameSoundSetting): Boolean =
+        soundSettingsRepository.isEnabled(setting)
+
     private fun onSoundClicked(sound: GameSounds) {
         playMedia(resId = sound.rawRes, free = true)
     }
@@ -1747,6 +1770,7 @@ class GameViewModel(
             GameFunction.ClearResults -> onClearResultsClicked()
             GameFunction.Info -> onInfoClicked()
             GameFunction.AllResults -> onAllResultsClicked()
+            GameFunction.Settings -> setEffectSafely(GameEffect.OpenSoundSettingsScreen)
             GameFunction.Delete -> onDeleteGameClicked()
         }
     }

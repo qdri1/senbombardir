@@ -140,6 +140,7 @@ private fun GameScreenContent(
                 }
                 is GameEffect.OpenUpdateGame -> navController.navigate(NavigationItem.AddGame.createRoute(effect.gameId))
                 is GameEffect.OpenGameResultsScreen -> navController.navigate(NavigationItem.GameResults.createRoute(effect.gameId))
+                is GameEffect.OpenSoundSettingsScreen -> navController.navigate(NavigationItem.SoundSettings.route)
                 is GameEffect.ShowOptionPlayersBottomSheet -> optionPlayersUiModel = effect.optionPlayersUiModel
                 is GameEffect.ShowPlayerResultBottomSheet -> playerResultUiModel = effect.playerResultUiModel
                 is GameEffect.ShowTeamResultBottomSheet -> teamResultUiModel = effect.teamUiModel

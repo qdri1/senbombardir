@@ -270,4 +270,21 @@
     <string name="activation_code_success">Белсендірілді!</string>
     <string name="activation_code_error">Қате код</string>
 
+    <!-- Sound settings -->
+    <string name="function_settings">Дыбыс баптаулары</string>
+    <string name="sound_settings_title">Дыбыс баптаулары</string>
+    <string name="sound_settings_all">Барлық автоматты дыбыстар</string>
+    <string name="sound_settings_all_description">Барлық дыбыстар мен дауыстап айтуды бірден қосу немесе өшіру</string>
+    <string name="sound_setting_start_match">Матчтың басталуы</string>
+    <string name="sound_setting_start_match_description">Ойын басталғанда ысқырық</string>
+    <string name="sound_setting_finish_match">Матчтың аяқталуы</string>
+    <string name="sound_setting_finish_match_description">Ойын аяқталғанда дыбыс</string>
+    <string name="sound_setting_one_minute_left">1 минут қалды</string>
+    <string name="sound_setting_one_minute_left_description">Ойын біткенше 1 минут қалғанда дыбыстық ескерту</string>
+    <string name="sound_setting_ten_seconds_left">10 секунд қалды</string>
+    <string name="sound_setting_ten_seconds_left_description">Ойын біткенше 10 секунд қалғанда дыбыстық ескерту</string>
+    <string name="sound_setting_action_voice">Әрекеттерді дауыстап айту</string>
+    <string name="sound_setting_action_voice_description">Гол, пас, сейв және басқа әрекеттерде ойыншының атын айту</string>
+    <string name="sound_setting_action_sounds">Әрекеттен кейінгі дыбыстар</string>
+    <string name="sound_setting_action_sounds_description">Гол, пас және басқа әрекеттерден кейінгі жанкүйерлер дыбыстары</string>
 </resources>

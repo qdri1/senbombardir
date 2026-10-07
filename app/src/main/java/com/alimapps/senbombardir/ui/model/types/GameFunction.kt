@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.alimapps.senbombardir.R
@@ -18,5 +19,6 @@ enum class GameFunction(val icon: ImageVector, val stringRes: Int) {
     ClearResults(icon = Icons.Filled.Refresh, stringRes = R.string.function_clear_result),
     Info(icon = Icons.Filled.Info, stringRes = R.string.function_info),
     AllResults(icon = Icons.Filled.DateRange, stringRes = R.string.function_all_results),
+    Settings(icon = Icons.Filled.Settings, stringRes = R.string.function_settings),
     Delete(icon = Icons.Filled.Delete, stringRes = R.string.function_remove),
 }

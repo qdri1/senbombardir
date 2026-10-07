@@ -8,6 +8,7 @@ import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeViewModel
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import com.alimapps.senbombardir.ui.screen.settings.SettingsViewModel
+import com.alimapps.senbombardir.ui.screen.soundsettings.SoundSettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -53,6 +54,7 @@ val uiModule = module {
             gameHistoryRepository = get(),
             languageRepository = get(),
             billingRepository = get(),
+            soundSettingsRepository = get(),
             context = get(),
         )
     }
@@ -64,6 +66,12 @@ val uiModule = module {
             playerHistoryRepository = get(),
             playerRepository = get(),
             billingRepository = get(),
+        )
+    }
+
+    viewModel {
+        SoundSettingsViewModel(
+            soundSettingsRepository = get(),
         )
     }
 

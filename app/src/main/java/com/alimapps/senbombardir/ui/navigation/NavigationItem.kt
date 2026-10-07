@@ -27,4 +27,5 @@ sealed class NavigationItem(val route: String) {
         fun createRoute(gameId: Long) = "gameResults/$gameId"
     }
     data object Activation : NavigationItem("activation")
+    data object SoundSettings : NavigationItem("soundSettings")
 }

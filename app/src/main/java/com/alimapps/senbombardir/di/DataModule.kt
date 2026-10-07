@@ -9,6 +9,7 @@ import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.data.repository.LiveGameRepository
 import com.alimapps.senbombardir.data.repository.PlayerHistoryRepository
 import com.alimapps.senbombardir.data.repository.PlayerRepository
+import com.alimapps.senbombardir.data.repository.SoundSettingsRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.data.source.AppDatabase
@@ -19,6 +20,7 @@ import com.alimapps.senbombardir.data.source.PlayerDao
 import com.alimapps.senbombardir.data.source.PlayerHistoryDao
 import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.data.source.Prefs
+import com.alimapps.senbombardir.data.source.SoundSettingsStorage
 import com.alimapps.senbombardir.data.source.TeamDao
 import com.alimapps.senbombardir.data.source.TeamHistoryDao
 import org.koin.dsl.module
@@ -47,6 +49,7 @@ val dataModule = module {
 
     single { Prefs(preferences = get<Context>().getSharedPreferences("PREFS", Context.MODE_PRIVATE)) }
     single { HiddenColumnsStorage(preferences = get<Context>().getSharedPreferences("HIDDEN_COLUMNS", Context.MODE_PRIVATE)) }
+    single { SoundSettingsStorage(preferences = get<Context>().getSharedPreferences("SOUND_SETTINGS", Context.MODE_PRIVATE)) }
 
     single {
         GameRepository(gameDao = get())
@@ -82,5 +85,9 @@ val dataModule = module {
 
     single {
         BillingRepository(prefs = get())
+    }
+
+    single {
+        SoundSettingsRepository(storage = get())
     }
 }

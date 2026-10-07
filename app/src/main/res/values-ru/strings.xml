@@ -269,4 +269,21 @@
     <string name="activation_code_success">Активировано!</string>
     <string name="activation_code_error">Неверный код</string>
 
+    <!-- Sound settings -->
+    <string name="function_settings">Настройки звука</string>
+    <string name="sound_settings_title">Настройки звука</string>
+    <string name="sound_settings_all">Все автоматические звуки</string>
+    <string name="sound_settings_all_description">Включить или выключить все звуки и озвучку сразу</string>
+    <string name="sound_setting_start_match">Начало матча</string>
+    <string name="sound_setting_start_match_description">Свисток при старте игры</string>
+    <string name="sound_setting_finish_match">Конец матча</string>
+    <string name="sound_setting_finish_match_description">Звук при завершении игры</string>
+    <string name="sound_setting_one_minute_left">Осталась 1 минута</string>
+    <string name="sound_setting_one_minute_left_description">Звуковое оповещение за минуту до конца игры</string>
+    <string name="sound_setting_ten_seconds_left">Осталось 10 секунд</string>
+    <string name="sound_setting_ten_seconds_left_description">Звуковое оповещение «Играем до аута» за 10 секунд до конца игры</string>
+    <string name="sound_setting_action_voice">Озвучка действий</string>
+    <string name="sound_setting_action_voice_description">Голос называет имя игрока при голе, пасе, сейве и других действиях</string>
+    <string name="sound_setting_action_sounds">Звуки после действий</string>
+    <string name="sound_setting_action_sounds_description">Звуки трибун после гола, паса и других действий</string>
 </resources>
