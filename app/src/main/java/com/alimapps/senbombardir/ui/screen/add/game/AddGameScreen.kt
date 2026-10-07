@@ -52,6 +52,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusDirection
@@ -584,9 +587,22 @@ private fun TextFieldWidget(
 ) {
     val focusManager = LocalFocusManager.current
 
+    // Keep selection/composition locally so we can put the cursor at the end
+    // when the field gains focus (e.g. via "Next" on the keyboard).
+    var textFieldValueState by remember { mutableStateOf(TextFieldValue(value, TextRange(value.length))) }
+    val textFieldValue = if (textFieldValueState.text == value) {
+        textFieldValueState
+    } else {
+        TextFieldValue(value, TextRange(value.length))
+    }
+    var isFocused by remember { mutableStateOf(false) }
+
     TextField(
-        value = value,
-        onValueChange = onValueChange,
+        value = textFieldValue,
+        onValueChange = { newValue ->
+            textFieldValueState = newValue
+            if (newValue.text != value) onValueChange(newValue.text)
+        },
         textStyle = MaterialTheme.typography.bodyMedium,
         label = {
             Text(
@@ -630,6 +646,11 @@ private fun TextFieldWidget(
         ),
         shape = RoundedCornerShape(16.dp),
         singleLine = true,
-        modifier = modifier,
+        modifier = modifier.onFocusChanged { focusState ->
+            if (focusState.isFocused && !isFocused) {
+                textFieldValueState = textFieldValue.copy(selection = TextRange(textFieldValue.text.length))
+            }
+            isFocused = focusState.isFocused
+        },
     )
 }
