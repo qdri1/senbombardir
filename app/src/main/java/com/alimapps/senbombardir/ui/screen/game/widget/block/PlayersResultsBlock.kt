@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.block
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -46,7 +47,10 @@ fun PlayersResultsBlock(
     onCustomizeClicked: () -> Unit,
 ) {
     Box(
-        modifier = Modifier.padding(top = 16.dp),
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp)),
     ) {
         if (uiLimited) {
             Box(

@@ -31,6 +31,8 @@ fun ActivationInfoBlock(
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp)
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
             .background(parseHexColor("#FFA500"))
             .padding(vertical = 16.dp)
             .padding(horizontal = 16.dp),
