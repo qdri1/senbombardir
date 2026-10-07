@@ -57,7 +57,7 @@ fun BestPlayersBottomSheet(
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.background,
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -67,60 +67,24 @@ fun BestPlayersBottomSheet(
                 .padding(vertical = 8.dp)
                 .padding(horizontal = 16.dp),
         ) {
-            bestPlayers.forEach { best ->
-                if (best.option == BestPlayerOption.BestPlayer) {
-                    BestPlayerHeroCard(bestPlayer = best)
-                } else {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Text(
-                            text = stringResource(best.option.stringRes),
-                            color = MaterialTheme.colorScheme.outline,
-                            style = MaterialTheme.typography.labelSmall,
-                        )
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.weight(1f),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                PlayerTeamBadge(
-                                    teamColor = best.playerUiModel.teamColor,
-                                    number = best.playerUiModel.number,
-                                )
-                                Text(
-                                    text = best.playerUiModel.name,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.labelSmall,
-                                )
-                            }
-                            Text(
-                                text = when (best.option) {
-                                    BestPlayerOption.BestPlayer -> ""
-                                    BestPlayerOption.Goals -> "${best.playerUiModel.goals} ${stringResource(R.string.text_goal)}"
-                                    BestPlayerOption.Assists -> "${best.playerUiModel.assists} ${stringResource(R.string.text_assist)}"
-                                    BestPlayerOption.Saves -> "${best.playerUiModel.saves} ${stringResource(R.string.text_save)}"
-                                    BestPlayerOption.Tackles -> "${best.playerUiModel.tackles} ${stringResource(R.string.text_tackle)}"
-                                    BestPlayerOption.Dribbles -> "${best.playerUiModel.dribbles} ${stringResource(R.string.text_dribble)}"
-                                    BestPlayerOption.Passes -> "${best.playerUiModel.passes} ${stringResource(R.string.text_pass)}"
-                                    BestPlayerOption.Shots -> "${best.playerUiModel.shots} ${stringResource(R.string.text_shot)}"
-                                    BestPlayerOption.AggressivePlayer -> {
-                                        listOfNotNull(
-                                            best.playerUiModel.yellowCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_yellow_card)}" },
-                                            best.playerUiModel.redCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_red_card)}" },
-                                        ).joinToString(separator = ", ")
-                                    }
-                                },
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.labelSmall,
-                                modifier = Modifier
-                            )
-                        }
+            val heroPlayers = bestPlayers.filter { it.option == BestPlayerOption.BestPlayer }
+            val otherPlayers = bestPlayers.filter { it.option != BestPlayerOption.BestPlayer }
+
+            heroPlayers.forEach { best ->
+                BestPlayerHeroCard(bestPlayer = best)
+            }
+
+            if (otherPlayers.isNotEmpty()) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(16.dp),
+                ) {
+                    otherPlayers.forEach { best ->
+                        BestPlayerRow(best = best)
                     }
                 }
             }
@@ -128,6 +92,61 @@ fun BestPlayersBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun BestPlayerRow(best: BestPlayerUiModel) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(best.option.stringRes),
+            color = MaterialTheme.colorScheme.outline,
+            style = MaterialTheme.typography.labelSmall,
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                PlayerTeamBadge(
+                    teamColor = best.playerUiModel.teamColor,
+                    number = best.playerUiModel.number,
+                )
+                Text(
+                    text = best.playerUiModel.name,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.labelSmall,
+                )
+            }
+            Text(
+                text = when (best.option) {
+                    BestPlayerOption.BestPlayer -> ""
+                    BestPlayerOption.Goals -> "${best.playerUiModel.goals} ${stringResource(R.string.text_goal)}"
+                    BestPlayerOption.Assists -> "${best.playerUiModel.assists} ${stringResource(R.string.text_assist)}"
+                    BestPlayerOption.Saves -> "${best.playerUiModel.saves} ${stringResource(R.string.text_save)}"
+                    BestPlayerOption.Tackles -> "${best.playerUiModel.tackles} ${stringResource(R.string.text_tackle)}"
+                    BestPlayerOption.Dribbles -> "${best.playerUiModel.dribbles} ${stringResource(R.string.text_dribble)}"
+                    BestPlayerOption.Passes -> "${best.playerUiModel.passes} ${stringResource(R.string.text_pass)}"
+                    BestPlayerOption.Shots -> "${best.playerUiModel.shots} ${stringResource(R.string.text_shot)}"
+                    BestPlayerOption.AggressivePlayer -> {
+                        listOfNotNull(
+                            best.playerUiModel.yellowCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_yellow_card)}" },
+                            best.playerUiModel.redCards.takeIf { it > 0 }?.let { "$it ${stringResource(R.string.text_red_card)}" },
+                        ).joinToString(separator = ", ")
+                    }
+                },
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier
             )
         }
     }
