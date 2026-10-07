@@ -31,6 +31,8 @@ fun GameResultsFunctionsBlock(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surface)
             .padding(vertical = 12.dp)
             .padding(horizontal = 12.dp),
