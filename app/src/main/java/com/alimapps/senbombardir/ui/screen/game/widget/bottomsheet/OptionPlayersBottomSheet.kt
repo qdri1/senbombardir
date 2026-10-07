@@ -17,9 +17,15 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.composable.PlayerTeamBadge
@@ -79,7 +85,7 @@ fun OptionPlayersBottomSheet(
                         number = playerUiModel.number,
                     )
                     Text(
-                        text = playerUiModel.name,
+                        text = remember(playerUiModel.name) { playerUiModel.name.withBoldFirstLetter() },
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodySmall,
                     )
@@ -113,5 +119,19 @@ fun OptionPlayersBottomSheet(
                     .height(16.dp)
             )
         }
+    }
+}
+
+/** Makes the first visible letter of the name bold (handles leading spaces and surrogate pairs). */
+private fun String.withBoldFirstLetter(): AnnotatedString {
+    val start = indexOfFirst { !it.isWhitespace() }
+    if (start == -1) return AnnotatedString(this)
+    val end = start + Character.charCount(codePointAt(start))
+    return buildAnnotatedString {
+        append(this@withBoldFirstLetter.substring(0, start))
+        withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+            append(this@withBoldFirstLetter.substring(start, end))
+        }
+        append(this@withBoldFirstLetter.substring(end))
     }
 }
