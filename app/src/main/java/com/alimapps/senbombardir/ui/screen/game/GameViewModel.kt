@@ -35,12 +35,15 @@ import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toLiveGameModel
 import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toPlayerModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
+import com.alimapps.senbombardir.ui.model.valueOf
+import com.alimapps.senbombardir.ui.model.withValue
 import com.alimapps.senbombardir.ui.model.types.BestPlayerOption
 import com.alimapps.senbombardir.ui.model.types.GameFunction
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
@@ -170,8 +173,8 @@ class GameViewModel(
             is GameAction.OnInterceptionNavigationResult -> onInterceptionNavigationResult(action.result)
             is GameAction.OnPlayerResultClicked -> setEffectSafely(GameEffect.ShowPlayerResultBottomSheet(action.playerResultUiModel))
             is GameAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
-            is GameAction.OnTeamResultClicked -> setEffectSafely(GameEffect.ShowTeamResultBottomSheet(action.teamUiModel))
-            is GameAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamUiModel, action.pointsValue)
+            is GameAction.OnTeamResultClicked -> setEffectSafely(GameEffect.ShowTeamResultBottomSheet(action.teamResultUiModel))
+            is GameAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamResultUiModel, action.teamResultValue)
             is GameAction.OnLiveGameResultClicked -> onLiveGameResultClicked(action.liveGameResultUiModel)
             is GameAction.OnSaveLiveGameResultClicked -> onSaveLiveGameResultClicked(action.liveGameResultUiModel, action.teamGoalsValue)
             is GameAction.OnActivateClicked -> openActivationScreen()
@@ -1700,15 +1703,18 @@ class GameViewModel(
     }
 
     private fun onSaveTeamResultClicked(
-        teamUiModel: TeamUiModel,
-        pointsValue: Int,
+        teamResultUiModel: TeamResultUiModel,
+        teamResultValue: Int,
     ) = viewModelScope.launch {
-        val updatedTeam = teamUiModel.copy(points = pointsValue)
+        val teamUiModel = teamResultUiModel.teamUiModel
+        val option = teamResultUiModel.option
+        val updatedTeam = teamUiModel.withValue(option, teamResultValue)
         teamRepository.updateTeam(updatedTeam.toTeamModel())
         teamHistoryRepository.getTeamHistory(teamUiModel.id)?.let { teamHistoryUiModel ->
-            val diff = pointsValue - teamUiModel.points
+            val diff = teamResultValue - teamResultUiModel.value
+            val historyValue = (teamHistoryUiModel.valueOf(option) + diff).coerceAtLeast(0)
             teamHistoryRepository.updateTeamHistory(
-                teamHistoryUiModel.copy(points = teamHistoryUiModel.points + diff).toTeamHistoryModel()
+                teamHistoryUiModel.withValue(option, historyValue).toTeamHistoryModel()
             )
         }
         updateTeamsBlock()

@@ -21,19 +21,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
+import com.alimapps.senbombardir.ui.model.types.TeamResultOption
 import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @Composable
 fun TeamsResultsBlock(
     teamUiModelList: List<TeamUiModel>,
-    onTeamResultClicked: (TeamUiModel) -> Unit,
+    onTeamResultClicked: (TeamResultUiModel) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -142,10 +146,11 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Text(
+                    TeamResultValueText(
                         text = teamUiModel.games.toString(),
                         color = textColor,
                         style = textStyle,
+                        onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Games)) },
                     )
                 }
             }
@@ -160,10 +165,11 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Text(
+                    TeamResultValueText(
                         text = teamUiModel.wins.toString(),
                         color = textColor,
                         style = textStyle,
+                        onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Wins)) },
                     )
                 }
             }
@@ -178,10 +184,11 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Text(
+                    TeamResultValueText(
                         text = teamUiModel.draws.toString(),
                         color = textColor,
                         style = textStyle,
+                        onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Draws)) },
                     )
                 }
             }
@@ -196,10 +203,11 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Text(
+                    TeamResultValueText(
                         text = teamUiModel.loses.toString(),
                         color = textColor,
                         style = textStyle,
+                        onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Loses)) },
                     )
                 }
             }
@@ -214,11 +222,25 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Text(
-                        text = "${teamUiModel.goals}-${teamUiModel.conceded}",
-                        color = textColor,
-                        style = textStyle,
-                    )
+                    Row {
+                        TeamResultValueText(
+                            text = teamUiModel.goals.toString(),
+                            color = textColor,
+                            style = textStyle,
+                            onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Goals)) },
+                        )
+                        Text(
+                            text = "-",
+                            color = textColor,
+                            style = textStyle,
+                        )
+                        TeamResultValueText(
+                            text = teamUiModel.conceded.toString(),
+                            color = textColor,
+                            style = textStyle,
+                            onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Conceded)) },
+                        )
+                    }
                 }
             }
 
@@ -254,19 +276,34 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Text(
+                    TeamResultValueText(
                         text = teamUiModel.points.toString(),
                         color = textColor,
                         style = textStyleBold,
-                        modifier = Modifier
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                                onClick = { onTeamResultClicked(teamUiModel) }
-                            )
+                        onClick = { onTeamResultClicked(TeamResultUiModel(teamUiModel, TeamResultOption.Points)) },
                     )
                 }
             }
         }
     }
+}
+
+@Composable
+private fun TeamResultValueText(
+    text: String,
+    color: Color,
+    style: TextStyle,
+    onClick: () -> Unit,
+) {
+    Text(
+        text = text,
+        color = color,
+        style = style,
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick,
+            )
+    )
 }

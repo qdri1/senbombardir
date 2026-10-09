@@ -38,7 +38,7 @@ import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
-import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
@@ -83,7 +83,7 @@ private fun GameResultsScreenContent(
 
     var showClearResultsConfirmation by remember { mutableStateOf(false) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
-    var teamResultUiModel by remember { mutableStateOf<TeamUiModel?>(null) }
+    var teamResultUiModel by remember { mutableStateOf<TeamResultUiModel?>(null) }
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
     var playerToRemove by remember { mutableStateOf<PlayerUiModel?>(null) }
 
@@ -171,10 +171,10 @@ private fun GameResultsScreenContent(
     when {
         teamResultUiModel != null -> teamResultUiModel?.let {
             TeamResultBottomSheet(
-                teamUiModel = it,
-                onSaveTeamResultClicked = { team, points ->
+                teamResultUiModel = it,
+                onSaveTeamResultClicked = { result, value ->
                     teamResultUiModel = null
-                    onAction(GameResultsAction.OnSaveTeamResultClicked(teamUiModel = team, pointsValue = points))
+                    onAction(GameResultsAction.OnSaveTeamResultClicked(teamResultUiModel = result, teamResultValue = value))
                 },
                 onDismissed = { teamResultUiModel = null },
             )

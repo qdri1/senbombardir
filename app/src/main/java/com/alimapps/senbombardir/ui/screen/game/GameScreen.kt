@@ -42,7 +42,7 @@ import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
-import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
@@ -112,7 +112,7 @@ private fun GameScreenContent(
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
     var gameHistory by remember { mutableStateOf<List<GameHistoryEntryUiModel>?>(null) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
-    var teamResultUiModel by remember { mutableStateOf<TeamUiModel?>(null) }
+    var teamResultUiModel by remember { mutableStateOf<TeamResultUiModel?>(null) }
     var liveGameResultUiModel by remember { mutableStateOf<LiveGameResultUiModel?>(null) }
 
     BackHandler {
@@ -143,7 +143,7 @@ private fun GameScreenContent(
                 is GameEffect.OpenSoundSettingsScreen -> navController.navigate(NavigationItem.SoundSettings.route)
                 is GameEffect.ShowOptionPlayersBottomSheet -> optionPlayersUiModel = effect.optionPlayersUiModel
                 is GameEffect.ShowPlayerResultBottomSheet -> playerResultUiModel = effect.playerResultUiModel
-                is GameEffect.ShowTeamResultBottomSheet -> teamResultUiModel = effect.teamUiModel
+                is GameEffect.ShowTeamResultBottomSheet -> teamResultUiModel = effect.teamResultUiModel
                 is GameEffect.ShowLiveGameResultBottomSheet -> liveGameResultUiModel = effect.liveGameResultUiModel
                 is GameEffect.ShowStayTeamSelectionBottomSheet -> showStayTeamSelection = true
                 is GameEffect.ShowDeleteGameConfirmationBottomSheet -> showDeleteGameConfirmation = true
@@ -239,7 +239,7 @@ private fun GameScreenContent(
                 if (uiState.teamUiModelList.isNotEmpty() && uiState.gameUiModel?.teamQuantity != TeamQuantity.Team2) {
                     TeamsResultsBlock(
                         teamUiModelList = uiState.teamUiModelList,
-                        onTeamResultClicked = { onAction(GameAction.OnTeamResultClicked(teamUiModel = it)) },
+                        onTeamResultClicked = { onAction(GameAction.OnTeamResultClicked(teamResultUiModel = it)) },
                     )
                 }
 
@@ -277,10 +277,10 @@ private fun GameScreenContent(
         }
         teamResultUiModel != null -> teamResultUiModel?.let {
             TeamResultBottomSheet(
-                teamUiModel = it,
-                onSaveTeamResultClicked = { team, points ->
+                teamResultUiModel = it,
+                onSaveTeamResultClicked = { result, value ->
                     teamResultUiModel = null
-                    onAction(GameAction.OnSaveTeamResultClicked(teamUiModel = team, pointsValue = points))
+                    onAction(GameAction.OnSaveTeamResultClicked(teamResultUiModel = result, teamResultValue = value))
                 },
                 onDismissed = { teamResultUiModel = null },
             )

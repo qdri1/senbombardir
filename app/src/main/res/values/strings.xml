@@ -194,6 +194,8 @@
     <string name="teams_block_info_goals_conceded">Соғылған/жіберілген голдар саны (+/-)</string>
     <string name="teams_block_info_goals_difference">Гол айырмасы</string>
     <string name="teams_block_info_points">Ұпай саны</string>
+    <string name="team_result_option_goals">Соғылған голдар</string>
+    <string name="team_result_option_conceded">Жіберілген голдар</string>
 
     <string name="players_block_info_goals">Гол</string>
     <string name="players_block_info_assists">Ассист</string>

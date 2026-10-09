@@ -11,9 +11,11 @@ import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.model.toPlayerHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
+import com.alimapps.senbombardir.ui.model.withValue
 import com.alimapps.senbombardir.ui.model.types.BestPlayerOption
 import com.alimapps.senbombardir.ui.model.types.GameResultsFunction
 import com.alimapps.senbombardir.ui.model.types.TeamOption
@@ -52,7 +54,7 @@ class GameResultsViewModel(
             is GameResultsAction.OnActivateClicked -> setEffectSafely(GameResultsEffect.OpenActivationScreen)
             is GameResultsAction.OnRemovePlayerHistoryClicked -> setEffectSafely(GameResultsEffect.ShowRemovePlayerConfirmationBottomSheet(action.playerUiModel))
             is GameResultsAction.OnRemovePlayerHistoryConfirmationClicked -> onRemovePlayerHistoryConfirmationClicked(action.playerUiModel)
-            is GameResultsAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamUiModel, action.pointsValue)
+            is GameResultsAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamResultUiModel, action.teamResultValue)
         }
     }
 
@@ -146,11 +148,12 @@ class GameResultsViewModel(
     }
 
     private fun onSaveTeamResultClicked(
-        teamUiModel: TeamUiModel,
-        pointsValue: Int,
+        teamResultUiModel: TeamResultUiModel,
+        teamResultValue: Int,
     ) {
+        val teamUiModel = teamResultUiModel.teamUiModel.withValue(teamResultUiModel.option, teamResultValue)
         viewModelScope.launch {
-            teamHistoryRepository.updateTeamHistory(teamUiModel.copy(points = pointsValue).toTeamHistoryModel())
+            teamHistoryRepository.updateTeamHistory(teamUiModel.toTeamHistoryModel())
             fetchGameHistory()
             setEffect(GameResultsEffect.ShowSnackbar(R.string.save_success))
         }

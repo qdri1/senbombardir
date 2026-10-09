@@ -27,7 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,19 +36,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.R
-import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.utils.parseHexColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TeamResultBottomSheet(
-    teamUiModel: TeamUiModel,
-    onSaveTeamResultClicked: (TeamUiModel, Int) -> Unit,
+    teamResultUiModel: TeamResultUiModel,
+    onSaveTeamResultClicked: (TeamResultUiModel, Int) -> Unit,
     onDismissed: () -> Unit,
 ) {
-    val currentPoints = teamUiModel.points
-    var pointsValue by remember { mutableStateOf(currentPoints) }
+    val teamUiModel = teamResultUiModel.teamUiModel
+    val currentValue = teamResultUiModel.value
+    var resultValue by remember { mutableIntStateOf(currentValue) }
 
     ModalBottomSheet(
         onDismissRequest = { onDismissed() },
@@ -77,7 +78,7 @@ fun TeamResultBottomSheet(
                     )
             )
             Text(
-                text = "${teamUiModel.name} - ${stringResource(id = R.string.team_result_points)}",
+                text = "${teamUiModel.name} - ${stringResource(id = teamResultUiModel.option.stringRes)}",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
@@ -92,10 +93,10 @@ fun TeamResultBottomSheet(
                 contentDescription = "TeamResultArrowUpIcon",
                 modifier = Modifier
                     .clip(CircleShape)
-                    .clickable { pointsValue++ }
+                    .clickable { resultValue++ }
             )
             Text(
-                text = pointsValue.toString(),
+                text = resultValue.toString(),
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(vertical = 8.dp)
@@ -105,13 +106,13 @@ fun TeamResultBottomSheet(
                 contentDescription = "TeamResultArrowDownIcon",
                 modifier = Modifier
                     .clip(CircleShape)
-                    .clickable { pointsValue-- }
+                    .clickable { if (resultValue > 0) resultValue-- }
             )
         }
         Button(
             onClick = {
-                if (currentPoints != pointsValue) {
-                    onSaveTeamResultClicked(teamUiModel, pointsValue)
+                if (currentValue != resultValue) {
+                    onSaveTeamResultClicked(teamResultUiModel, resultValue)
                 } else {
                     onDismissed()
                 }

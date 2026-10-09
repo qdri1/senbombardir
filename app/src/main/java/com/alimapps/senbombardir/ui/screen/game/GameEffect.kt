@@ -5,7 +5,7 @@ import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
-import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.utils.DebounceEffect
 
 sealed interface GameEffect : DebounceEffect {
@@ -16,7 +16,7 @@ sealed interface GameEffect : DebounceEffect {
     data object OpenSoundSettingsScreen : GameEffect
     class ShowOptionPlayersBottomSheet(val optionPlayersUiModel: OptionPlayersUiModel) : GameEffect
     class ShowPlayerResultBottomSheet(val playerResultUiModel: PlayerResultUiModel) : GameEffect
-    class ShowTeamResultBottomSheet(val teamUiModel: TeamUiModel) : GameEffect
+    class ShowTeamResultBottomSheet(val teamResultUiModel: TeamResultUiModel) : GameEffect
     class ShowLiveGameResultBottomSheet(val liveGameResultUiModel: LiveGameResultUiModel) : GameEffect
     data object ShowStayTeamSelectionBottomSheet : GameEffect
     data object ShowDeleteGameConfirmationBottomSheet : GameEffect

@@ -194,6 +194,8 @@
     <string name="teams_block_info_goals_conceded">Количество забитых/пропущенных (+/-) голов</string>
     <string name="teams_block_info_goals_difference">Разница голов</string>
     <string name="teams_block_info_points">Количество очков</string>
+    <string name="team_result_option_goals">Забитые голы</string>
+    <string name="team_result_option_conceded">Пропущенные голы</string>
 
     <string name="players_block_info_goals">Гол</string>
     <string name="players_block_info_assists">Ассист</string>

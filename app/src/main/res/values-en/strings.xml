@@ -195,6 +195,8 @@
     <string name="teams_block_info_goals_conceded">Goals scored/conceded (+/-)</string>
     <string name="teams_block_info_goals_difference">Goal difference</string>
     <string name="teams_block_info_points">Points</string>
+    <string name="team_result_option_goals">Goals scored</string>
+    <string name="team_result_option_conceded">Goals conceded</string>
 
     <string name="players_block_info_goals">Goal</string>
     <string name="players_block_info_assists">Assist</string>
