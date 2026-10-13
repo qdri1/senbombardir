@@ -40,7 +40,6 @@
     <string name="add_player">Ойыншы қосу</string>
     <string name="save">Сақтау</string>
     <string name="save_success">Сақталды</string>
-
     <string name="result_correction_text">Назар аударыңыз! Бұл бөлім қате нәтижелерді түзетуге арналған. Егер жаңа нәтижені қосқыңыз келсе, ойын барысында сол немесе оң команданың атауын басыңыз.</string>
 
     <string name="button_yes">Иә</string>
@@ -216,7 +215,6 @@
     <string name="settings_version">Нұсқа</string>
 
     <string name="choose_language">Тілді таңдаңыз</string>
-
     <string name="telegram_not_installed">Сізде Telegram орнатылмаған!</string>
     <string name="whatsapp_not_installed">Сізде Whatsapp орнатылмаған!</string>
     <string name="google_play_not_installed">Сізде Google Play орнатылмаған!</string>
