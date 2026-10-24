@@ -143,8 +143,10 @@
     <string name="sound_limited_text">Дыбыстар тек қосымшаның толық нұсқасында қолжетімді</string>
     <string name="sound_league_chemp">Чемпиондар\nлигасы</string>
     <string name="sound_goal_fans">Стадион\nГоооооол</string>
+    <string name="sound_satpayev_goal">Сатпаев\nГоооооол</string>
     <string name="sound_anarbekov">Темірлан\nАнарбеков</string>
     <string name="sound_uo_uo_uo">UO UO UO</string>
+    <string name="sound_dop_tep">Dop Tep</string>
     <string name="sound_whistle">Ысқырық\n№1</string>
     <string name="sound_start_match">Ысқырық\n№2</string>
     <string name="sound_stadium_applause">Стадион\nшапалақ</string>
@@ -152,15 +154,20 @@
     <string name="sound_bilgenin_istep_jatyr">Білгенін\nістеп жатыр</string>
     <string name="sound_europa_karashy">Европа\nқарашы</string>
     <string name="sound_goal_save">Не деген\nсейв</string>
+    <string name="sound_kakoi_save">Какой\nсейв</string>
+    <string name="sound_toni_kross_pass">Тони Кроос\nпас</string>
     <string name="sound_suiii">Suiii</string>
     <string name="sound_suiii_full">Suiiiii\nFull</string>
     <string name="sound_goal_goal_goal">Голь Голь\nГоль</string>
     <string name="sound_oiii_kandai_goal">Уйиии қандай\nшебер гол</string>
+    <string name="sound_kandai_galamat_pas">Қандай ғаламат\nпас</string>
     <string name="sound_modrichtyn_pasy">Модричтың\nпасы</string>
     <string name="sound_tondyryp_tastagan">Тоңдырып\nтастаған</string>
+    <string name="sound_sharip_commentator">Шәріп\nкомментатор</string>
     <string name="sound_penalty_real_madrid">Penalti a favor del\nReal Madrid</string>
     <string name="sound_stadium_atmosphere">Стадион\nАтмосферасы</string>
     <string name="sound_freed_from_desire">Freed From\nDesire</string>
+    <string name="sound_shakira_dai_dai">Dai Dai\nWorld Cup</string>
 
     <string name="function_best_players">Үздік ойыншылар</string>
     <string name="function_history">Ойындар тарихы</string>

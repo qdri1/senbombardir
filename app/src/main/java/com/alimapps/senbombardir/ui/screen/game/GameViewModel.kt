@@ -126,13 +126,14 @@ class GameViewModel(
         val elapsedSeconds: Int,
     )
 
+    private val selectedLanguage = languageRepository.getSelectedLanguage() ?: AppLanguage.RU
+
     init {
         fetchGame()
     }
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
-            val selectedLanguage = languageRepository.getSelectedLanguage() ?: AppLanguage.RU
             val language = if (selectedLanguage == AppLanguage.KZ) {
                 AppLanguage.RU
             } else {
@@ -161,6 +162,7 @@ class GameViewModel(
             is GameAction.OnLeftTeamOptionSelected -> onLeftTeamOptionSelected(action.option)
             is GameAction.OnRightTeamOptionSelected -> onRightTeamOptionSelected(action.option)
             is GameAction.OnTeamChangeIconClicked -> onTeamChangeIconClicked()
+            is GameAction.OnDopClicked -> playDopTepSound()
             is GameAction.OnLeftTeamChangeClicked -> onLeftTeamChangeClicked(action.teamId)
             is GameAction.OnRightTeamChangeClicked -> onRightTeamChangeClicked(action.teamId)
             is GameAction.OnOptionPlayersSelected -> onOptionPlayersSelected(action.teamId, action.playerUiModel, action.option)
@@ -801,7 +803,7 @@ class GameViewModel(
                 currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, playerNumber = playerUiModel.number, actionType = "assist", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_assist, playerUiModel.name),
-                    onComplete = { playMedia(resId = R.raw.girls_applause) },
+                    onComplete = { playMedia(resId = getAssistResId()) },
                 )
             }
             TeamOption.Dribble -> {
@@ -818,7 +820,7 @@ class GameViewModel(
                 currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, playerNumber = playerUiModel.number, actionType = "dribble", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_dribble, playerUiModel.name),
-                    onComplete = { playMedia(resId = R.raw.bilgenin_istep_jatyr) },
+                    onComplete = { playMedia(resId = getDribbleResId()) },
                 )
             }
             TeamOption.Pass -> {
@@ -869,7 +871,7 @@ class GameViewModel(
                 currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, playerNumber = playerUiModel.number, actionType = "save", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_save, playerUiModel.name),
-                    onComplete = { playMedia(resId = R.raw.goal_save) },
+                    onComplete = { playMedia(resId = getSaveResId()) },
                 )
             }
             TeamOption.Tackle -> {
@@ -886,7 +888,7 @@ class GameViewModel(
                 currentGameActions.add(PendingGameAction(teamName = playerUiModel.teamName, teamColor = playerUiModel.teamColor.hexColor, playerName = playerUiModel.name, playerNumber = playerUiModel.number, actionType = "tackle", elapsedSeconds = currentElapsedSeconds()))
                 speak(
                     text = context.getString(R.string.text_to_speech_tackle, playerUiModel.name),
-                    onComplete = { playMedia(resId = R.raw.girls_applause) },
+                    onComplete = { playMedia(resId = R.raw.stadium_applause) },
                 )
             }
             TeamOption.YellowCard -> {
@@ -1008,7 +1010,7 @@ class GameViewModel(
 
     private fun finishGame() {
         if (isSoundEnabled(GameSoundSetting.FinishMatch)) {
-            playMedia(resId = R.raw.finish, free = true)
+            playMedia(resId = getFinishMatchResId(), free = true)
         }
         pendingGameDurationSeconds = currentElapsedSeconds()
         resetTimer()
@@ -1726,8 +1728,12 @@ class GameViewModel(
         timer = object : CountDownTimer(timerValue, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 when (millisUntilFinished) {
-                    in 60000L..60999L -> if (isSoundEnabled(GameSoundSetting.OneMinuteLeft)) playMedia(resId = R.raw.minuta)
-                    in 10000L..10999L -> if (isSoundEnabled(GameSoundSetting.TenSecondsLeft)) playMedia(resId = R.raw.do_auta)
+                    in 60000L..60999L -> if (isSoundEnabled(GameSoundSetting.OneMinuteLeft)) {
+                        playMedia(resId = getMinutaResId())
+                    }
+                    in 10000L..10999L -> if (isSoundEnabled(GameSoundSetting.TenSecondsLeft)) {
+                        playMedia(resId = getDoAutaResId())
+                    }
                 }
                 timerValue = millisUntilFinished
                 _timerValueState.value = millisUntilFinished.toStringTime()
@@ -1754,10 +1760,30 @@ class GameViewModel(
     }
 
     private fun playGoalSound() {
-        when (Random.nextInt(0, 3)) {
-            0 -> playMedia(resId = R.raw.oooi_kandai_gol)
-            1 -> playMedia(resId = R.raw.suiii_full)
-            2 -> playMedia(resId = R.raw.gol_gol_gol)
+        when (selectedLanguage) {
+            AppLanguage.KZ -> when (Random.nextInt(0, 5)) {
+                0 -> playMedia(resId = R.raw.oooi_kandai_gol)
+                1 -> playMedia(resId = R.raw.suiii_full)
+                2 -> playMedia(resId = R.raw.gol_gol_gol)
+                3 -> playMedia(resId = R.raw.satpayev_gol)
+                4 -> playMedia(resId = R.raw.sharip_gol_gol)
+            }
+            AppLanguage.RU,
+            AppLanguage.EN -> when (Random.nextInt(0, 4)) {
+                0 -> playMedia(resId = R.raw.suiii_full)
+                1 -> playMedia(resId = R.raw.gol_gol_gol)
+                2 -> playMedia(resId = R.raw.satpayev_gol)
+                3 -> playMedia(resId = R.raw.sharip_gol_gol)
+            }
+        }
+    }
+
+    private fun playDopTepSound() {
+        when (Random.nextInt(0, 4)) {
+            0 -> playMedia(resId = R.raw.sound_dop_tep_1, free = true)
+            1 -> playMedia(resId = R.raw.sound_dop_tep_2, free = true)
+            2 -> playMedia(resId = R.raw.sound_dop_tep_3, free = true)
+            3 -> playMedia(resId = R.raw.sound_dop_tep_4, free = true)
         }
     }
 
@@ -1765,7 +1791,11 @@ class GameViewModel(
         soundSettingsRepository.isEnabled(setting)
 
     private fun onSoundClicked(sound: GameSounds) {
-        playMedia(resId = sound.rawRes, free = true)
+        if (sound == GameSounds.DopTep) {
+            playDopTepSound()
+        } else {
+            playMedia(resId = sound.rawRes, free = true)
+        }
     }
 
     private fun onFunctionClicked(function: GameFunction) {
@@ -1818,6 +1848,42 @@ class GameViewModel(
         viewModelScope.launch {
             _effect.emit(effect)
         }
+    }
+
+    private fun getMinutaResId() = when (selectedLanguage) {
+        AppLanguage.KZ -> R.raw.oiynnyn_aiaktaluyna_1_minut_kaldy
+        AppLanguage.RU -> R.raw.minuta
+        AppLanguage.EN -> R.raw.minuta
+    }
+
+    private fun getDoAutaResId() = when (selectedLanguage) {
+        AppLanguage.KZ -> R.raw.autka_dein_oinaimyz
+        AppLanguage.RU -> R.raw.do_auta
+        AppLanguage.EN -> R.raw.do_auta
+    }
+
+    private fun getFinishMatchResId() = when (selectedLanguage) {
+        AppLanguage.KZ -> R.raw.oiyn_aiaktaldy
+        AppLanguage.RU -> R.raw.finish
+        AppLanguage.EN -> R.raw.finish
+    }
+
+    private fun getAssistResId() = when (selectedLanguage) {
+        AppLanguage.KZ -> R.raw.kandai_galamat_pas_jane_gol
+        AppLanguage.RU -> R.raw.toni_kross_pass
+        AppLanguage.EN -> R.raw.toni_kross_pass
+    }
+
+    private fun getSaveResId() = when (selectedLanguage) {
+        AppLanguage.KZ -> R.raw.goal_save
+        AppLanguage.RU -> R.raw.kakoi_save
+        AppLanguage.EN -> R.raw.kakoi_save
+    }
+
+    private fun getDribbleResId() = when (selectedLanguage) {
+        AppLanguage.KZ -> R.raw.bilgenin_istep_jatyr
+        AppLanguage.RU -> R.raw.girls_applause
+        AppLanguage.EN -> R.raw.girls_applause
     }
 
     private fun Long.toStringTime(): String =

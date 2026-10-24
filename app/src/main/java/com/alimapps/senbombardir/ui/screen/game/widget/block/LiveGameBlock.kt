@@ -121,6 +121,7 @@ fun LiveGameBlock(
                 CenterDivider(
                     isLive = liveGameUiModel.isLive,
                     onTeamChangeClicked = { onAction(GameAction.OnTeamChangeIconClicked) },
+                    onDopClicked = { onAction(GameAction.OnDopClicked)  },
                     modifier = Modifier.padding(horizontal = 2.dp),
                 )
 
@@ -381,6 +382,7 @@ private fun JerseyBadge(color: TeamColor, showFlame: Boolean) {
 private fun CenterDivider(
     isLive: Boolean,
     onTeamChangeClicked: () -> Unit,
+    onDopClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -389,7 +391,17 @@ private fun CenterDivider(
             .clip(CircleShape)
             .background(Color.White.copy(alpha = 0.06f))
             .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
-            .then(if (isLive) Modifier else Modifier.clickable(onClick = onTeamChangeClicked)),
+            .then(
+                if (isLive) {
+                    Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        onClick = { onDopClicked() }
+                    )
+                } else {
+                    Modifier.clickable(onClick = onTeamChangeClicked)
+                }
+            ),
         contentAlignment = Alignment.Center,
     ) {
         if (isLive) {

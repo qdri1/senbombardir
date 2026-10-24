@@ -22,6 +22,7 @@ sealed interface GameAction {
     class OnRightTeamOptionSelected(val option: TeamOption?) : GameAction
 
     data object OnTeamChangeIconClicked : GameAction
+    data object OnDopClicked : GameAction
     class OnLeftTeamChangeClicked(val teamId: Long?) : GameAction
     class OnRightTeamChangeClicked(val teamId: Long?) : GameAction
 
