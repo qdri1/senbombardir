@@ -25,7 +25,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.SportsSoccer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -261,10 +260,10 @@ private fun MatchStatusBadge(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Filled.SportsSoccer,
+                painter = painterResource(id = R.drawable.ic_sports_court),
                 contentDescription = null,
                 tint = Gold,
-                modifier = Modifier.size(12.dp),
+                modifier = Modifier.size(14.dp),
             )
             Text(
                 text = statusText,
