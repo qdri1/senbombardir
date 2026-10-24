@@ -33,11 +33,8 @@ fun FunctionsBlock(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 12.dp)
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         GameFunction.entries.forEach { function ->
             val isFunctionLimited = (function == GameFunction.BestPlayers || function == GameFunction.History) && uiLimited
@@ -47,6 +44,7 @@ fun FunctionsBlock(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface)
                     .clickable {
                         if (isFunctionLimited) {
                             onAction(GameAction.OnActivateClicked)
@@ -54,7 +52,7 @@ fun FunctionsBlock(
                             onAction(GameAction.OnFunctionClicked(function))
                         }
                     }
-                    .padding(12.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 val color = if (function == GameFunction.Delete) {
                     parseHexColor(TeamColor.Red.hexColor)

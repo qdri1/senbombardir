@@ -2,13 +2,14 @@ package com.alimapps.senbombardir.ui.screen.game.widget.block
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,46 +31,49 @@ fun SoundsBlock(
     uiLimited: Boolean,
     onAction: (GameAction) -> Unit,
 ) {
-    Row(
+    LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .horizontalScroll(rememberScrollState())
-            .padding(vertical = 12.dp)
-            .padding(horizontal = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+            .padding(top = 16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        GameSounds.entries.forEach { gameSound ->
-            Box {
+        items(GameSounds.entries) { gameSound ->
+            val isLocked = uiLimited &&
+                gameSound != GameSounds.DopTep &&
+                gameSound != GameSounds.Whistle &&
+                gameSound != GameSounds.StartMatch
+
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface)
+                    .clickable {
+                        if (isLocked) {
+                            onAction(GameAction.OnActivateClicked)
+                        } else {
+                            onAction(GameAction.OnSoundClicked(gameSound))
+                        }
+                    },
+            ) {
                 Text(
                     text = stringResource(id = gameSound.stringRes),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = if (isLocked) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.labelSmall,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .clickable { onAction(GameAction.OnSoundClicked(gameSound)) }
-                        .padding(12.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                 )
-                if (gameSound != GameSounds.DopTep && gameSound != GameSounds.Whistle && gameSound != GameSounds.StartMatch && uiLimited) {
-                    Box(
+                if (isLocked) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_lock),
+                        contentDescription = "GameScreenLockIcon",
+                        tint = MaterialTheme.colorScheme.outline,
                         modifier = Modifier
-                            .matchParentSize()
-                            .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.9f))
-                            .clip(RoundedCornerShape(8.dp))
-                            .clickable { onAction(GameAction.OnActivateClicked) },
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_lock),
-                            contentDescription = "GameScreenLockIcon",
-                            tint = MaterialTheme.colorScheme.outline,
-                        )
-                    }
+                            .align(Alignment.TopEnd)
+                            .padding(4.dp)
+                            .size(10.dp),
+                    )
                 }
             }
         }
