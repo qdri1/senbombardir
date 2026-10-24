@@ -1890,7 +1890,7 @@ class GameViewModel(
         String.format(
             Locale.ENGLISH,
             "%02d:%02d",
-            TimeUnit.MILLISECONDS.toMinutes(this) % TimeUnit.HOURS.toMinutes(1),
+            TimeUnit.MILLISECONDS.toMinutes(this),
             TimeUnit.MILLISECONDS.toSeconds(this) % TimeUnit.MINUTES.toSeconds(1)
         )
 
