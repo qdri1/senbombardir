@@ -59,7 +59,7 @@ fun TeamsResultsBlock(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,6 +87,8 @@ fun TeamsResultsBlock(
                     text = stringResource(id = R.string.team_result_name),
                     color = headerTextColor,
                     style = headerTextStyle,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
                 teamUiModelList.forEach { teamUiModel ->
                     Row(

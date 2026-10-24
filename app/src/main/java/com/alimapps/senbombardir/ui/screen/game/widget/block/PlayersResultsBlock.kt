@@ -104,7 +104,7 @@ fun PlayersResultsBlock(
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
                     ) {
                         // Place column
                         Column(
@@ -134,6 +134,8 @@ fun PlayersResultsBlock(
                                 text = stringResource(id = R.string.player_result_name),
                                 color = headerTextColor,
                                 style = headerTextStyle,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             playerUiModelList.forEach { playerUiModel ->
                                 Row(
