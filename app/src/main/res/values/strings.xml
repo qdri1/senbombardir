@@ -60,7 +60,7 @@
     <string name="team_result_draws">Т</string>
     <string name="team_result_loses">Ұ</string>
     <string name="team_result_goals_conceded">+/-</string>
-    <string name="team_result_goals_difference">ГА</string>
+    <string name="team_result_goals_difference">А</string>
     <string name="team_result_points">ҰП</string>
 
     <string name="player_result_limited_text">Ойыншылардың нәтижелері тек қосымшаның толық нұсқасында қолжетімді</string>
@@ -198,7 +198,7 @@
     <string name="teams_block_info_draws">Тең ойындар</string>
     <string name="teams_block_info_loses">Ұтылыстар</string>
     <string name="teams_block_info_goals_conceded">Соғылған/жіберілген голдар саны (+/-)</string>
-    <string name="teams_block_info_goals_difference">Гол айырмасы</string>
+    <string name="teams_block_info_goals_difference">Соғылған/жіберілген голдар айырмасы</string>
     <string name="teams_block_info_points">Ұпай саны</string>
     <string name="team_result_option_goals">Соғылған голдар</string>
     <string name="team_result_option_conceded">Жіберілген голдар</string>

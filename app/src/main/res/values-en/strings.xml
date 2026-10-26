@@ -62,8 +62,8 @@
     <string name="team_result_draws">D</string>
     <string name="team_result_loses">L</string>
     <string name="team_result_goals_conceded">+/-</string>
-    <string name="team_result_goals_difference">GD</string>
-    <string name="team_result_points">PTS</string>
+    <string name="team_result_goals_difference">D</string>
+    <string name="team_result_points">PT</string>
 
     <string name="player_result_limited_text">Player results are available only in the full version of the app</string>
     <string name="player_result_place">#</string>

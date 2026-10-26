@@ -61,8 +61,8 @@
     <string name="team_result_draws">Н</string>
     <string name="team_result_loses">П</string>
     <string name="team_result_goals_conceded">+/-</string>
-    <string name="team_result_goals_difference">РГ</string>
-    <string name="team_result_points">ОЧК</string>
+    <string name="team_result_goals_difference">Р</string>
+    <string name="team_result_points">ОЧ</string>
 
     <string name="player_result_limited_text">Результаты игроков доступны только в полной версии приложения</string>
     <string name="player_result_place">#</string>
@@ -199,7 +199,7 @@
     <string name="teams_block_info_draws">Ничьи</string>
     <string name="teams_block_info_loses">Поражения</string>
     <string name="teams_block_info_goals_conceded">Количество забитых/пропущенных (+/-) голов</string>
-    <string name="teams_block_info_goals_difference">Разница голов</string>
+    <string name="teams_block_info_goals_difference">Разница забитых/пропущенных голов</string>
     <string name="teams_block_info_points">Количество очков</string>
     <string name="team_result_option_goals">Забитые голы</string>
     <string name="team_result_option_conceded">Пропущенные голы</string>
