@@ -260,7 +260,6 @@ class GameViewModel(
             TeamQuantity.Team2 -> Unit
             TeamQuantity.Team3 -> when (gameUiModel.gameRule) {
                 GameRuleTeam3.ONLY_2_GAMES -> setTeam3Only2GamesNextPlayingTeams()
-                GameRuleTeam3.WINNER_STAY_2 -> setTeam3WinnerStayNextPlayingTeams(winCount = 1)
                 else -> setState(uiState.value.copy(nextPlayingTeamsUiModelList = emptyList()))
             }
             TeamQuantity.Team4 -> uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -317,40 +316,6 @@ class GameViewModel(
                     firstNextPlayingTeams,
                     secondNextPlayingTeams,
                 ),
-            )
-        )
-    }
-
-    private fun setTeam3WinnerStayNextPlayingTeams(winCount: Int) {
-        val liveGameUiModel = uiState.value.liveGameUiModel ?: return
-        val teamUiModelList = uiState.value.teamUiModelList
-
-        val currentLeftTeam = teamUiModelList.find { it.id == liveGameUiModel.leftTeamId }
-        val currentRightTeam = teamUiModelList.find { it.id == liveGameUiModel.rightTeamId }
-        val restTeam = teamUiModelList.firstOrNull { teamUiModel ->
-            teamUiModel.id !in listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId)
-        }
-
-        val nextPlayingTeams = if (liveGameUiModel.leftTeamWinCount >= winCount) {
-            NextPlayingTeamsUiModel(
-                leftTeam = restTeam,
-                rightTeam = currentRightTeam,
-            )
-        } else if (liveGameUiModel.rightTeamWinCount >= winCount) {
-            NextPlayingTeamsUiModel(
-                leftTeam = currentLeftTeam,
-                rightTeam = restTeam,
-            )
-        } else {
-            NextPlayingTeamsUiModel(
-                leftTeam = restTeam,
-                rightTeam = null,
-            )
-        }
-
-        setState(
-            uiState.value.copy(
-                nextPlayingTeamsUiModelList = listOf(nextPlayingTeams),
             )
         )
     }
@@ -1082,13 +1047,6 @@ class GameViewModel(
                         updateLiveGameRightTeam(nextTeam, liveGameUiModel)
                     }
                 }
-            }
-            GameRuleTeam3.WINNER_STAY_2 -> {
-                finishGameRuleTeam3WinnerStay(
-                    liveGameUiModel = liveGameUiModel,
-                    ids = ids,
-                    winCount = 1,
-                )
             }
             GameRuleTeam3.WINNER_STAY_3 -> {
                 finishGameRuleTeam3WinnerStay(

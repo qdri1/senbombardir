@@ -16,7 +16,6 @@
     <string name="game_rule_2_change_side">Әр таймнан кейін алаң ауыстырамыз</string>
     <string name="game_rule_2_stay_side">Алаң ауыстырмаймыз</string>
     <string name="game_rule_3_only_2_games">Дәл 2 ойын</string>
-    <string name="game_rule_3_winner_stay_2">Жеңген команда қалады (макс. 2 ойын)</string>
     <string name="game_rule_3_winner_stay_3">Жеңген команда қалады (макс. 3 ойын)</string>
     <string name="game_rule_3_winner_stay_4">Жеңген команда қалады (макс. 4 ойын)</string>
     <string name="game_rule_3_winner_stay_unlimited">Жеңген команда әрдайым қалады</string>
