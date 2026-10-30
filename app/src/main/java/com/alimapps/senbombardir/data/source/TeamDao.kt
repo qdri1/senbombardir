@@ -10,7 +10,7 @@ import com.alimapps.senbombardir.data.model.TeamModel
 @Dao
 interface TeamDao {
 
-    @Query("SELECT * FROM teams WHERE gameId = :gameId")
+    @Query("SELECT * FROM teams WHERE gameId = :gameId ORDER BY id")
     suspend fun getTeams(gameId: Long): List<TeamModel>
 
     @Query("SELECT * FROM teams WHERE id = :teamId")

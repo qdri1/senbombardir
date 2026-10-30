@@ -49,7 +49,7 @@ enum class GameRuleTeam3(override val stringRes: Int) : GameRule {
 }
 
 enum class GameRuleTeam4(override val stringRes: Int) : GameRule {
-    ONLY_3_GAMES(stringRes = R.string.game_rule_4_only_3_games),
+    ONLY_2_GAMES(stringRes = R.string.game_rule_4_only_2_games),
     WINNER_STAY_3(stringRes = R.string.game_rule_4_winner_stay_3),
     WINNER_STAY_4(stringRes = R.string.game_rule_4_winner_stay_4),
     WINNER_STAY_5(stringRes = R.string.game_rule_4_winner_stay_5),
@@ -61,7 +61,7 @@ enum class GameRuleTeam4(override val stringRes: Int) : GameRule {
 
         fun getGameRule(
             rule: String,
-            default: GameRuleTeam4 = ONLY_3_GAMES,
+            default: GameRuleTeam4 = ONLY_2_GAMES,
         ): GameRuleTeam4 = entries.find { it.name == rule } ?: default
     }
 }

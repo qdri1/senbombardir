@@ -194,7 +194,7 @@ class AddGameViewModel(
         _gameRuleState.value = when (teamQuantity) {
             TeamQuantity.Team2 -> GameRuleTeam2.AFTER_TIME_CHANGE_SIDE
             TeamQuantity.Team3 -> GameRuleTeam3.ONLY_2_GAMES
-            TeamQuantity.Team4 -> GameRuleTeam4.ONLY_3_GAMES
+            TeamQuantity.Team4 -> GameRuleTeam4.ONLY_2_GAMES
         }
 
         teamColors = List(teamQuantity.quantity) { index -> mutableStateOf(TeamColor.entries[index]) }

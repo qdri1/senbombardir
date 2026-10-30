@@ -47,4 +47,14 @@ class LiveGameRepository(
     }
 
     fun getTimerValue(): Long = prefs.timerValue
+
+    fun getLastLeftTeamId(gameId: Long): Long? = prefs.getLastLeftTeamId(gameId)
+
+    fun saveLastLeftTeamId(gameId: Long, teamId: Long) {
+        prefs.setLastLeftTeamId(gameId, teamId)
+    }
+
+    fun clearLastLeftTeamId(gameId: Long) {
+        prefs.clearLastLeftTeamId(gameId)
+    }
 }

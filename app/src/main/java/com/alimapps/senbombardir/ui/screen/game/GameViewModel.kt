@@ -113,7 +113,10 @@ class GameViewModel(
     private val timeInMinutes: Int
         get() = uiState.value.gameUiModel?.timeInMinutes.orDefault()
 
-    private var oldTeamId: Long = 0L
+    private var oldTeamId: Long
+        get() = liveGameRepository.getLastLeftTeamId(gameId) ?: 0L
+        set(value) = liveGameRepository.saveLastLeftTeamId(gameId, value)
+
     private var pendingGameDurationSeconds: Int = 0
     private val currentGameActions = mutableListOf<PendingGameAction>()
 
@@ -269,6 +272,11 @@ class GameViewModel(
                 setState(
                     uiState.value.copy(
                         restTeamUiModelList = restTeamUiModelList.sortedBy { it.id == oldTeamId },
+                        nextPlayingTeamsUiModelList = if (gameUiModel.gameRule == GameRuleTeam4.ONLY_2_GAMES) {
+                            getTeam4Only2GamesNextPlayingTeams(liveGameUiModel)
+                        } else {
+                            emptyList()
+                        },
                     )
                 )
             }
@@ -386,7 +394,8 @@ class GameViewModel(
     }
 
     private fun onClearResultsConfirmationClicked() = viewModelScope.launch {
-        teamRepository.getTeams(gameId).forEach { teamUiModel ->
+        val teams = teamRepository.getTeams(gameId)
+        teams.forEach { teamUiModel ->
             val teamModel = teamUiModel.copy(
                 games = 0,
                 wins = 0,
@@ -415,7 +424,15 @@ class GameViewModel(
         }
 
         liveGameRepository.getLiveGame(gameId)?.let { liveGameUiModel ->
+            val firstTeam = teams.getOrNull(0)
+            val secondTeam = teams.getOrNull(1)
             val liveGameModel = liveGameUiModel.copy(
+                leftTeamId = firstTeam?.id ?: liveGameUiModel.leftTeamId,
+                leftTeamName = firstTeam?.name ?: liveGameUiModel.leftTeamName,
+                leftTeamColor = firstTeam?.color ?: liveGameUiModel.leftTeamColor,
+                rightTeamId = secondTeam?.id ?: liveGameUiModel.rightTeamId,
+                rightTeamName = secondTeam?.name ?: liveGameUiModel.rightTeamName,
+                rightTeamColor = secondTeam?.color ?: liveGameUiModel.rightTeamColor,
                 leftTeamGoals = 0,
                 leftTeamWinCount = 0,
                 rightTeamGoals = 0,
@@ -426,6 +443,7 @@ class GameViewModel(
 
             liveGameRepository.updateLiveGame(liveGameModel)
         }
+        liveGameRepository.clearLastLeftTeamId(gameId)
 
         gameHistoryRepository.deleteGameHistory(gameId)
         setModifiedAt()
@@ -1093,34 +1111,19 @@ class GameViewModel(
         val ids = listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId, oldTeamId)
 
         when (gameUiModel.gameRule) {
-            GameRuleTeam4.ONLY_3_GAMES -> {
+            GameRuleTeam4.ONLY_2_GAMES -> {
                 when {
                     liveGameUiModel.isLeftTeamWin -> updateLeftTeamWin(liveGameUiModel)
                     liveGameUiModel.isRightTeamWin -> updateRightTeamWin(liveGameUiModel)
                     else -> updateTeamsDraw(liveGameUiModel)
                 }
-                findNextTeam(ids)?.let { nextTeam ->
-                    when {
-                        liveGameUiModel.leftTeamWinCount == 0 && liveGameUiModel.rightTeamWinCount == 0 -> {
-                            oldTeamId = liveGameUiModel.rightTeamId
-                            updateLiveGameRightTeam(nextTeam, liveGameUiModel)
-                        }
-                        liveGameUiModel.leftTeamWinCount == 1 -> {
-                            oldTeamId = liveGameUiModel.rightTeamId
-                            updateLiveGameRightTeam(nextTeam, liveGameUiModel)
-                        }
-                        liveGameUiModel.leftTeamWinCount == 2 -> {
-                            oldTeamId = liveGameUiModel.leftTeamId
-                            updateLiveGameLeftTeam(nextTeam, liveGameUiModel)
-                        }
-                        liveGameUiModel.rightTeamWinCount == 1 -> {
-                            oldTeamId = liveGameUiModel.leftTeamId
-                            updateLiveGameLeftTeam(nextTeam, liveGameUiModel)
-                        }
-                        liveGameUiModel.rightTeamWinCount == 2 -> {
-                            oldTeamId = liveGameUiModel.rightTeamId
-                            updateLiveGameRightTeam(nextTeam, liveGameUiModel)
-                        }
+                nextTeam4Only2GamesStep(liveGameUiModel.toTeam4Rotation())?.let { step ->
+                    if (step.isLeftTeamLeaving) {
+                        oldTeamId = liveGameUiModel.leftTeamId
+                        updateLiveGameLeftTeam(step.nextTeam, liveGameUiModel)
+                    } else {
+                        oldTeamId = liveGameUiModel.rightTeamId
+                        updateLiveGameRightTeam(step.nextTeam, liveGameUiModel)
                     }
                 }
             }
@@ -1295,6 +1298,62 @@ class GameViewModel(
                 liveGameUiModel = liveGameUiModel,
             )
         }
+    }
+
+    private fun nextTeam4Only2GamesStep(rotation: Team4Rotation): Team4RotationStep? {
+        val restTeams = uiState.value.teamUiModelList
+            .filter { it.id != rotation.leftTeamId && it.id != rotation.rightTeamId }
+            .sortedBy { it.id }
+
+        if (restTeams.isEmpty()) {
+            return null
+        }
+
+        val isFirstGame = rotation.gameCount == 0
+        val isLeftTeamLeaving = !isFirstGame && rotation.leftGamesInRow >= 1
+
+        val nextTeam = if (!isFirstGame && restTeams.any { it.id == rotation.lastLeftTeamId }) {
+            restTeams.firstOrNull { it.id != rotation.lastLeftTeamId } ?: restTeams.first()
+        } else {
+            restTeams.first()
+        }
+
+        val nextRotation = if (isLeftTeamLeaving) {
+            Team4Rotation(
+                leftTeamId = nextTeam.id,
+                leftGamesInRow = 0,
+                rightTeamId = rotation.rightTeamId,
+                rightGamesInRow = rotation.rightGamesInRow + 1,
+                gameCount = rotation.gameCount + 1,
+                lastLeftTeamId = rotation.leftTeamId,
+            )
+        } else {
+            Team4Rotation(
+                leftTeamId = rotation.leftTeamId,
+                leftGamesInRow = rotation.leftGamesInRow + 1,
+                rightTeamId = nextTeam.id,
+                rightGamesInRow = 0,
+                gameCount = rotation.gameCount + 1,
+                lastLeftTeamId = rotation.rightTeamId,
+            )
+        }
+
+        return Team4RotationStep(isLeftTeamLeaving, nextTeam, nextRotation)
+    }
+
+    private fun getTeam4Only2GamesNextPlayingTeams(liveGameUiModel: LiveGameUiModel): List<NextPlayingTeamsUiModel> {
+        val teams = uiState.value.teamUiModelList
+        val nextPlayingTeams = mutableListOf<NextPlayingTeamsUiModel>()
+        var rotation = liveGameUiModel.toTeam4Rotation()
+        repeat(2) {
+            val step = nextTeam4Only2GamesStep(rotation) ?: return nextPlayingTeams
+            rotation = step.rotation
+            nextPlayingTeams += NextPlayingTeamsUiModel(
+                leftTeam = teams.find { it.id == rotation.leftTeamId },
+                rightTeam = teams.find { it.id == rotation.rightTeamId },
+            )
+        }
+        return nextPlayingTeams
     }
 
     private fun findNextTeam(ids: List<Long>): TeamUiModel? = uiState.value.teamUiModelList.find { it.id !in ids }
@@ -1863,4 +1922,28 @@ class GameViewModel(
 
         super.onCleared()
     }
+
+    private data class Team4Rotation(
+        val leftTeamId: Long,
+        val leftGamesInRow: Int,
+        val rightTeamId: Long,
+        val rightGamesInRow: Int,
+        val gameCount: Int,
+        val lastLeftTeamId: Long?,
+    )
+
+    private data class Team4RotationStep(
+        val isLeftTeamLeaving: Boolean,
+        val nextTeam: TeamUiModel,
+        val rotation: Team4Rotation,
+    )
+
+    private fun LiveGameUiModel.toTeam4Rotation() = Team4Rotation(
+        leftTeamId = leftTeamId,
+        leftGamesInRow = leftTeamWinCount,
+        rightTeamId = rightTeamId,
+        rightGamesInRow = rightTeamWinCount,
+        gameCount = gameCount,
+        lastLeftTeamId = liveGameRepository.getLastLeftTeamId(gameId),
+    )
 }

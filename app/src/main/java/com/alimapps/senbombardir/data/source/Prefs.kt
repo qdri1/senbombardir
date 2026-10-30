@@ -37,7 +37,22 @@ class Prefs(private val preferences: SharedPreferences) {
         get() = preferences.getString("ONEDAY_PRICE", null)
         set(value) = preferences.edit { putString("ONEDAY_PRICE", value) }
 
+    fun getLastLeftTeamId(gameId: Long): Long? =
+        preferences.getLong(lastLeftTeamIdKey(gameId), NO_TEAM_ID).takeIf { it != NO_TEAM_ID }
+
+    fun setLastLeftTeamId(gameId: Long, teamId: Long) =
+        preferences.edit { putLong(lastLeftTeamIdKey(gameId), teamId) }
+
+    fun clearLastLeftTeamId(gameId: Long) =
+        preferences.edit { remove(lastLeftTeamIdKey(gameId)) }
+
+    private fun lastLeftTeamIdKey(gameId: Long) = "LAST_LEFT_TEAM_ID_$gameId"
+
     var onedayExpirationDate: Long
         get() = preferences.getLong("ONEDAY_EXPIRATION_DATE", 0L)
         set(value) = preferences.edit { putLong("ONEDAY_EXPIRATION_DATE", value) }
+
+    private companion object {
+        const val NO_TEAM_ID = -1L
+    }
 }
