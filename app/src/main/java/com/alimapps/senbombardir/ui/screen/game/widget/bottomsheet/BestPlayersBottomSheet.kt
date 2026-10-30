@@ -19,8 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Whatshot
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -31,7 +32,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -39,8 +39,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.unit.Dp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.composable.PlayerTeamBadge
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
@@ -59,6 +65,16 @@ fun BestPlayersBottomSheet(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         containerColor = MaterialTheme.colorScheme.background,
     ) {
+        Text(
+            text = stringResource(R.string.function_best_players),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp),
+        )
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -70,20 +86,24 @@ fun BestPlayersBottomSheet(
             val heroPlayers = bestPlayers.filter { it.option == BestPlayerOption.BestPlayer }
             val otherPlayers = bestPlayers.filter { it.option != BestPlayerOption.BestPlayer }
 
-            heroPlayers.forEach { best ->
-                BestPlayerHeroCard(bestPlayer = best)
-            }
-
-            if (otherPlayers.isNotEmpty()) {
+            if (bestPlayers.isNotEmpty()) {
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(16.dp),
+                        .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(16.dp)),
                 ) {
-                    otherPlayers.forEach { best ->
+                    heroPlayers.forEach { best ->
+                        Box(modifier = Modifier.padding(12.dp)) {
+                            BestPlayerHeroCard(bestPlayer = best)
+                        }
+                    }
+                    otherPlayers.forEachIndexed { index, best ->
+                        if (index > 0) {
+                            HorizontalDivider(
+                                color = MaterialTheme.colorScheme.background,
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            )
+                        }
                         BestPlayerRow(best = best)
                     }
                 }
@@ -100,7 +120,9 @@ fun BestPlayersBottomSheet(
 @Composable
 private fun BestPlayerRow(best: BestPlayerUiModel) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
@@ -109,7 +131,8 @@ private fun BestPlayerRow(best: BestPlayerUiModel) {
             style = MaterialTheme.typography.labelSmall,
         )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -125,6 +148,8 @@ private fun BestPlayerRow(best: BestPlayerUiModel) {
                     text = best.playerUiModel.name,
                     color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.labelSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             Text(
@@ -146,7 +171,6 @@ private fun BestPlayerRow(best: BestPlayerUiModel) {
                 },
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier
             )
         }
     }
@@ -184,7 +208,7 @@ private fun BestPlayerHeroCard(bestPlayer: BestPlayerUiModel) {
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(elevation = 14.dp, shape = cardShape, ambientColor = shadowColor, spotColor = shadowColor)
+            .bestPlayerShadow(shadowColor = shadowColor, cornerRadius = 20.dp, blur = 14.dp, offsetY = 6.dp)
             .clip(cardShape)
             .background(backgroundGradient),
     ) {
@@ -222,7 +246,7 @@ private fun BestPlayerHeroCard(bestPlayer: BestPlayerUiModel) {
                         imageVector = Icons.Filled.EmojiEvents,
                         contentDescription = null,
                         tint = goldColor,
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(20.dp),
                     )
                 }
                 Text(
@@ -290,16 +314,16 @@ private fun MvpBadge(modifier: Modifier = Modifier) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
         modifier = modifier
-            .shadow(elevation = 6.dp, shape = shape, ambientColor = shadowColor, spotColor = shadowColor)
+            .bestPlayerShadow(shadowColor = shadowColor, cornerRadius = null, blur = 6.dp, offsetY = 2.dp)
             .clip(shape)
             .background(gradient)
             .border(width = 0.75.dp, color = Color.White.copy(alpha = 0.5f), shape = shape)
             .padding(horizontal = 12.dp, vertical = 6.dp),
     ) {
         Icon(
-            imageVector = Icons.Filled.Whatshot,
+            imageVector = Icons.Filled.LocalFireDepartment,
             contentDescription = null,
             tint = Color.White,
             modifier = Modifier.size(16.dp),
@@ -309,8 +333,25 @@ private fun MvpBadge(modifier: Modifier = Modifier) {
             color = Color.White,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             letterSpacing = 0.5.sp,
         )
+    }
+}
+
+private fun Modifier.bestPlayerShadow(
+    shadowColor: Color,
+    cornerRadius: Dp?,
+    blur: Dp,
+    offsetY: Dp,
+): Modifier = drawBehind {
+    val radius = cornerRadius?.toPx() ?: (size.height / 2)
+    drawIntoCanvas { canvas ->
+        val paint = Paint()
+        paint.asFrameworkPaint().apply {
+            color = android.graphics.Color.TRANSPARENT
+            setShadowLayer(blur.toPx(), 0f, offsetY.toPx(), shadowColor.toArgb())
+        }
+        canvas.drawRoundRect(0f, 0f, size.width, size.height, radius, radius, paint)
     }
 }
