@@ -272,10 +272,10 @@ class GameViewModel(
                 setState(
                     uiState.value.copy(
                         restTeamUiModelList = restTeamUiModelList.sortedBy { it.id == oldTeamId },
-                        nextPlayingTeamsUiModelList = if (gameUiModel.gameRule == GameRuleTeam4.ONLY_2_GAMES) {
-                            getTeam4Only2GamesNextPlayingTeams(liveGameUiModel)
-                        } else {
-                            emptyList()
+                        nextPlayingTeamsUiModelList = when (gameUiModel.gameRule) {
+                            GameRuleTeam4.ONLY_2_GAMES -> getTeam4Only2GamesNextPlayingTeams(liveGameUiModel)
+                            GameRuleTeam4.ROUND_ROBIN -> getTeam4RoundRobinNextPlayingTeams(liveGameUiModel)
+                            else -> emptyList()
                         },
                     )
                 )
@@ -1127,6 +1127,16 @@ class GameViewModel(
                     }
                 }
             }
+            GameRuleTeam4.ROUND_ROBIN -> {
+                when {
+                    liveGameUiModel.isLeftTeamWin -> updateLeftTeamWin(liveGameUiModel)
+                    liveGameUiModel.isRightTeamWin -> updateRightTeamWin(liveGameUiModel)
+                    else -> updateTeamsDraw(liveGameUiModel)
+                }
+                getTeam4RoundRobinPair(gameIndex = liveGameUiModel.gameCount + 1)?.let { (leftTeam, rightTeam) ->
+                    updateLiveGameTeams(leftTeam, rightTeam, liveGameUiModel)
+                }
+            }
             GameRuleTeam4.WINNER_STAY_3 -> {
                 finishGameRuleTeam4WinnerStay(
                     liveGameUiModel = liveGameUiModel,
@@ -1354,6 +1364,48 @@ class GameViewModel(
             )
         }
         return nextPlayingTeams
+    }
+
+    private val team4RoundRobinSchedule = listOf(
+        0 to 1, 2 to 3, 0 to 3, 1 to 2, 0 to 2, 1 to 3,
+        1 to 0, 3 to 2, 3 to 0, 2 to 1, 2 to 0, 3 to 1,
+    )
+
+    private fun getTeam4RoundRobinPair(gameIndex: Int): Pair<TeamUiModel, TeamUiModel>? {
+        val teams = uiState.value.teamUiModelList.sortedBy { it.id }
+        val (leftIndex, rightIndex) = team4RoundRobinSchedule[gameIndex % team4RoundRobinSchedule.size]
+        val leftTeam = teams.getOrNull(leftIndex) ?: return null
+        val rightTeam = teams.getOrNull(rightIndex) ?: return null
+        return leftTeam to rightTeam
+    }
+
+    private fun getTeam4RoundRobinNextPlayingTeams(liveGameUiModel: LiveGameUiModel): List<NextPlayingTeamsUiModel> =
+        (1..2).mapNotNull { offset ->
+            getTeam4RoundRobinPair(liveGameUiModel.gameCount + offset)?.let { (leftTeam, rightTeam) ->
+                NextPlayingTeamsUiModel(leftTeam = leftTeam, rightTeam = rightTeam)
+            }
+        }
+
+    private suspend fun updateLiveGameTeams(
+        leftTeam: TeamUiModel,
+        rightTeam: TeamUiModel,
+        liveGameUiModel: LiveGameUiModel,
+    ) {
+        val copyLiveGameUiModel = liveGameUiModel.copy(
+            leftTeamId = leftTeam.id,
+            leftTeamName = leftTeam.name,
+            leftTeamColor = leftTeam.color,
+            leftTeamGoals = 0,
+            leftTeamWinCount = 0,
+            rightTeamId = rightTeam.id,
+            rightTeamName = rightTeam.name,
+            rightTeamColor = rightTeam.color,
+            rightTeamGoals = 0,
+            rightTeamWinCount = 0,
+            gameCount = liveGameUiModel.gameCount + 1,
+            isLive = false,
+        )
+        liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
     }
 
     private fun findNextTeam(ids: List<Long>): TeamUiModel? = uiState.value.teamUiModelList.find { it.id !in ids }

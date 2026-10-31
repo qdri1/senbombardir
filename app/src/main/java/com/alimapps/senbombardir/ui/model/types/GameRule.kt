@@ -50,6 +50,7 @@ enum class GameRuleTeam3(override val stringRes: Int) : GameRule {
 
 enum class GameRuleTeam4(override val stringRes: Int) : GameRule {
     ONLY_2_GAMES(stringRes = R.string.game_rule_4_only_2_games),
+    ROUND_ROBIN(stringRes = R.string.game_rule_4_round_robin),
     WINNER_STAY_3(stringRes = R.string.game_rule_4_winner_stay_3),
     WINNER_STAY_4(stringRes = R.string.game_rule_4_winner_stay_4),
     WINNER_STAY_5(stringRes = R.string.game_rule_4_winner_stay_5),

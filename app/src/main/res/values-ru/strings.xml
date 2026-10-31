@@ -21,6 +21,7 @@
     <string name="game_rule_3_winner_stay_4">Победивший остается (макс. 4 игры)</string>
     <string name="game_rule_3_winner_stay_unlimited">Победивший всегда остается</string>
     <string name="game_rule_4_only_2_games">Ровно 2 игры</string>
+    <string name="game_rule_4_round_robin">Каждый с каждым</string>
     <string name="game_rule_4_winner_stay_3">Победивший остается (макс. 3 игры)</string>
     <string name="game_rule_4_winner_stay_4">Победивший остается (макс. 4 игры)</string>
     <string name="game_rule_4_winner_stay_5">Победивший остается (макс. 5 игры)</string>
