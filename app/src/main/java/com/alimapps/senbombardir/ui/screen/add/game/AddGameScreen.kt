@@ -27,9 +27,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -109,6 +111,7 @@ private fun AddGameScreenContent(
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     var showColorsBottomSheet by remember { mutableStateOf(false) }
+    var showRulesBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
@@ -313,19 +316,35 @@ private fun AddGameScreenContent(
                         .fillMaxWidth()
                         .padding(8.dp),
                 ) {
-                    val rules = when (viewModel.gameRuleState.value) {
-                        is GameRuleTeam2 -> GameRuleTeam2.entries
-                        is GameRuleTeam3 -> GameRuleTeam3.entries
-                        is GameRuleTeam4 -> GameRuleTeam4.entries
-                        else -> emptyList()
-                    }
-                    rules.forEach { rule ->
+                    currentGameRules(viewModel.gameRuleState.value).forEach { rule ->
                         GameRulesItemWidget(
                             rule = rule,
                             selectedGameRule = viewModel.gameRuleState.value,
                             onAction = onAction,
                         )
                     }
+                }
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.background,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(vertical = 8.dp)
+                        .align(Alignment.CenterHorizontally),
+                )
+                TextButton(
+                    onClick = { showRulesBottomSheet = true },
+                    modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Text(
+                        text = stringResource(id = R.string.game_rules_info),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(start = 8.dp),
+                    )
                 }
             }
 
@@ -334,6 +353,14 @@ private fun AddGameScreenContent(
                 onAction = onAction,
             )
         }
+    }
+
+    if (showRulesBottomSheet) {
+        GameRulesBottomSheet(
+            rules = currentGameRules(viewModel.gameRuleState.value),
+            selectedRule = viewModel.gameRuleState.value,
+            onDismissed = { showRulesBottomSheet = false },
+        )
     }
 
     if (showColorsBottomSheet) {
@@ -655,4 +682,11 @@ private fun TextFieldWidget(
             isFocused = focusState.isFocused
         },
     )
+}
+
+private fun currentGameRules(gameRule: GameRule?): List<GameRule> = when (gameRule) {
+    is GameRuleTeam2 -> GameRuleTeam2.entries
+    is GameRuleTeam3 -> GameRuleTeam3.entries
+    is GameRuleTeam4 -> GameRuleTeam4.entries
+    else -> emptyList()
 }
