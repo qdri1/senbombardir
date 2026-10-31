@@ -444,6 +444,8 @@ class GameViewModel(
             liveGameRepository.updateLiveGame(liveGameModel)
         }
         liveGameRepository.clearLastLeftTeamId(gameId)
+        liveGameRepository.clearTeamOrder(gameId)
+        liveGameRepository.clearRoundRobinStart(gameId)
 
         gameHistoryRepository.deleteGameHistory(gameId)
         setModifiedAt()
@@ -598,6 +600,7 @@ class GameViewModel(
             )
             setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
             liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+            restartTeam4RoundRobinCycle(copyLiveGameUiModel)
             setNextPlayingTeamsUiModelList()
         }
     }
@@ -658,6 +661,7 @@ class GameViewModel(
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+                        restartTeam4RoundRobinCycle(copyLiveGameUiModel)
                         setNextPlayingTeamsUiModelList()
                     }
                 }
@@ -680,6 +684,7 @@ class GameViewModel(
                         )
                         setState(uiState.value.copy(liveGameUiModel = copyLiveGameUiModel))
                         liveGameRepository.updateLiveGame(copyLiveGameUiModel.toLiveGameModel())
+                        restartTeam4RoundRobinCycle(copyLiveGameUiModel)
                         setNextPlayingTeamsUiModelList()
                     }
                 }
@@ -1371,9 +1376,29 @@ class GameViewModel(
         1 to 0, 3 to 2, 3 to 0, 2 to 1, 2 to 0, 3 to 1,
     )
 
+    private fun getTeam4Order(): List<TeamUiModel> {
+        val teams = uiState.value.teamUiModelList
+        val savedOrder = liveGameRepository.getTeamOrder(gameId)
+            ?.mapNotNull { teamId -> teams.find { it.id == teamId } }
+            ?.distinct()
+        return if (savedOrder != null && savedOrder.size == teams.size) savedOrder else teams.sortedBy { it.id }
+    }
+
+    private fun restartTeam4RoundRobinCycle(liveGameUiModel: LiveGameUiModel) {
+        if (uiState.value.gameUiModel?.gameRule != GameRuleTeam4.ROUND_ROBIN) return
+        val order = getTeam4Order().map { it.id }
+        if (order.size != 4 || liveGameUiModel.leftTeamId == liveGameUiModel.rightTeamId) return
+        val otherTeamIds = order.filter { it != liveGameUiModel.leftTeamId && it != liveGameUiModel.rightTeamId }
+        val newOrder = listOf(liveGameUiModel.leftTeamId, liveGameUiModel.rightTeamId) + otherTeamIds
+        if (newOrder.size != 4) return
+        liveGameRepository.saveTeamOrder(gameId, newOrder)
+        liveGameRepository.saveRoundRobinStart(gameId, liveGameUiModel.gameCount)
+    }
+
     private fun getTeam4RoundRobinPair(gameIndex: Int): Pair<TeamUiModel, TeamUiModel>? {
-        val teams = uiState.value.teamUiModelList.sortedBy { it.id }
-        val (leftIndex, rightIndex) = team4RoundRobinSchedule[gameIndex % team4RoundRobinSchedule.size]
+        val teams = getTeam4Order()
+        val cycleIndex = Math.floorMod(gameIndex - liveGameRepository.getRoundRobinStart(gameId), team4RoundRobinSchedule.size)
+        val (leftIndex, rightIndex) = team4RoundRobinSchedule[cycleIndex]
         val leftTeam = teams.getOrNull(leftIndex) ?: return null
         val rightTeam = teams.getOrNull(rightIndex) ?: return null
         return leftTeam to rightTeam

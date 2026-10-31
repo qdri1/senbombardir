@@ -57,4 +57,24 @@ class LiveGameRepository(
     fun clearLastLeftTeamId(gameId: Long) {
         prefs.clearLastLeftTeamId(gameId)
     }
+
+    fun getTeamOrder(gameId: Long): List<Long>? = prefs.getTeamOrder(gameId)
+
+    fun saveTeamOrder(gameId: Long, teamIds: List<Long>) {
+        prefs.setTeamOrder(gameId, teamIds)
+    }
+
+    fun clearTeamOrder(gameId: Long) {
+        prefs.clearTeamOrder(gameId)
+    }
+
+    fun getRoundRobinStart(gameId: Long): Int = prefs.getRoundRobinStart(gameId)
+
+    fun saveRoundRobinStart(gameId: Long, gameCount: Int) {
+        prefs.setRoundRobinStart(gameId, gameCount)
+    }
+
+    fun clearRoundRobinStart(gameId: Long) {
+        prefs.clearRoundRobinStart(gameId)
+    }
 }

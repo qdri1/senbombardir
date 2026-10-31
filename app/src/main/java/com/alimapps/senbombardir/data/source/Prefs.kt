@@ -48,6 +48,29 @@ class Prefs(private val preferences: SharedPreferences) {
 
     private fun lastLeftTeamIdKey(gameId: Long) = "LAST_LEFT_TEAM_ID_$gameId"
 
+    fun getTeamOrder(gameId: Long): List<Long>? =
+        preferences.getString(teamOrderKey(gameId), null)
+            ?.split(",")
+            ?.mapNotNull { it.toLongOrNull() }
+
+    fun setTeamOrder(gameId: Long, teamIds: List<Long>) =
+        preferences.edit { putString(teamOrderKey(gameId), teamIds.joinToString(",")) }
+
+    fun clearTeamOrder(gameId: Long) =
+        preferences.edit { remove(teamOrderKey(gameId)) }
+
+    private fun teamOrderKey(gameId: Long) = "TEAM_ORDER_$gameId"
+
+    fun getRoundRobinStart(gameId: Long): Int = preferences.getInt(roundRobinStartKey(gameId), 0)
+
+    fun setRoundRobinStart(gameId: Long, gameCount: Int) =
+        preferences.edit { putInt(roundRobinStartKey(gameId), gameCount) }
+
+    fun clearRoundRobinStart(gameId: Long) =
+        preferences.edit { remove(roundRobinStartKey(gameId)) }
+
+    private fun roundRobinStartKey(gameId: Long) = "ROUND_ROBIN_START_$gameId"
+
     var onedayExpirationDate: Long
         get() = preferences.getLong("ONEDAY_EXPIRATION_DATE", 0L)
         set(value) = preferences.edit { putLong("ONEDAY_EXPIRATION_DATE", value) }
