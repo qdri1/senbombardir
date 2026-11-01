@@ -70,7 +70,7 @@
     <string name="button_no">Нет</string>
 
     <string name="home_game_name">Название:</string>
-    <string name="home_pitch_surface">Покрытие:</string>
+    <string name="home_pitch_surface">Покрытие поля:</string>
     <string name="home_game_format">Формат:</string>
     <string name="home_game_team_quantity">Команд:</string>
     <string name="home_game_rule">Правила:</string>

@@ -69,7 +69,7 @@
     <string name="button_no">Жоқ</string>
 
     <string name="home_game_name">Атауы:</string>
-    <string name="home_pitch_surface">Жабын:</string>
+    <string name="home_pitch_surface">Алаң жабыны:</string>
     <string name="home_game_format">Форматы:</string>
     <string name="home_game_team_quantity">Командалар:</string>
     <string name="home_game_rule">Ереже:</string>
