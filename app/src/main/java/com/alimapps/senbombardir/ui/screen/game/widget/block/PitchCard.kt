@@ -45,6 +45,7 @@ internal data class PitchColors(
     val mid: Color,
     val deep: Color,
     val centerMarkAlpha: Float,
+    val dividerAlpha: Float,
 )
 
 internal val GrassPitchColors = PitchColors(
@@ -52,6 +53,7 @@ internal val GrassPitchColors = PitchColors(
     mid = PitchMid,
     deep = PitchDeep,
     centerMarkAlpha = 0.06f,
+    dividerAlpha = 0.10f,
 )
 
 internal val ParquetPitchColors = PitchColors(
@@ -59,6 +61,7 @@ internal val ParquetPitchColors = PitchColors(
     mid = Color(0xFFA2661C),
     deep = Color(0xFF54320A),
     centerMarkAlpha = 0.22f,
+    dividerAlpha = 0.28f,
 )
 
 internal val PitchSurface.colors: PitchColors

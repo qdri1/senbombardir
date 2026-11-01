@@ -94,7 +94,7 @@ fun TimerBlock(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .background(Color.White.copy(alpha = 0.10f))
+                .background(Color.White.copy(alpha = LocalPitchColors.current.dividerAlpha))
         )
 
         StartFinishButton(
