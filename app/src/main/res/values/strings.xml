@@ -13,6 +13,9 @@
     <string name="game_format">Ойын форматы</string>
 
     <string name="game_rules">Ойын ережелері</string>
+    <string name="pitch_surface">Алаң жабыны</string>
+    <string name="pitch_surface_grass">Газон</string>
+    <string name="pitch_surface_parquet">Паркет</string>
     <string name="game_rule_2_change_side">Әр таймнан кейін алаң ауыстырамыз</string>
     <string name="game_rule_2_stay_side">Алаң ауыстырмаймыз</string>
     <string name="game_rule_3_only_2_games">Дәл 2 ойын</string>
@@ -66,6 +69,7 @@
     <string name="button_no">Жоқ</string>
 
     <string name="home_game_name">Атауы:</string>
+    <string name="home_pitch_surface">Жабын:</string>
     <string name="home_game_format">Форматы:</string>
     <string name="home_game_team_quantity">Командалар:</string>
     <string name="home_game_rule">Ереже:</string>

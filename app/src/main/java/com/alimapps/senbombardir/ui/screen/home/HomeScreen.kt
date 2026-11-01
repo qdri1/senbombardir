@@ -160,6 +160,20 @@ private fun HomeScreenContent(
                                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                                     ) {
                                         Text(
+                                            text = stringResource(id = R.string.home_pitch_surface),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelMedium,
+                                        )
+                                        Text(
+                                            text = stringResource(id = item.pitchSurface.stringRes),
+                                            color = MaterialTheme.colorScheme.onSurface,
+                                            style = MaterialTheme.typography.labelSmall,
+                                        )
+                                    }
+                                    Row(
+                                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                                    ) {
+                                        Text(
                                             text = stringResource(id = R.string.home_game_format),
                                             color = MaterialTheme.colorScheme.onSurface,
                                             style = MaterialTheme.typography.labelMedium,

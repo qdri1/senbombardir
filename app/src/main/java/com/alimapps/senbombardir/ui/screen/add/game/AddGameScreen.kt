@@ -75,6 +75,7 @@ import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.model.types.GameFormat
 import com.alimapps.senbombardir.ui.model.types.GameRule
+import com.alimapps.senbombardir.ui.model.types.PitchSurface
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam4
@@ -204,6 +205,56 @@ private fun AddGameScreenContent(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
             )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .background(MaterialTheme.colorScheme.surface),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.pitch_surface),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 16.dp),
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    PitchSurface.entries.forEach { pitchSurface ->
+                        val isSelected = pitchSurface == viewModel.pitchSurfaceState.value
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) { onAction(AddGameAction.OnPitchSurfaceSelected(pitchSurface)) },
+                        ) {
+                            RadioButton(
+                                selected = isSelected,
+                                onClick = { onAction(AddGameAction.OnPitchSurfaceSelected(pitchSurface)) },
+                                colors = RadioButtonDefaults.colors(
+                                    unselectedColor = MaterialTheme.colorScheme.surfaceVariant,
+                                ),
+                            )
+                            Text(
+                                text = stringResource(id = pitchSurface.stringRes),
+                                color = if (isSelected) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.surfaceVariant
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
+                    }
+                }
+            }
 
             Column(
                 modifier = Modifier

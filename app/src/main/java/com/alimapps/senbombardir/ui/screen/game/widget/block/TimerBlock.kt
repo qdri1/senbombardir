@@ -44,7 +44,10 @@ fun TimerBlock(
     uiState: GameUiState,
     onAction: (GameAction) -> Unit,
 ) {
-    PitchCard(modifier = Modifier.padding(top = 16.dp)) {
+    PitchCard(
+        modifier = Modifier.padding(top = 16.dp),
+        surface = uiState.pitchSurface,
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

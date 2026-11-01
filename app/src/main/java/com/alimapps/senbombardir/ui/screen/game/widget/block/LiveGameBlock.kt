@@ -82,7 +82,10 @@ fun LiveGameBlock(
     hiddenOptions: Set<TeamOption>,
     onAction: (GameAction) -> Unit,
 ) {
-    PitchCard(modifier = Modifier.padding(top = 16.dp)) {
+    PitchCard(
+        modifier = Modifier.padding(top = 16.dp),
+        surface = uiState.pitchSurface,
+    ) {
         MatchStatusBadge(
             isLive = liveGameUiModel.isLive,
             gameCount = liveGameUiModel.gameCount,
@@ -93,7 +96,7 @@ fun LiveGameBlock(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .pitchCenterMark(),
+                    .pitchCenterMark(alpha = LocalPitchColors.current.centerMarkAlpha),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -179,9 +182,8 @@ fun LiveGameBlock(
 
 // region Pitch mark
 
-/** Halfway line + center circle behind the score row (iOS `PitchCenterMark`). */
-private fun Modifier.pitchCenterMark(): Modifier = drawBehind {
-    val markColor = Color.White.copy(alpha = 0.06f)
+private fun Modifier.pitchCenterMark(alpha: Float): Modifier = drawBehind {
+    val markColor = Color.White.copy(alpha = alpha)
     val strokeWidth = 1.5.dp.toPx()
     drawCircle(
         color = markColor,
@@ -363,7 +365,7 @@ private fun JerseyBadge(color: TeamColor, showFlame: Boolean) {
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .offset(x = 8.dp, y = (-6).dp)
-                    .background(PitchMid, CircleShape)
+                    .background(LocalPitchColors.current.mid, CircleShape)
                     .padding(4.dp)
             ) {
                 Icon(

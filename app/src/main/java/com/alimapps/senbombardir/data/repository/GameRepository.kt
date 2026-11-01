@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.data.repository
 
+import com.alimapps.senbombardir.ui.model.types.PitchSurface
 import com.alimapps.senbombardir.data.model.GameModel
 import com.alimapps.senbombardir.data.source.GameDao
 import com.alimapps.senbombardir.ui.model.types.GameFormat
@@ -28,6 +29,7 @@ class GameRepository(
                 gameRule = rule,
                 timeInMinutes = gameModel.timeInMinutes,
                 modifiedAt = gameModel.modifiedAt,
+                pitchSurface = PitchSurface.from(gameModel.pitchSurface),
             )
         }
 
@@ -51,6 +53,7 @@ class GameRepository(
                 gameRule = rule,
                 timeInMinutes = gameModel.timeInMinutes,
                 modifiedAt = gameModel.modifiedAt,
+                pitchSurface = PitchSurface.from(gameModel.pitchSurface),
             )
         }
 

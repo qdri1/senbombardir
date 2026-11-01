@@ -247,6 +247,7 @@ class GameViewModel(
                         teamUiModelList = teamUiModelList,
                         playerUiModelList = playerUiModelList,
                         liveGameUiModel = liveGameUiModel,
+                        pitchSurface = gameUiModel.pitchSurface,
                     )
                 )
                 setNextPlayingTeamsUiModelList()

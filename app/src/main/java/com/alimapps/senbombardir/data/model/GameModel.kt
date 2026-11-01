@@ -15,4 +15,5 @@ data class GameModel(
     val rule: String,
     val timeInMinutes: Int,
     val modifiedAt: Long = 0L,
+    val pitchSurface: String = "Grass",
 )

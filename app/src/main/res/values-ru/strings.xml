@@ -14,6 +14,9 @@
     <string name="game_format">Формат игры</string>
 
     <string name="game_rules">Правила игры</string>
+    <string name="pitch_surface">Покрытие поля</string>
+    <string name="pitch_surface_grass">Газон</string>
+    <string name="pitch_surface_parquet">Паркет</string>
     <string name="game_rule_2_change_side">После каждого тайма меняемся сторонами</string>
     <string name="game_rule_2_stay_side">Не меняемся сторонами</string>
     <string name="game_rule_3_only_2_games">Ровно 2 игры</string>
@@ -67,6 +70,7 @@
     <string name="button_no">Нет</string>
 
     <string name="home_game_name">Название:</string>
+    <string name="home_pitch_surface">Покрытие:</string>
     <string name="home_game_format">Формат:</string>
     <string name="home_game_team_quantity">Команд:</string>
     <string name="home_game_rule">Правила:</string>

@@ -46,16 +46,25 @@ class HomeViewModel(
                 setState(uiState.value.copy(isLoading = true))
             }
             delay(500)
-            val games = gameRepository.getGames().sortedByDescending { it.modifiedAt }
-            setState(uiState.value.copy(games = games, isLoading = false, isRefreshing = false))
+            setGames()
         }
     }
 
     private fun refreshGamesSilently() {
         viewModelScope.launch {
-            val games = gameRepository.getGames().sortedByDescending { it.modifiedAt }
-            setState(uiState.value.copy(games = games, isLoading = false, isRefreshing = false))
+            setGames()
         }
+    }
+
+    private suspend fun setGames() {
+        val games = gameRepository.getGames().sortedByDescending { it.modifiedAt }
+        setState(
+            uiState.value.copy(
+                games = games,
+                isLoading = false,
+                isRefreshing = false,
+            )
+        )
     }
 
     private fun onInterceptionNavigationResult(result: Any) {

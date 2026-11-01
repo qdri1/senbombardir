@@ -6,6 +6,7 @@ import com.alimapps.senbombardir.ui.model.LiveGameUiModel
 import com.alimapps.senbombardir.ui.model.NextPlayingTeamsUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
+import com.alimapps.senbombardir.ui.model.types.PitchSurface
 
 data class GameUiState(
     val gameUiModel: GameUiModel? = null,
@@ -21,4 +22,5 @@ data class GameUiState(
     val isTimerPlay: Boolean = false,
     val billingType: BillingType = BillingType.Lifetime,
     val uiLimited: Boolean = false,
+    val pitchSurface: PitchSurface = PitchSurface.Grass,
 )

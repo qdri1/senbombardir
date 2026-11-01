@@ -31,6 +31,7 @@ import com.alimapps.senbombardir.ui.model.toPlayerModel
 import com.alimapps.senbombardir.ui.model.toTeamHistoryModel
 import com.alimapps.senbombardir.ui.model.toTeamModel
 import com.alimapps.senbombardir.ui.model.types.GameFormat
+import com.alimapps.senbombardir.ui.model.types.PitchSurface
 import com.alimapps.senbombardir.ui.model.types.GameRule
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam2
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
@@ -69,6 +70,9 @@ class AddGameViewModel(
 
     private val _timeInMinuteFieldState = mutableStateOf(String.empty)
     val timeInMinuteFieldState: State<String> = _timeInMinuteFieldState
+
+    private val _pitchSurfaceState = mutableStateOf(PitchSurface.Grass)
+    val pitchSurfaceState: State<PitchSurface> = _pitchSurfaceState
 
     private val _gameFormatState = mutableStateOf(GameFormat.Format5x5)
     val gameFormatState: State<GameFormat> = _gameFormatState
@@ -127,6 +131,7 @@ class AddGameViewModel(
             is AddGameAction.CloseScreen -> setEffectSafely(AddGameEffect.CloseScreen)
             is AddGameAction.OnGameTextValueChanged -> _gameNameFieldState.value = action.value
             is AddGameAction.OnTimeTextValueChanged -> _timeInMinuteFieldState.value = action.value
+            is AddGameAction.OnPitchSurfaceSelected -> _pitchSurfaceState.value = action.pitchSurface
             is AddGameAction.OnGameFormatSelected -> onGameFormatSelected(action.format)
             is AddGameAction.OnTeamQuantitySelected -> onTeamQuantitySelected(action.teamQuantity)
             is AddGameAction.OnGameRuleSelected -> _gameRuleState.value = action.rule
@@ -149,6 +154,7 @@ class AddGameViewModel(
                     _gameNameFieldState.value = gameUiModel.name
                     _timeInMinuteFieldState.value = gameUiModel.timeInMinutes.toString()
                     _gameFormatState.value = gameUiModel.gameFormat
+                    _pitchSurfaceState.value = gameUiModel.pitchSurface
                     _teamQuantityState.value = gameUiModel.teamQuantity
                     _gameRuleState.value = gameUiModel.gameRule
 
@@ -254,6 +260,7 @@ class AddGameViewModel(
             rule = rule,
             timeInMinutes = timeInMinuteFieldState.value.toIntOrNull() ?: DEFAULT_TIME_IN_MINUTES,
             modifiedAt = System.currentTimeMillis(),
+            pitchSurface = pitchSurfaceState.value.name,
         )
         val gameId = gameRepository.saveGame(gameModel)
 
@@ -339,6 +346,7 @@ class AddGameViewModel(
                     rule = rule,
                     timeInMinutes = timeInMinuteFieldState.value.toIntOrNull() ?: DEFAULT_TIME_IN_MINUTES,
                     modifiedAt = System.currentTimeMillis(),
+                    pitchSurface = pitchSurfaceState.value.name,
                 )
                 gameRepository.updateGame(gameModel)
             }

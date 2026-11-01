@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.model
 
+import com.alimapps.senbombardir.ui.model.types.PitchSurface
 import com.alimapps.senbombardir.data.model.GameModel
 import com.alimapps.senbombardir.ui.model.types.GameFormat
 import com.alimapps.senbombardir.ui.model.types.GameRule
@@ -17,6 +18,7 @@ data class GameUiModel(
     val gameRule: GameRule,
     val timeInMinutes: Int,
     val modifiedAt: Long = 0L,
+    val pitchSurface: PitchSurface = PitchSurface.Grass,
 )
 
 fun GameUiModel.toGameModel(): GameModel {
@@ -34,5 +36,6 @@ fun GameUiModel.toGameModel(): GameModel {
         rule = rule,
         timeInMinutes = timeInMinutes,
         modifiedAt = modifiedAt,
+        pitchSurface = pitchSurface.name,
     )
 }

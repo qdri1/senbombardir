@@ -14,6 +14,9 @@
     <string name="game_format">Game format</string>
 
     <string name="game_rules">Game rules</string>
+    <string name="pitch_surface">Pitch surface</string>
+    <string name="pitch_surface_grass">Grass</string>
+    <string name="pitch_surface_parquet">Parquet</string>
     <string name="game_rule_2_change_side">Change sides after each half</string>
     <string name="game_rule_2_stay_side">Do not change sides</string>
     <string name="game_rule_3_only_2_games">Exactly 2 games</string>
@@ -68,6 +71,7 @@
     <string name="button_no">No</string>
 
     <string name="home_game_name">Name:</string>
+    <string name="home_pitch_surface">Surface:</string>
     <string name="home_game_format">Format:</string>
     <string name="home_game_team_quantity">Teams:</string>
     <string name="home_game_rule">Rule:</string>
