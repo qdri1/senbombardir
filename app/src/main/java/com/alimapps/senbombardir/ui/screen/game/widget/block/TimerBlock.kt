@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -107,18 +106,11 @@ fun TimerBlock(
 @Composable
 private fun StartFinishButton(isLive: Boolean, onClick: () -> Unit) {
     val primary = MaterialTheme.colorScheme.primary
-    val accentColor = if (isLive) FinishStart else primary
     val gradient = if (isLive) listOf(FinishStart, FinishEnd) else listOf(primary, StartEnd)
     val shape = RoundedCornerShape(16.dp)
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 10.dp,
-                shape = shape,
-                ambientColor = accentColor.copy(alpha = 0.4f),
-                spotColor = accentColor.copy(alpha = 0.4f),
-            )
             .clip(shape)
             .background(Brush.horizontalGradient(gradient))
             .clickable(onClick = onClick)

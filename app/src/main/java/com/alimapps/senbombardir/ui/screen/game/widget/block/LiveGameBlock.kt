@@ -345,15 +345,6 @@ private fun TeamScore(
 @Composable
 private fun JerseyBadge(color: TeamColor, showFlame: Boolean) {
     Box {
-        // Soft drop shadow (iOS: shadow(color: black 0.25, radius: 3, y: 2))
-        Icon(
-            painter = painterResource(id = R.drawable.ic_jersey),
-            contentDescription = null,
-            tint = Color.Black.copy(alpha = 0.25f),
-            modifier = Modifier
-                .size(38.dp)
-                .offset(y = 2.dp),
-        )
         Icon(
             painter = painterResource(id = R.drawable.ic_jersey),
             contentDescription = null,
@@ -486,6 +477,7 @@ private fun StreakPill(count: Int) {
 
 @Composable
 private fun ScoreboardDivider(title: String) {
+    val lineColor = Color.White.copy(alpha = maxOf(0.12f, LocalPitchColors.current.dividerAlpha))
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -495,7 +487,7 @@ private fun ScoreboardDivider(title: String) {
             modifier = Modifier
                 .weight(1f)
                 .height(1.dp)
-                .background(Color.White.copy(alpha = 0.12f))
+                .background(lineColor)
         )
         Text(
             text = title.uppercase(),
@@ -508,7 +500,7 @@ private fun ScoreboardDivider(title: String) {
             modifier = Modifier
                 .weight(1f)
                 .height(1.dp)
-                .background(Color.White.copy(alpha = 0.12f))
+                .background(lineColor)
         )
     }
 }
@@ -533,6 +525,11 @@ private fun ScoreboardTeamChip(color: TeamColor?) {
 private fun FooterTeamName(text: String, textAlign: TextAlign, modifier: Modifier = Modifier) {
     Text(
         text = text,
+        autoSize = TextAutoSize.StepBased(
+            minFontSize = 10.sp,
+            maxFontSize = 14.sp,
+            stepSize = 1.sp
+        ),
         color = Color.White.copy(alpha = 0.85f),
         style = MaterialTheme.typography.labelSmall,
         maxLines = 1,
