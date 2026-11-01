@@ -403,7 +403,7 @@ private fun CenterDivider(
             LottieAnimation(
                 composition = composition,
                 iterations = LottieConstants.IterateForever,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(LocalPitchColors.current.ballSize),
             )
         } else {
             Icon(

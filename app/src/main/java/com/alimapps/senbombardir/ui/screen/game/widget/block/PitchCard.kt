@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alimapps.senbombardir.ui.model.types.PitchSurface
 import kotlin.math.ceil
@@ -46,6 +47,7 @@ internal data class PitchColors(
     val deep: Color,
     val centerMarkAlpha: Float,
     val dividerAlpha: Float,
+    val ballSize: Dp,
 )
 
 internal val GrassPitchColors = PitchColors(
@@ -54,6 +56,7 @@ internal val GrassPitchColors = PitchColors(
     deep = PitchDeep,
     centerMarkAlpha = 0.06f,
     dividerAlpha = 0.10f,
+    ballSize = 24.dp,
 )
 
 internal val ParquetPitchColors = PitchColors(
@@ -62,6 +65,7 @@ internal val ParquetPitchColors = PitchColors(
     deep = Color(0xFF54320A),
     centerMarkAlpha = 0.22f,
     dividerAlpha = 0.28f,
+    ballSize = 20.dp,
 )
 
 internal val PitchSurface.colors: PitchColors
