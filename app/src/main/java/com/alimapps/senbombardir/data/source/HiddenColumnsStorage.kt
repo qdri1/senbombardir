@@ -22,6 +22,10 @@ class HiddenColumnsStorage(private val preferences: SharedPreferences) {
         preferences.edit { putStringSet(key(gameId), hiddenOptions.map { it.name }.toSet()) }
     }
 
+    fun clear(gameId: Long) {
+        preferences.edit { remove(key(gameId)) }
+    }
+
     private companion object {
         val DEFAULT_HIDDEN_OPTIONS = setOf(TeamOption.YellowCard, TeamOption.RedCard)
     }

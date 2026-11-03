@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.model.GameHistoryActionEventModel
 import com.alimapps.senbombardir.data.model.GameHistoryEntryModel
@@ -85,6 +86,7 @@ class GameViewModel(
     private val gameHistoryRepository: GameHistoryRepository,
     private val billingRepository: BillingRepository,
     private val soundSettingsRepository: SoundSettingsRepository,
+    private val hiddenColumnsStorage: HiddenColumnsStorage,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
 
@@ -118,6 +120,7 @@ class GameViewModel(
         set(value) = liveGameRepository.saveLastLeftTeamId(gameId, value)
 
     private var pendingGameDurationSeconds: Int = 0
+    private var isGameDeleted = false
     private val currentGameActions = mutableListOf<PendingGameAction>()
 
     private data class PendingGameAction(
@@ -331,7 +334,7 @@ class GameViewModel(
 
     private fun setTimerValue() {
         if (isLive) {
-            val savedTimerValue = liveGameRepository.getTimerValue()
+            val savedTimerValue = liveGameRepository.getTimerValue(gameId)
             timerValue = if (savedTimerValue > 0L) {
                 savedTimerValue
             } else {
@@ -382,7 +385,11 @@ class GameViewModel(
     }
 
     private fun onDeleteGameConfirmationClicked() = viewModelScope.launch {
+        isGameDeleted = true
+        stopTimer()
         gameRepository.deleteGame(gameId)
+        liveGameRepository.clearGameData(gameId)
+        hiddenColumnsStorage.clear(gameId)
         setEffect(GameEffect.CloseScreenWithResult)
     }
 
@@ -1851,7 +1858,7 @@ class GameViewModel(
         stopTimer()
         timerValue = timeInMinutes.toMillis()
         _timerValueState.value = timerValue.toStringTime()
-        liveGameRepository.clearTimerValue()
+        liveGameRepository.clearTimerValue(gameId)
     }
 
     private fun playGoalSound() {
@@ -1990,8 +1997,8 @@ class GameViewModel(
         )
 
     override fun onCleared() {
-        if (isLive) {
-            liveGameRepository.saveTimerValue(timerValue)
+        if (isLive && isGameDeleted.not()) {
+            liveGameRepository.saveTimerValue(gameId, timerValue)
         }
         stopTimer()
         mediaPlayer.release()

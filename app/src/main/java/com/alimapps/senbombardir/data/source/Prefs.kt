@@ -5,10 +5,6 @@ import androidx.core.content.edit
 
 class Prefs(private val preferences: SharedPreferences) {
 
-    var timerValue: Long
-        get() = preferences.getLong("LIVE_GAME_TIMER_VALUE", 0L)
-        set(value) = preferences.edit { putLong("LIVE_GAME_TIMER_VALUE", value) }
-
     var selectedLanguage: String?
         get() = preferences.getString("SELECTED_LANGUAGE", null)
         set(value) = preferences.edit { putString("SELECTED_LANGUAGE", value) }
@@ -37,14 +33,28 @@ class Prefs(private val preferences: SharedPreferences) {
         get() = preferences.getString("ONEDAY_PRICE", null)
         set(value) = preferences.edit { putString("ONEDAY_PRICE", value) }
 
+    fun getTimerValue(gameId: Long): Long = preferences.getLong(timerValueKey(gameId), 0L)
+
+    fun setTimerValue(gameId: Long, value: Long) {
+        preferences.edit { putLong(timerValueKey(gameId), value) }
+    }
+
+    fun clearTimerValue(gameId: Long) {
+        preferences.edit { remove(timerValueKey(gameId)) }
+    }
+
+    private fun timerValueKey(gameId: Long) = "LIVE_GAME_TIMER_VALUE_$gameId"
+
     fun getLastLeftTeamId(gameId: Long): Long? =
         preferences.getLong(lastLeftTeamIdKey(gameId), NO_TEAM_ID).takeIf { it != NO_TEAM_ID }
 
-    fun setLastLeftTeamId(gameId: Long, teamId: Long) =
+    fun setLastLeftTeamId(gameId: Long, teamId: Long) {
         preferences.edit { putLong(lastLeftTeamIdKey(gameId), teamId) }
+    }
 
-    fun clearLastLeftTeamId(gameId: Long) =
+    fun clearLastLeftTeamId(gameId: Long) {
         preferences.edit { remove(lastLeftTeamIdKey(gameId)) }
+    }
 
     private fun lastLeftTeamIdKey(gameId: Long) = "LAST_LEFT_TEAM_ID_$gameId"
 
@@ -53,21 +63,25 @@ class Prefs(private val preferences: SharedPreferences) {
             ?.split(",")
             ?.mapNotNull { it.toLongOrNull() }
 
-    fun setTeamOrder(gameId: Long, teamIds: List<Long>) =
+    fun setTeamOrder(gameId: Long, teamIds: List<Long>) {
         preferences.edit { putString(teamOrderKey(gameId), teamIds.joinToString(",")) }
+    }
 
-    fun clearTeamOrder(gameId: Long) =
+    fun clearTeamOrder(gameId: Long) {
         preferences.edit { remove(teamOrderKey(gameId)) }
+    }
 
     private fun teamOrderKey(gameId: Long) = "TEAM_ORDER_$gameId"
 
     fun getRoundRobinStart(gameId: Long): Int = preferences.getInt(roundRobinStartKey(gameId), 0)
 
-    fun setRoundRobinStart(gameId: Long, gameCount: Int) =
+    fun setRoundRobinStart(gameId: Long, gameCount: Int) {
         preferences.edit { putInt(roundRobinStartKey(gameId), gameCount) }
+    }
 
-    fun clearRoundRobinStart(gameId: Long) =
+    fun clearRoundRobinStart(gameId: Long) {
         preferences.edit { remove(roundRobinStartKey(gameId)) }
+    }
 
     private fun roundRobinStartKey(gameId: Long) = "ROUND_ROBIN_START_$gameId"
 

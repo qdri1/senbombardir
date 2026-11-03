@@ -38,15 +38,15 @@ class LiveGameRepository(
 
     suspend fun updateLiveGame(liveGameModel: LiveGameModel) { liveGameDao.updateLiveGame(liveGameModel) }
 
-    fun saveTimerValue(value: Long) {
-        prefs.timerValue = value
+    fun saveTimerValue(gameId: Long, value: Long) {
+        prefs.setTimerValue(gameId, value)
     }
 
-    fun clearTimerValue() {
-        prefs.timerValue = 0L
+    fun clearTimerValue(gameId: Long) {
+        prefs.clearTimerValue(gameId)
     }
 
-    fun getTimerValue(): Long = prefs.timerValue
+    fun getTimerValue(gameId: Long): Long = prefs.getTimerValue(gameId)
 
     fun getLastLeftTeamId(gameId: Long): Long? = prefs.getLastLeftTeamId(gameId)
 
@@ -76,5 +76,12 @@ class LiveGameRepository(
 
     fun clearRoundRobinStart(gameId: Long) {
         prefs.clearRoundRobinStart(gameId)
+    }
+
+    fun clearGameData(gameId: Long) {
+        clearLastLeftTeamId(gameId)
+        clearTeamOrder(gameId)
+        clearRoundRobinStart(gameId)
+        clearTimerValue(gameId)
     }
 }

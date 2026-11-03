@@ -55,6 +55,7 @@ val uiModule = module {
             languageRepository = get(),
             billingRepository = get(),
             soundSettingsRepository = get(),
+            hiddenColumnsStorage = get(),
             context = get(),
         )
     }
