@@ -258,6 +258,7 @@
     <string name="game_history_empty">История пуста</string>
     <string name="game_history_duration">⏱ %s</string>
 
+    <string name="function_champions_all_games">Чемпионы всех игр</string>
     <string name="function_best_players_all_games">Лучшие игроки всех игр</string>
     <string name="function_clear_result_all_games">Сбросить результаты всех игр</string>
 

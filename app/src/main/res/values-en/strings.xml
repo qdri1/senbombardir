@@ -259,6 +259,7 @@
     <string name="game_history_empty">Empty history</string>
     <string name="game_history_duration">⏱ %s</string>
 
+    <string name="function_champions_all_games">Champions of all games</string>
     <string name="function_best_players_all_games">Best players of all games</string>
     <string name="function_clear_result_all_games">Clear all games results</string>
 

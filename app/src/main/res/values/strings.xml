@@ -257,6 +257,7 @@
     <string name="game_history_empty">Тарих бос</string>
     <string name="game_history_duration">⏱ %s</string>
 
+    <string name="function_champions_all_games">Барлық ойындардың чемпиондары</string>
     <string name="function_best_players_all_games">Барлық ойындардың үздік ойыншылары</string>
     <string name="function_clear_result_all_games">Барлық ойындардың нәтижелерін тазарту</string>
 

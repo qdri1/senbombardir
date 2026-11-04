@@ -9,6 +9,7 @@ import com.alimapps.senbombardir.data.repository.PlayerRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
+import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamResultUiModel
@@ -166,6 +167,7 @@ class GameResultsViewModel(
 
     private fun onFunctionClicked(function: GameResultsFunction) {
         when (function) {
+            GameResultsFunction.Champions -> onChampionsClicked()
             GameResultsFunction.BestPlayers -> onBestPlayersClicked()
             GameResultsFunction.ClearResults -> setEffectSafely(GameResultsEffect.ShowClearResultsConfirmationBottomSheet)
         }
@@ -220,6 +222,16 @@ class GameResultsViewModel(
             }
 
         setEffectSafely(GameResultsEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
+    }
+
+    private fun onChampionsClicked() {
+        val championTeam = uiState.value.teamUiModelList.firstOrNull()
+        if (championTeam == null || championTeam.games == 0) {
+            setEffectSafely(GameResultsEffect.ShowSnackbar(R.string.champions_empty))
+            return
+        }
+        val players = uiState.value.playerUiModelList.filter { it.teamId == championTeam.id }
+        setEffectSafely(GameResultsEffect.ShowChampionsBottomSheet(champions = ChampionsUiModel.make(team = championTeam, players = players)))
     }
 
     private fun setState(state: GameResultsUiState) {

@@ -45,6 +45,8 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ChampionsBottomSheet
+import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.CustomizeColumnsBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
@@ -85,6 +87,7 @@ private fun GameResultsScreenContent(
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
     var teamResultUiModel by remember { mutableStateOf<TeamResultUiModel?>(null) }
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
+    var champions by remember { mutableStateOf<ChampionsUiModel?>(null) }
     var playerToRemove by remember { mutableStateOf<PlayerUiModel?>(null) }
 
     LaunchedEffect(Unit) {
@@ -94,6 +97,7 @@ private fun GameResultsScreenContent(
                 is GameResultsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
                 is GameResultsEffect.ShowClearResultsConfirmationBottomSheet -> showClearResultsConfirmation = true
                 is GameResultsEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
+                is GameResultsEffect.ShowChampionsBottomSheet -> champions = effect.champions
                 is GameResultsEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
@@ -216,6 +220,14 @@ private fun GameResultsScreenContent(
                 bestPlayers = bestPlayers,
                 onDismissed = { bestPlayers = emptyList() },
             )
+        }
+        champions != null -> {
+            champions?.let {
+                ChampionsBottomSheet(
+                    champions = it,
+                    onDismissed = { champions = null },
+                )
+            }
         }
         showCustomizeColumns -> {
             CustomizeColumnsBottomSheet(
