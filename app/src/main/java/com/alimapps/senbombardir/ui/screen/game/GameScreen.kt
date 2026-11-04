@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
+import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.model.GameHistoryEntryUiModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
 import com.alimapps.senbombardir.ui.model.OptionPlayersUiModel
@@ -59,6 +60,7 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.TimerBlock
 import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
+import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ChampionsBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.CustomizeColumnsBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.GameHistoryBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
@@ -110,6 +112,7 @@ private fun GameScreenContent(
     var showGoBackConfirmation by remember { mutableStateOf(false) }
     var showGameInfo by remember { mutableStateOf(false) }
     var bestPlayers by remember { mutableStateOf<List<BestPlayerUiModel>>(emptyList()) }
+    var champions by remember { mutableStateOf<ChampionsUiModel?>(null) }
     var gameHistory by remember { mutableStateOf<List<GameHistoryEntryUiModel>?>(null) }
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
     var teamResultUiModel by remember { mutableStateOf<TeamResultUiModel?>(null) }
@@ -153,6 +156,7 @@ private fun GameScreenContent(
                 is GameEffect.ShowGameInfoBottomSheet -> showGameInfo = true
                 is GameEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
                 is GameEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
+                is GameEffect.ShowChampionsBottomSheet -> champions = effect.champions
                 is GameEffect.ShowGameHistoryBottomSheet -> gameHistory = effect.gameHistory
                 is GameEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
@@ -368,6 +372,14 @@ private fun GameScreenContent(
                 bestPlayers = bestPlayers,
                 onDismissed = { bestPlayers = emptyList() },
             )
+        }
+        champions != null -> {
+            champions?.let {
+                ChampionsBottomSheet(
+                    champions = it,
+                    onDismissed = { champions = null },
+                )
+            }
         }
         gameHistory != null -> {
             GameHistoryBottomSheet(

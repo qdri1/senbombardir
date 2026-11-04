@@ -29,6 +29,7 @@ import com.alimapps.senbombardir.data.repository.SoundSettingsRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
+import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.toGameModel
 import com.alimapps.senbombardir.ui.model.LiveGameResultUiModel
@@ -509,6 +510,16 @@ class GameViewModel(
             }
 
         setEffectSafely(GameEffect.ShowBestPlayersBottomSheet(bestPlayers = bestPlayers))
+    }
+
+    private fun onChampionsClicked() {
+        val championTeam = uiState.value.teamUiModelList.firstOrNull()
+        if (championTeam == null || championTeam.games == 0) {
+            setEffectSafely(GameEffect.ShowSnackbar(R.string.champions_empty))
+            return
+        }
+        val players = uiState.value.playerUiModelList.filter { it.teamId == championTeam.id }
+        setEffectSafely(GameEffect.ShowChampionsBottomSheet(champions = ChampionsUiModel.make(team = championTeam, players = players)))
     }
 
     private fun onHistoryClicked() = viewModelScope.launch {
@@ -1903,6 +1914,7 @@ class GameViewModel(
     private fun onFunctionClicked(function: GameFunction) {
         when (function) {
             GameFunction.BestPlayers -> onBestPlayersClicked()
+            GameFunction.Champions -> onChampionsClicked()
             GameFunction.History -> onHistoryClicked()
             GameFunction.Edit -> onEditGameClicked()
             GameFunction.ClearResults -> onClearResultsClicked()
