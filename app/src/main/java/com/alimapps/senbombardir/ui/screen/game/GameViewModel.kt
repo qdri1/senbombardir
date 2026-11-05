@@ -1881,12 +1881,16 @@ class GameViewModel(
                 3 -> playMedia(resId = R.raw.satpayev_gol)
                 4 -> playMedia(resId = R.raw.sharip_gol_gol)
             }
-            AppLanguage.RU,
-            AppLanguage.EN -> when (Random.nextInt(0, 4)) {
+            AppLanguage.RU -> when (Random.nextInt(0, 4)) {
                 0 -> playMedia(resId = R.raw.suiii_full)
                 1 -> playMedia(resId = R.raw.gol_gol_gol)
                 2 -> playMedia(resId = R.raw.satpayev_gol)
                 3 -> playMedia(resId = R.raw.sharip_gol_gol)
+            }
+            AppLanguage.EN -> when (Random.nextInt(0, 3)) {
+                0 -> playMedia(resId = R.raw.suiii_full)
+                1 -> playMedia(resId = R.raw.gol_gol_gol)
+                2 -> playMedia(resId = R.raw.sharip_gol_gol)
             }
         }
     }
@@ -1967,31 +1971,31 @@ class GameViewModel(
     private fun getMinutaResId() = when (selectedLanguage) {
         AppLanguage.KZ -> R.raw.oiynnyn_aiaktaluyna_1_minut_kaldy
         AppLanguage.RU -> R.raw.minuta
-        AppLanguage.EN -> R.raw.minuta
+        AppLanguage.EN -> R.raw.one_minute_remaining
     }
 
     private fun getDoAutaResId() = when (selectedLanguage) {
         AppLanguage.KZ -> R.raw.autka_dein_oinaimyz
         AppLanguage.RU -> R.raw.do_auta
-        AppLanguage.EN -> R.raw.do_auta
+        AppLanguage.EN -> R.raw.play_continues_until_ball_goes_out
     }
 
     private fun getFinishMatchResId() = when (selectedLanguage) {
         AppLanguage.KZ -> R.raw.oiyn_aiaktaldy
         AppLanguage.RU -> R.raw.finish
-        AppLanguage.EN -> R.raw.finish
+        AppLanguage.EN -> R.raw.full_time
     }
 
     private fun getAssistResId() = when (selectedLanguage) {
         AppLanguage.KZ -> R.raw.kandai_galamat_pas_jane_gol
         AppLanguage.RU -> R.raw.toni_kross_pass
-        AppLanguage.EN -> R.raw.toni_kross_pass
+        AppLanguage.EN -> R.raw.girls_applause
     }
 
     private fun getSaveResId() = when (selectedLanguage) {
         AppLanguage.KZ -> R.raw.goal_save
         AppLanguage.RU -> R.raw.kakoi_save
-        AppLanguage.EN -> R.raw.kakoi_save
+        AppLanguage.EN -> R.raw.what_a_save
     }
 
     private fun getDribbleResId() = when (selectedLanguage) {
