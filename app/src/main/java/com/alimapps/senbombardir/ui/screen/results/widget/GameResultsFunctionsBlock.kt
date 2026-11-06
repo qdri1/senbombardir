@@ -32,11 +32,8 @@ fun GameResultsFunctionsBlock(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp)
-            .padding(horizontal = 16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 12.dp)
-            .padding(horizontal = 12.dp),
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         GameResultsFunction.entries.filter { showChampions || it != GameResultsFunction.Champions }.forEach { function ->
             val isFunctionLimited = (function == GameResultsFunction.BestPlayers || function == GameResultsFunction.Champions) && uiLimited
@@ -46,6 +43,7 @@ fun GameResultsFunctionsBlock(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
+                    .background(MaterialTheme.colorScheme.surface)
                     .clickable {
                         if (isFunctionLimited) {
                             onAction(GameResultsAction.OnActivateClicked)
@@ -53,7 +51,7 @@ fun GameResultsFunctionsBlock(
                             onAction(GameResultsAction.OnFunctionClicked(function))
                         }
                     }
-                    .padding(12.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 val color = if (isFunctionLimited) {
                     MaterialTheme.colorScheme.outline
