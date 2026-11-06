@@ -198,7 +198,7 @@
     <string name="champions">Чемпиондар</string>
     <string name="champions_first_place">Бірінші орын</string>
     <string name="champions_points">ҰП: %1$d</string>
-    <string name="champions_record">"Ж: %1$d  Т: %2$d  Ұ: %3$d"</string>
+    <string name="champions_record">"Ж: %1$d ⬩ Т: %2$d ⬩ Ұ: %3$d"</string>
     <string name="champions_goals">Голдар: %1$d-%2$d</string>
     <string name="champions_empty">Әзірге ойналған матч жоқ</string>
     <string name="champion_title_match_king">Матч королі</string>

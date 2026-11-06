@@ -305,12 +305,14 @@ private fun BestPlayerHeroCard(bestPlayer: BestPlayerUiModel) {
 }
 
 @Composable
-private fun MvpBadge(modifier: Modifier = Modifier) {
+fun MvpBadge(
+    modifier: Modifier = Modifier,
+    text: String = "MVP",
+    gradientColors: List<Color> = listOf(parseHexColor("#FF3D00"), parseHexColor("#FF9F1C")),
+    shadowColor: Color = parseHexColor("#FF3D00").copy(alpha = 0.5f),
+) {
     val shape = CircleShape
-    val gradient = Brush.horizontalGradient(
-        colors = listOf(parseHexColor("#FF3D00"), parseHexColor("#FF9F1C")),
-    )
-    val shadowColor = parseHexColor("#FF3D00").copy(alpha = 0.5f)
+    val gradient = Brush.horizontalGradient(colors = gradientColors)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -329,7 +331,7 @@ private fun MvpBadge(modifier: Modifier = Modifier) {
             modifier = Modifier.size(16.dp),
         )
         Text(
-            text = "MVP",
+            text = text,
             color = Color.White,
             fontFamily = Montserrat,
             fontWeight = FontWeight.Bold,
@@ -339,7 +341,7 @@ private fun MvpBadge(modifier: Modifier = Modifier) {
     }
 }
 
-private fun Modifier.bestPlayerShadow(
+fun Modifier.bestPlayerShadow(
     shadowColor: Color,
     cornerRadius: Dp?,
     blur: Dp,

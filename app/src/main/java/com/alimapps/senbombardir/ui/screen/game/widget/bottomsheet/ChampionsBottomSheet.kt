@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -65,31 +66,35 @@ fun ChampionsBottomSheet(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         containerColor = MaterialTheme.colorScheme.background,
     ) {
+        Text(
+            text = stringResource(R.string.champions),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 8.dp),
+        )
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
+                .padding(vertical = 8.dp)
+                .padding(horizontal = 16.dp),
         ) {
-            Text(
-                text = stringResource(R.string.champions),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp),
-            )
-
             ChampionTeamHeroCard(team = champions.teamUiModel)
 
             champions.players.forEach { champion ->
                 ChampionPlayerRow(champion = champion)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(16.dp)
+            )
         }
     }
 }
@@ -97,8 +102,7 @@ fun ChampionsBottomSheet(
 @Composable
 private fun ChampionTeamHeroCard(team: TeamUiModel) {
     val goldColor = parseHexColor("#FFD166")
-    val cardShape = RoundedCornerShape(18.dp)
-    val density = LocalDensity.current
+    val cardShape = RoundedCornerShape(20.dp)
     val backgroundGradient = Brush.linearGradient(
         colors = listOf(
             parseHexColor("#1B1500"),
@@ -107,24 +111,27 @@ private fun ChampionTeamHeroCard(team: TeamUiModel) {
         ),
     )
     val borderGradient = Brush.verticalGradient(
-        colors = listOf(Color.White.copy(alpha = 0.4f), Color.White.copy(alpha = 0.04f)),
+        colors = listOf(Color.White.copy(alpha = 0.35f), Color.White.copy(alpha = 0.04f)),
     )
+    val shadowColor = parseHexColor("#E0A800").copy(alpha = 0.4f)
+    val density = LocalDensity.current
     val stats = listOf(
         stringResource(R.string.champions_points, team.points),
-        stringResource(R.string.champions_record, team.wins, team.draws, team.loses),
         stringResource(R.string.champions_goals, team.goals, team.conceded),
+        stringResource(R.string.champions_record, team.wins, team.draws, team.loses),
     )
 
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxWidth()
+            .bestPlayerShadow(shadowColor = shadowColor, cornerRadius = 20.dp, blur = 14.dp, offsetY = 6.dp)
             .clip(cardShape)
             .background(backgroundGradient),
     ) {
         val radialGradient = Brush.radialGradient(
             colors = listOf(parseHexColor("#FFE38A").copy(alpha = 0.55f), Color.Transparent),
             center = with(density) { Offset(x = maxWidth.toPx(), y = 0f) },
-            radius = with(density) { 180.dp.toPx() },
+            radius = with(density) { 170.dp.toPx() },
         )
         Box(
             modifier = Modifier
@@ -138,22 +145,30 @@ private fun ChampionTeamHeroCard(team: TeamUiModel) {
         )
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+            modifier = Modifier.padding(vertical = 16.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                Icon(
-                    imageVector = Icons.Filled.EmojiEvents,
-                    contentDescription = null,
-                    tint = goldColor,
-                    modifier = Modifier.size(14.dp),
-                )
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .background(color = Color.White.copy(alpha = 0.18f), shape = CircleShape),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.EmojiEvents,
+                        contentDescription = null,
+                        tint = goldColor,
+                        modifier = Modifier.size(20.dp),
+                    )
+                }
                 Text(
                     text = stringResource(R.string.champions_first_place).uppercase(),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelLarge,
                     color = goldColor,
                     letterSpacing = 0.4.sp,
                 )
@@ -162,26 +177,27 @@ private fun ChampionTeamHeroCard(team: TeamUiModel) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(end = 40.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
             ) {
-                Box(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                        .background(parseHexColor(team.color.hexColor))
-                        .border(width = 1.dp, color = Color.White.copy(alpha = 0.6f), shape = RoundedCornerShape(5.dp)),
+                PlayerTeamBadge(
+                    teamColor = team.color,
+                    number = null,
+                    size = 24.dp,
                 )
-                AutoSizeText(
+                Text(
                     text = team.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = Color.White,
-                    minFontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 
             Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
             ) {
                 stats.forEach { statText ->
                     Text(
@@ -192,21 +208,20 @@ private fun ChampionTeamHeroCard(team: TeamUiModel) {
                         modifier = Modifier
                             .clip(CircleShape)
                             .background(color = Color.White.copy(alpha = 0.16f), shape = CircleShape)
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                            .padding(horizontal = 10.dp, vertical = 6.dp),
                     )
                 }
             }
         }
 
-        Text(
-            text = "#1",
-            color = Color.White.copy(alpha = 0.9f),
-            fontFamily = Montserrat,
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 28.sp,
+        MvpBadge(
+            text = "TOP 1",
+            gradientColors = listOf(parseHexColor("#A86F00"), parseHexColor("#F2B705")),
+            shadowColor = parseHexColor("#E0A800").copy(alpha = 0.5f),
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(top = 10.dp, end = 16.dp),
+                .padding(top = 32.dp, end = 20.dp)
+                .rotate(-4f),
         )
     }
 }

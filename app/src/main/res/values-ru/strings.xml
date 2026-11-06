@@ -199,7 +199,7 @@
     <string name="champions">Чемпионы</string>
     <string name="champions_first_place">Первое место</string>
     <string name="champions_points">ОЧ: %1$d</string>
-    <string name="champions_record">"В: %1$d  Н: %2$d  П: %3$d"</string>
+    <string name="champions_record">"В: %1$d ⬩ Н: %2$d ⬩ П: %3$d"</string>
     <string name="champions_goals">Голы: %1$d-%2$d</string>
     <string name="champions_empty">Пока нет сыгранных матчей</string>
     <string name="champion_title_match_king">Король матча</string>
