@@ -202,6 +202,8 @@
     <string name="champions_record">"В: %1$d ⬩ Н: %2$d ⬩ П: %3$d"</string>
     <string name="champions_goals">Голы: %1$d-%2$d</string>
     <string name="champions_empty">Пока нет сыгранных матчей</string>
+    <string name="champions_draw">Пока ничья — чемпиона нет</string>
+    <string name="champions_score">Счёт: %1$d-%2$d</string>
     <string name="champion_title_match_king">Король матча</string>
     <string name="champion_title_match_king_description">Самый ценный игрок команды</string>
     <string name="champion_title_sniper">Снайпер</string>

@@ -29,6 +29,7 @@ import com.alimapps.senbombardir.data.repository.SoundSettingsRepository
 import com.alimapps.senbombardir.data.repository.TeamHistoryRepository
 import com.alimapps.senbombardir.data.repository.TeamRepository
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
+import com.alimapps.senbombardir.ui.model.ChampionsScore
 import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.model.GameUiModel
 import com.alimapps.senbombardir.ui.model.toGameModel
@@ -513,6 +514,10 @@ class GameViewModel(
     }
 
     private fun onChampionsClicked() {
+        if (uiState.value.gameUiModel?.teamQuantity == TeamQuantity.Team2) {
+            onTeam2ChampionsClicked()
+            return
+        }
         val championTeam = uiState.value.teamUiModelList.firstOrNull()
         if (championTeam == null || championTeam.games == 0) {
             setEffectSafely(GameEffect.ShowSnackbar(R.string.champions_empty))
@@ -520,6 +525,24 @@ class GameViewModel(
         }
         val players = uiState.value.playerUiModelList.filter { it.teamId == championTeam.id }
         setEffectSafely(GameEffect.ShowChampionsBottomSheet(champions = ChampionsUiModel.make(team = championTeam, players = players)))
+    }
+
+    private fun onTeam2ChampionsClicked() {
+        val liveGame = uiState.value.liveGameUiModel ?: return
+        if (liveGame.leftTeamGoals == liveGame.rightTeamGoals) {
+            setEffectSafely(GameEffect.ShowSnackbar(R.string.champions_draw))
+            return
+        }
+        val isLeftLeading = liveGame.leftTeamGoals > liveGame.rightTeamGoals
+        val championTeamId = if (isLeftLeading) liveGame.leftTeamId else liveGame.rightTeamId
+        val championTeam = uiState.value.teamUiModelList.firstOrNull { it.id == championTeamId } ?: return
+        val score = if (isLeftLeading) {
+            ChampionsScore(goals = liveGame.leftTeamGoals, conceded = liveGame.rightTeamGoals)
+        } else {
+            ChampionsScore(goals = liveGame.rightTeamGoals, conceded = liveGame.leftTeamGoals)
+        }
+        val players = uiState.value.playerUiModelList.filter { it.teamId == championTeam.id }
+        setEffectSafely(GameEffect.ShowChampionsBottomSheet(champions = ChampionsUiModel.make(team = championTeam, players = players, score = score)))
     }
 
     private fun onHistoryClicked() = viewModelScope.launch {

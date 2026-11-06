@@ -166,6 +166,7 @@ private fun GameResultsScreenContent(
 
                 GameResultsFunctionsBlock(
                     uiLimited = uiState.uiLimited,
+                    showChampions = uiState.teamUiModelList.size > 2,
                     onAction = onAction,
                 )
             }

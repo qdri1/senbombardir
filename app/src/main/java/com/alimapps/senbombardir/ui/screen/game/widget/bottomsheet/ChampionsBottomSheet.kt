@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.ui.composable.PlayerTeamBadge
 import com.alimapps.senbombardir.ui.model.ChampionPlayerUiModel
+import com.alimapps.senbombardir.ui.model.ChampionsScore
 import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.model.TeamUiModel
 import com.alimapps.senbombardir.ui.theme.Montserrat
@@ -84,7 +85,7 @@ fun ChampionsBottomSheet(
                 .padding(vertical = 8.dp)
                 .padding(horizontal = 16.dp),
         ) {
-            ChampionTeamHeroCard(team = champions.teamUiModel)
+            ChampionTeamHeroCard(team = champions.teamUiModel, score = champions.score)
 
             champions.players.forEach { champion ->
                 ChampionPlayerRow(champion = champion)
@@ -100,7 +101,7 @@ fun ChampionsBottomSheet(
 }
 
 @Composable
-private fun ChampionTeamHeroCard(team: TeamUiModel) {
+private fun ChampionTeamHeroCard(team: TeamUiModel, score: ChampionsScore?) {
     val goldColor = parseHexColor("#FFD166")
     val cardShape = RoundedCornerShape(20.dp)
     val backgroundGradient = Brush.linearGradient(
@@ -115,7 +116,9 @@ private fun ChampionTeamHeroCard(team: TeamUiModel) {
     )
     val shadowColor = parseHexColor("#E0A800").copy(alpha = 0.4f)
     val density = LocalDensity.current
-    val stats = listOf(
+    val stats = if (score != null) listOf(
+        stringResource(R.string.champions_score, score.goals, score.conceded),
+    ) else listOf(
         stringResource(R.string.champions_points, team.points),
         stringResource(R.string.champions_goals, team.goals, team.conceded),
         stringResource(R.string.champions_record, team.wins, team.draws, team.loses),

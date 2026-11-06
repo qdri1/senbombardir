@@ -203,6 +203,8 @@
     <string name="champions_record">"W: %1$d ⬩ D: %2$d ⬩ L: %3$d"</string>
     <string name="champions_goals">Goals: %1$d-%2$d</string>
     <string name="champions_empty">No matches played yet</string>
+    <string name="champions_draw">It\'s a draw — no champion yet</string>
+    <string name="champions_score">Score: %1$d-%2$d</string>
     <string name="champion_title_match_king">Match King</string>
     <string name="champion_title_match_king_description">The team\'s most valuable player</string>
     <string name="champion_title_sniper">Sniper</string>

@@ -25,6 +25,7 @@ import com.alimapps.senbombardir.ui.screen.results.GameResultsAction
 @Composable
 fun GameResultsFunctionsBlock(
     uiLimited: Boolean,
+    showChampions: Boolean,
     onAction: (GameResultsAction) -> Unit,
 ) {
     Column(
@@ -37,7 +38,7 @@ fun GameResultsFunctionsBlock(
             .padding(vertical = 12.dp)
             .padding(horizontal = 12.dp),
     ) {
-        GameResultsFunction.entries.forEach { function ->
+        GameResultsFunction.entries.filter { showChampions || it != GameResultsFunction.Champions }.forEach { function ->
             val isFunctionLimited = (function == GameResultsFunction.BestPlayers || function == GameResultsFunction.Champions) && uiLimited
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),

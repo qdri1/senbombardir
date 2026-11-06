@@ -201,6 +201,8 @@
     <string name="champions_record">"Ж: %1$d ⬩ Т: %2$d ⬩ Ұ: %3$d"</string>
     <string name="champions_goals">Голдар: %1$d-%2$d</string>
     <string name="champions_empty">Әзірге ойналған матч жоқ</string>
+    <string name="champions_draw">Әзірге тең — чемпион жоқ</string>
+    <string name="champions_score">Есеп: %1$d-%2$d</string>
     <string name="champion_title_match_king">Матч королі</string>
     <string name="champion_title_match_king_description">Команданың ең құнды ойыншысы</string>
     <string name="champion_title_sniper">Мерген</string>

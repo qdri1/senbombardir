@@ -7,15 +7,21 @@ data class ChampionPlayerUiModel(
     val title: ChampionTitle,
 )
 
+data class ChampionsScore(
+    val goals: Int,
+    val conceded: Int,
+)
+
 data class ChampionsUiModel(
     val teamUiModel: TeamUiModel,
     val players: List<ChampionPlayerUiModel>,
+    val score: ChampionsScore? = null,
 ) {
 
     companion object {
 
-        fun make(team: TeamUiModel, players: List<PlayerUiModel>): ChampionsUiModel =
-            ChampionsUiModel(teamUiModel = team, players = assignTitles(players))
+        fun make(team: TeamUiModel, players: List<PlayerUiModel>, score: ChampionsScore? = null): ChampionsUiModel =
+            ChampionsUiModel(teamUiModel = team, players = assignTitles(players), score = score)
 
         private data class Candidate(
             val playerIndex: Int,
