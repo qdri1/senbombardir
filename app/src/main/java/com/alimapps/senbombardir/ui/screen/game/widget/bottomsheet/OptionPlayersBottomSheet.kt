@@ -61,7 +61,10 @@ fun OptionPlayersBottomSheet(
                 .padding(vertical = 8.dp)
                 .padding(horizontal = 16.dp),
         ) {
-            HorizontalDivider()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.background,
+                thickness = 1.dp,
+            )
             optionPlayersUiModel.playerUiModelList.forEach { playerUiModel ->
                 Row(
                     modifier = Modifier
@@ -90,7 +93,10 @@ fun OptionPlayersBottomSheet(
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
-                HorizontalDivider()
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.background,
+                    thickness = 1.dp,
+                )
             }
             if (optionPlayersUiModel.option == TeamOption.Goal) {
                 val text = stringResource(id = R.string.team_option_players_auto_goal)
@@ -111,7 +117,10 @@ fun OptionPlayersBottomSheet(
                         .padding(horizontal = 8.dp)
                         .padding(vertical = 16.dp)
                 )
-                HorizontalDivider()
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.background,
+                    thickness = 1.dp,
+                )
             }
             Spacer(
                 modifier = Modifier

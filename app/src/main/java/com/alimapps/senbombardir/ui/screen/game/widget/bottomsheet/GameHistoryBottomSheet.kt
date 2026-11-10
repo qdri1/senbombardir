@@ -153,7 +153,11 @@ fun GameHistoryBottomSheet(
                 } else {
                     gameHistory.forEach { entry ->
                         GameHistoryEntryItem(entry = entry)
-                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceVariant, thickness = 1.dp)
+                        HorizontalDivider(
+                            color = MaterialTheme.colorScheme.background,
+                            thickness = 1.dp,
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
                     }
                 }
             }

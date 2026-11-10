@@ -59,7 +59,10 @@ fun StayTeamSelectionBottomSheet(
                 .padding(vertical = 8.dp)
                 .padding(horizontal = 16.dp),
         ) {
-            HorizontalDivider()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.background,
+                thickness = 1.dp,
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -89,7 +92,10 @@ fun StayTeamSelectionBottomSheet(
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
-            HorizontalDivider()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.background,
+                thickness = 1.dp,
+            )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -119,7 +125,10 @@ fun StayTeamSelectionBottomSheet(
                     style = MaterialTheme.typography.bodySmall,
                 )
             }
-            HorizontalDivider()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.background,
+                thickness = 1.dp,
+            )
         }
         Spacer(
             modifier = Modifier

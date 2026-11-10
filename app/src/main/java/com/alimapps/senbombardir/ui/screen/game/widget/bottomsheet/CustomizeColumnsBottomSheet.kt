@@ -84,7 +84,11 @@ fun CustomizeColumnsBottomSheet(
         ) {
             toggleableOptions.forEach { option ->
                 val isVisible = !hiddenOptions.contains(option)
-                HorizontalDivider()
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.background,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -110,7 +114,11 @@ fun CustomizeColumnsBottomSheet(
                     )
                 }
             }
-            HorizontalDivider()
+            HorizontalDivider(
+                color = MaterialTheme.colorScheme.background,
+                thickness = 1.dp,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
         }
     }
 }
