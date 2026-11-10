@@ -120,8 +120,8 @@ private fun ChampionTeamHeroCard(team: TeamUiModel, score: ChampionsScore?) {
         stringResource(R.string.champions_score, score.goals, score.conceded),
     ) else listOf(
         stringResource(R.string.champions_points, team.points),
-        stringResource(R.string.champions_goals, team.goals, team.conceded),
         stringResource(R.string.champions_record, team.wins, team.draws, team.loses),
+        stringResource(R.string.champions_goals, team.goals, team.conceded),
     )
 
     BoxWithConstraints(
@@ -201,13 +201,13 @@ private fun ChampionTeamHeroCard(team: TeamUiModel, score: ChampionsScore?) {
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 stats.forEach { statText ->
                     Text(
                         text = statText,
                         style = MaterialTheme.typography.labelSmall,
                         color = Color.White,
-                        maxLines = 1,
                         modifier = Modifier
                             .clip(CircleShape)
                             .background(color = Color.White.copy(alpha = 0.16f), shape = CircleShape)
