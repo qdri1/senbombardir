@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.alimapps.senbombardir.R
 
 enum class GameFunction(val icon: ImageVector, val stringRes: Int) {
-    Champions(icon = Icons.Filled.EmojiEvents, stringRes = R.string.function_champions),
     BestPlayers(icon = Icons.Filled.ThumbUp, stringRes = R.string.function_best_players),
+    Champions(icon = Icons.Filled.EmojiEvents, stringRes = R.string.function_champions),
     History(icon = Icons.Filled.History, stringRes = R.string.function_history),
     Edit(icon = Icons.Filled.Edit, stringRes = R.string.function_edit),
     ClearResults(icon = Icons.Filled.Refresh, stringRes = R.string.function_clear_result),
