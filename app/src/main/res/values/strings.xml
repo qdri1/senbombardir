@@ -341,6 +341,19 @@
     <string name="activation_oneday_hours_abbr">сағ</string>
     <string name="activation_oneday_minutes_abbr">мин</string>
     <string name="activation_oneday_not_subscription">Бұл бір реттік сатып алу, жазылым емес. Қолжетімділік қосымша төлемдерсіз автоматты түрде аяқталады.</string>
+    <string name="paywall_title">Dop Tep Premium</string>
+    <string name="paywall_subtitle">Ойыншылар статистикасы, голдарды дыбыстау, үздік ойыншылар мен чемпиондар — бәрі шектеусіз</string>
+    <string name="paywall_feature_champions">Чемпиондар мен атақтар</string>
+    <string name="paywall_feature_champions_desc">Жеңімпаз команда және әр ойыншыға берілетін атақ.</string>
+    <string name="paywall_badge_best">Ең тиімді</string>
+    <string name="paywall_badge_one_time">Жазылымсыз</string>
+    <string name="paywall_per_month">Айына ≈ %1$s</string>
+    <string name="paywall_period_month">айына</string>
+    <string name="paywall_period_year">жылына</string>
+    <string name="paywall_period_forever">мәңгілік</string>
+    <string name="paywall_period_day">24 сағатқа</string>
+    <string name="paywall_note_subscription">Автоматты түрде ұзартылады. Google Play-де кез келген уақытта тоқтатуға болады</string>
+    <string name="paywall_note_one_time">Google Play арқылы бір реттік төлем, автоматты төлемдерсіз</string>
 
     <string name="update_required_title">Қосымшаның жаңа версиясы шықты</string>
     <string name="update_button_skip">Өткізіп жіберу</string>

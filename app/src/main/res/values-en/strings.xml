@@ -344,6 +344,19 @@
     <string name="activation_oneday_hours_abbr">h</string>
     <string name="activation_oneday_minutes_abbr">min</string>
     <string name="activation_oneday_not_subscription">This is a one-time purchase, not a subscription. Access expires automatically without additional payments.</string>
+    <string name="paywall_title">Dop Tep Premium</string>
+    <string name="paywall_subtitle">Player stats, goal voice-overs, best players and champions — no limits</string>
+    <string name="paywall_feature_champions">Champions and titles</string>
+    <string name="paywall_feature_champions_desc">The winning team and a title for every player.</string>
+    <string name="paywall_badge_best">Best value</string>
+    <string name="paywall_badge_one_time">No subscription</string>
+    <string name="paywall_per_month">≈ %1$s per month</string>
+    <string name="paywall_period_month">per month</string>
+    <string name="paywall_period_year">per year</string>
+    <string name="paywall_period_forever">forever</string>
+    <string name="paywall_period_day">for 24 hours</string>
+    <string name="paywall_note_subscription">Renews automatically. Cancel anytime in Google Play</string>
+    <string name="paywall_note_one_time">One-time payment via Google Play, no recurring charges</string>
 
     <string name="update_required_title">A new version of the app is available</string>
     <string name="update_button_skip">Skip</string>

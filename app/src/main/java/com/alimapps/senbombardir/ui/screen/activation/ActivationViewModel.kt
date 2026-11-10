@@ -31,7 +31,6 @@ class ActivationViewModel(
     fun action(action: ActivationAction) {
         when (action) {
             is ActivationAction.OnBackClicked -> onBackClicked()
-            is ActivationAction.ShowPriceButtonClicked -> onShowPriceButtonClicked()
             is ActivationAction.BuyButtonClicked -> onBuyButtonClicked()
             is ActivationAction.ManageSubscriptionsButtonClicked -> setEffectSafely(ActivationEffect.OpenGooglePlaySubscriptions)
             is ActivationAction.OnActivationPlanItemClicked -> onActivationPlanItemClicked(action.plan)
@@ -53,28 +52,11 @@ class ActivationViewModel(
     }
 
     private fun onBackClicked() {
-        if (uiState.value.billingType == BillingType.Limited) {
-            if (uiState.value.pageIndex > 0) {
-                setState(uiState.value.copy(pageIndex = 0))
-            } else {
-                setEffectSafely(ActivationEffect.CloseScreen)
-            }
-        } else {
-            setEffectSafely(ActivationEffect.CloseScreen)
-        }
-    }
-
-    private fun onShowPriceButtonClicked() {
-        setState(uiState.value.copy(pageIndex = 1))
+        setEffectSafely(ActivationEffect.CloseScreen)
     }
 
     private fun onBuyButtonClicked() {
-        val selectedPlan = uiState.value.selectedPlan
-        if (selectedPlan == null) {
-            setEffectSafely(ActivationEffect.ShowSnackbar(R.string.activation_plan_select_error_text))
-        } else {
-            setEffectSafely(ActivationEffect.BuySelectedPlan(selectedPlan))
-        }
+        setEffectSafely(ActivationEffect.BuySelectedPlan(uiState.value.selectedPlan))
     }
 
     private fun onActivationPlanItemClicked(plan: ActivationPlan) {

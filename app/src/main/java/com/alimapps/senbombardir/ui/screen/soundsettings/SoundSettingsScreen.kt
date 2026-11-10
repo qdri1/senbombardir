@@ -1,5 +1,6 @@
 package com.alimapps.senbombardir.ui.screen.soundsettings
 
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -63,6 +64,7 @@ private fun SoundSettingsScreenContent(
     onAction: (SoundSettingsAction) -> Unit,
 ) {
     Scaffold(
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             Row(
                 modifier = Modifier

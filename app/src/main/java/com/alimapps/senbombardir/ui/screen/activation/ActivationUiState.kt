@@ -5,8 +5,7 @@ import com.alimapps.senbombardir.domain.model.BillingType
 
 data class ActivationUiState(
     val billingType: BillingType = BillingType.Limited,
-    val pageIndex: Int = 0,
-    val selectedPlan: ActivationPlan? = null,
+    val selectedPlan: ActivationPlan = ActivationPlan.Yearly,
     val monthlyPrice: String? = null,
     val yearlyPrice: String? = null,
     val unlimitedPrice: String? = null,

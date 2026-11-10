@@ -342,6 +342,19 @@
     <string name="activation_oneday_hours_abbr">ч</string>
     <string name="activation_oneday_minutes_abbr">мин</string>
     <string name="activation_oneday_not_subscription">Это разовая покупка, а не подписка. Доступ истечёт автоматически без дополнительных платежей.</string>
+    <string name="paywall_title">Dop Tep Premium</string>
+    <string name="paywall_subtitle">Статистика игроков, озвучка голов, лучшие игроки и чемпионы — без ограничений</string>
+    <string name="paywall_feature_champions">Чемпионы и звания</string>
+    <string name="paywall_feature_champions_desc">Команда-победитель и звание для каждого игрока.</string>
+    <string name="paywall_badge_best">Лучший выбор</string>
+    <string name="paywall_badge_one_time">Без подписки</string>
+    <string name="paywall_per_month">≈ %1$s в месяц</string>
+    <string name="paywall_period_month">в месяц</string>
+    <string name="paywall_period_year">в год</string>
+    <string name="paywall_period_forever">навсегда</string>
+    <string name="paywall_period_day">на 24 часа</string>
+    <string name="paywall_note_subscription">Продлевается автоматически. Отмена в любой момент в Google Play</string>
+    <string name="paywall_note_one_time">Разовая оплата через Google Play, без автосписаний</string>
 
     <string name="update_required_title">Доступна новая версия приложения</string>
     <string name="update_button_skip">Пропустить</string>
