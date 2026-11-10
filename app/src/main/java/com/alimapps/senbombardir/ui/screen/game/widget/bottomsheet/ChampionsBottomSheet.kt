@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -199,20 +200,27 @@ private fun ChampionTeamHeroCard(team: TeamUiModel, score: ChampionsScore?) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier
+                    .height(IntrinsicSize.Min)
                     .horizontalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 stats.forEach { statText ->
-                    Text(
-                        text = statText,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.White,
+                    Box(
+                        contentAlignment = Alignment.Center,
                         modifier = Modifier
+                            .fillMaxHeight()
                             .clip(CircleShape)
                             .background(color = Color.White.copy(alpha = 0.16f), shape = CircleShape)
                             .padding(horizontal = 10.dp, vertical = 6.dp),
-                    )
+                    ) {
+                        Text(
+                            text = statText,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color.White,
+                            maxLines = 1,
+                        )
+                    }
                 }
             }
         }
