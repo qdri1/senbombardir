@@ -322,7 +322,6 @@
     <string name="activation_desc_4">Фразы «Осталась одна минута» и «Играем до аута».</string>
     <string name="activation_text_5">Список футбольных звуков</string>
     <string name="activation_desc_5">Интересные исторические футбольные звуки.</string>
-    <string name="activation_text_button">Показать цены</string>
 
     <string name="activation_plan_title">Выберите ваш план</string>
     <string name="activation_plan_1">Ежемесячный</string>
@@ -332,7 +331,6 @@
     <string name="activation_plan_desc_subscribe">Подписка</string>
     <string name="activation_plan_desc_lifetime">Одноразовая покупка</string>
     <string name="activation_plan_desc_one_day">Одноразовая покупка (доступ на один день)</string>
-    <string name="activation_plan_select_error_text">Выберите план</string>
     <string name="activation_plan_activated_text">У вас полная версия</string>
     <string name="activation_plan_activated_button">Управление подпиской</string>
     <string name="activation_plan_badge_save">Экономия %d%%</string>

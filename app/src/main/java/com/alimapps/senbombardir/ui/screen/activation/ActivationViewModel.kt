@@ -2,7 +2,6 @@ package com.alimapps.senbombardir.ui.screen.activation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.domain.model.BillingType

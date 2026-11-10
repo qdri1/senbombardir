@@ -321,7 +321,6 @@
     <string name="activation_desc_4">«Бір минут қалды» және «Аутқа дейін ойнаймыз» фразалары.</string>
     <string name="activation_text_5">Футбол дыбыстарының тізімі</string>
     <string name="activation_desc_5">Қызықты тарихи футбол дыбыстары.</string>
-    <string name="activation_text_button">Бағаларды көрсету</string>
 
     <string name="activation_plan_title">Тарифті таңдаңыз</string>
     <string name="activation_plan_1">Ай сайын</string>
@@ -331,7 +330,6 @@
     <string name="activation_plan_desc_subscribe">Жазылым</string>
     <string name="activation_plan_desc_lifetime">Бір реттік сатып алу</string>
     <string name="activation_plan_desc_one_day">Бір реттік сатып алу (бір күнге қолжетімділік)</string>
-    <string name="activation_plan_select_error_text">Тарифті таңдаңыз</string>
     <string name="activation_plan_activated_text">Сізде толық нұсқа</string>
     <string name="activation_plan_activated_button">Жазылымды басқару</string>
     <string name="activation_plan_badge_save">Үнемдеу %d%%</string>

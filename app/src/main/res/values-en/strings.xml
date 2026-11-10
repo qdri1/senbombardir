@@ -324,7 +324,6 @@
     <string name="activation_desc_4">“One minute remaining” and “Play until the ball is out” phrases.</string>
     <string name="activation_text_5">List of football sounds</string>
     <string name="activation_desc_5">Interesting historical Football sounds.</string>
-    <string name="activation_text_button">Show prices</string>
 
     <string name="activation_plan_title">Choose your plan</string>
     <string name="activation_plan_1">Monthly</string>
@@ -334,7 +333,6 @@
     <string name="activation_plan_desc_subscribe">Subscription</string>
     <string name="activation_plan_desc_lifetime">One-time purchase</string>
     <string name="activation_plan_desc_one_day">One-time purchase</string>
-    <string name="activation_plan_select_error_text">Choose plan</string>
     <string name="activation_plan_activated_text">You have the full version</string>
     <string name="activation_plan_activated_button">Manage subscription</string>
     <string name="activation_plan_badge_save">Save %d%%</string>
