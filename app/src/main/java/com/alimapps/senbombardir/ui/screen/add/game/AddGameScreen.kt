@@ -43,6 +43,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -384,6 +385,7 @@ private fun AddGameScreenContent(
                 )
                 TextButton(
                     onClick = { showRulesBottomSheet = true },
+                    colors = ButtonDefaults.textButtonColors(contentColor = parseHexColor("#FFA500")),
                     modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
                 ) {
                     Icon(

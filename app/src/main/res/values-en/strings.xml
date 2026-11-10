@@ -30,7 +30,7 @@
     <string name="game_rule_4_winner_stay_5">Winner stays (max. 5 games)</string>
     <string name="game_rule_4_winner_stay_6">Winner stays (max. 6 games)</string>
     <string name="game_rule_4_winner_stay_unlimited">Winner always stays</string>
-    <string name="game_rules_info">How the rules work</string>
+    <string name="game_rules_info">How the rules work?</string>
     <string name="game_rule_example">Example</string>
     <string name="game_rule_description_2_change_side">Two teams play. After each half they switch sides of the field.</string>
     <string name="game_rule_example_2_change_side">Half 1: T1 left, T2 right\nHalf 2: T2 left, T1 right\nHalf 3: T1 left again, T2 right</string>

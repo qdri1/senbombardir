@@ -29,7 +29,7 @@
     <string name="game_rule_4_winner_stay_5">Жеңген команда қалады (макс. 5 ойын)</string>
     <string name="game_rule_4_winner_stay_6">Жеңген команда қалады (макс. 6 ойын)</string>
     <string name="game_rule_4_winner_stay_unlimited">Жеңген команда әрдайым қалады</string>
-    <string name="game_rules_info">Ережелер қалай жұмыс істейді</string>
+    <string name="game_rules_info">Ережелер қалай жұмыс істейді?</string>
     <string name="game_rule_example">Мысал</string>
     <string name="game_rule_description_2_change_side">Екі команда ойнайды. Әр таймнан кейін олар алаң жағын ауыстырады.</string>
     <string name="game_rule_example_2_change_side">1-тайм: К1 сол жақта, К2 оң жақта\n2-тайм: К2 сол жақта, К1 оң жақта\n3-тайм: қайтадан К1 сол жақта, К2 оң жақта</string>
