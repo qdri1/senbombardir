@@ -2,4 +2,10 @@
 <resources>
 
     <style name="Theme.SenBombardir" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.SenBombardir.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_app_icon</item>
+        <item name="postSplashScreenTheme">@style/Theme.SenBombardir</item>
+    </style>
 </resources>

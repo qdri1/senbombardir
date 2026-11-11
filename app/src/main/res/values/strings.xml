@@ -381,4 +381,10 @@
     <string name="sound_setting_action_voice_description">Гол, пас, сейв және басқа әрекеттерде ойыншының атын айту</string>
     <string name="sound_setting_action_sounds">Әрекеттен кейінгі дыбыстар</string>
     <string name="sound_setting_action_sounds_description">Гол, пас және басқа әрекеттерден кейінгі жанкүйерлер дыбыстары</string>
+    <string-array name="splash_slogans" translatable="false">
+        <item>Oyındarıñ qızıqtı da, mändi ötsin</item>
+        <item>Futbolımız dami bersin</item>
+        <item>Futbol — bärimizdi biriktiretin oyın</item>
+    </string-array>
+    <string name="splash_made_in" translatable="false">Made in KZ</string>
 </resources>

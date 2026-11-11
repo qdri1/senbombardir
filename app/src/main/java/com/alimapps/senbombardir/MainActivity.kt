@@ -11,17 +11,27 @@ import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.navigation.AppNavigation
+import com.alimapps.senbombardir.ui.screen.splash.SplashScreen
 import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager
@@ -39,8 +49,12 @@ class MainActivity : ComponentActivity() {
 
     private var billingManager: BillingManager? = null
     private var selectedActivationPlan: ActivationPlan? = null
+    private var keepSystemSplash = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val isFirstLaunch = savedInstanceState == null
+        keepSystemSplash = isFirstLaunch
+        installSplashScreen().setKeepOnScreenCondition { keepSystemSplash }
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         RemoteConfig.configureAndActivate()
@@ -56,7 +70,9 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                if (showUpdateDialog && selectedLanguage != null) {
+                var showSplash by rememberSaveable { mutableStateOf(isFirstLaunch) }
+
+                if (showUpdateDialog && selectedLanguage != null && !showSplash) {
                     AppUpdateDialog(
                         onSkip = { showUpdateDialog = false },
                         onUpdate = {
@@ -66,18 +82,31 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                AppNavigation(
-                    showLanguage = selectedLanguage == null,
-                    selectedLanguage = selectedLanguage,
-                    onLanguageSelected = { appLanguage ->
-                        languageRepository.saveLanguage(appLanguage)
-                        setLocale(this, appLanguage)
-                    },
-                    onActivationPlanSelected = { activationPlan ->
-                        selectedActivationPlan = activationPlan
-                        startPurchase(activationPlan)
-                    },
-                )
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AppNavigation(
+                        showLanguage = selectedLanguage == null && !showSplash,
+                        selectedLanguage = selectedLanguage,
+                        onLanguageSelected = { appLanguage ->
+                            languageRepository.saveLanguage(appLanguage)
+                            setLocale(this@MainActivity, appLanguage)
+                        },
+                        onActivationPlanSelected = { activationPlan ->
+                            selectedActivationPlan = activationPlan
+                            startPurchase(activationPlan)
+                        },
+                    )
+
+                    AnimatedVisibility(
+                        visible = showSplash,
+                        enter = EnterTransition.None,
+                        exit = fadeOut(tween(300)),
+                    ) {
+                        SplashScreen(
+                            onReady = { keepSystemSplash = false },
+                            onFinished = { showSplash = false },
+                        )
+                    }
+                }
             }
         }
     }
