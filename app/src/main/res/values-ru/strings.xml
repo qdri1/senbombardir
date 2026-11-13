@@ -382,4 +382,7 @@
     <string name="sound_setting_action_voice_description">Голос называет имя игрока при голе, пасе, сейве и других действиях</string>
     <string name="sound_setting_action_sounds">Звуки после действий</string>
     <string name="sound_setting_action_sounds_description">Звуки трибун после гола, паса и других действий</string>
+    <string name="match_timer_channel_name">Таймер матча</string>
+    <string name="match_timer_notification_title">Идёт матч</string>
+    <string name="match_timer_notification_text">Таймер работает в фоне</string>
 </resources>

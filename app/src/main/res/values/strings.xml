@@ -387,4 +387,7 @@
         <item>Futbol — bärimizdi biriktiretin oyın</item>
     </string-array>
     <string name="splash_made_in" translatable="false">Made in KZ</string>
+    <string name="match_timer_channel_name">Матч таймері</string>
+    <string name="match_timer_notification_title">Матч жүріп жатыр</string>
+    <string name="match_timer_notification_text">Таймер фонда жұмыс істеп тұр</string>
 </resources>

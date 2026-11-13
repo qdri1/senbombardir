@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.alimapps.senbombardir.ui.utils.MatchTimerService
 import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.model.GameHistoryActionEventModel
@@ -1871,6 +1872,7 @@ class GameViewModel(
 
     private fun startTimer() {
         setState(uiState.value.copy(isTimerPlay = true))
+        MatchTimerService.start(context)
         timer = object : CountDownTimer(timerValue, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 when (millisUntilFinished) {
@@ -1887,6 +1889,8 @@ class GameViewModel(
             override fun onFinish() {
                 timerValue = 0L
                 _timerValueState.value = 0L.toStringTime()
+                setState(uiState.value.copy(isTimerPlay = false))
+                MatchTimerService.stop(context)
             }
         }
         timer?.start()
@@ -1896,6 +1900,7 @@ class GameViewModel(
         setState(uiState.value.copy(isTimerPlay = false))
         timer?.cancel()
         timer = null
+        MatchTimerService.stop(context)
     }
 
     private fun resetTimer() {

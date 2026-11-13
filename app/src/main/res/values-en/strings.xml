@@ -384,4 +384,7 @@
     <string name="sound_setting_action_voice_description">Announces the player name on goals, passes, saves and other actions</string>
     <string name="sound_setting_action_sounds">Sounds after actions</string>
     <string name="sound_setting_action_sounds_description">Crowd sounds after goals, passes and other actions</string>
+    <string name="match_timer_channel_name">Match timer</string>
+    <string name="match_timer_notification_title">Match in progress</string>
+    <string name="match_timer_notification_text">Timer running in background</string>
 </resources>
