@@ -327,7 +327,7 @@ class AddGameViewModel(
         )
         liveGameRepository.saveLiveGame(liveGameModel)
 
-        setEffect(AddGameEffect.OpenGameScreen(gameId))
+        setEffect(AddGameEffect.CloseScreen)
     }
 
     private suspend fun updateGame() {

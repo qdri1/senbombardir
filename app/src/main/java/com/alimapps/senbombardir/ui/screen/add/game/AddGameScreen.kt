@@ -82,7 +82,6 @@ import com.alimapps.senbombardir.ui.model.types.GameRuleTeam3
 import com.alimapps.senbombardir.ui.model.types.GameRuleTeam4
 import com.alimapps.senbombardir.ui.model.types.TeamColor
 import com.alimapps.senbombardir.ui.model.types.TeamQuantity
-import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.navigation.NavigationResultManager
 import com.alimapps.senbombardir.ui.screen.add.game.result.UpdateGameResult
 import com.alimapps.senbombardir.ui.utils.parseHexColor
@@ -122,12 +121,6 @@ private fun AddGameScreenContent(
                 is AddGameEffect.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
-                is AddGameEffect.OpenGameScreen -> navController.navigate(
-                    route = NavigationItem.Game.createRoute(effect.gameId),
-                    builder = {
-                        popUpTo(route = NavigationItem.AddGame.route) { inclusive = true }
-                    },
-                )
                 is AddGameEffect.CloseScreen -> navController.navigateUp()
                 is AddGameEffect.CloseScreenWithResult -> {
                     navigationResultManager.sendResult(
