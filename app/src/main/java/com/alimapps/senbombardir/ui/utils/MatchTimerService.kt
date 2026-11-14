@@ -20,6 +20,7 @@ import com.alimapps.senbombardir.R
  * Keeps the process and CPU alive while a live match timer is running, so the
  * timer keeps ticking and the minute / out sounds still play when the app is
  * in the background. Started when the timer starts, stopped when it stops.
+ * Runs only when notifications are allowed (same behaviour as iOS).
  */
 class MatchTimerService : Service() {
 
@@ -30,7 +31,7 @@ class MatchTimerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startAsForeground()
         acquireWakeLock()
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {
@@ -106,6 +107,9 @@ class MatchTimerService : Service() {
         private const val MAX_DURATION_MS = 3 * 60 * 60 * 1000L // 3h safety cap
 
         fun start(context: Context) {
+            if (context.areNotificationsEnabled().not()) {
+                return
+            }
             ContextCompat.startForegroundService(context, Intent(context, MatchTimerService::class.java))
         }
 

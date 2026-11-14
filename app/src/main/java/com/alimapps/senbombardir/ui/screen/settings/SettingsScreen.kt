@@ -1,6 +1,18 @@
 package com.alimapps.senbombardir.ui.screen.settings
 
 import android.content.Context
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import com.alimapps.senbombardir.data.source.NotificationPermissionStorage
+import com.alimapps.senbombardir.ui.utils.areNotificationsEnabled
+import com.alimapps.senbombardir.ui.utils.requestNotificationPermissionOrOpenSettings
+import org.koin.compose.koinInject
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -122,6 +134,8 @@ private fun SettingsScreenContent(
             )
         }
 
+        NotificationSettingsItem()
+
         if (RemoteConfig.telegramUrl.isNotEmpty()) {
             SettingsItemContent(
                 painter = painterResource(R.drawable.ic_telegram),
@@ -189,6 +203,66 @@ private fun SettingsItemContent(
             text = text,
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.labelSmall,
+        )
+    }
+}
+
+@Composable
+private fun NotificationSettingsItem(
+    storage: NotificationPermissionStorage = koinInject(),
+) {
+    val context = LocalContext.current
+    var isEnabled by remember { mutableStateOf(context.areNotificationsEnabled()) }
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {
+        isEnabled = context.areNotificationsEnabled()
+    }
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        isEnabled = context.areNotificationsEnabled()
+    }
+
+    val onClick = {
+        context.requestNotificationPermissionOrOpenSettings(
+            storage = storage,
+            launcher = permissionLauncher,
+        )
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.Notifications,
+            contentDescription = String.empty,
+        )
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.settings_item_notifications),
+                color = MaterialTheme.colorScheme.onSurface,
+                style = MaterialTheme.typography.labelSmall,
+            )
+            Text(
+                text = stringResource(R.string.settings_notifications_desc),
+                color = MaterialTheme.colorScheme.outline,
+                style = MaterialTheme.typography.labelSmall,
+            )
+        }
+        Switch(
+            checked = isEnabled,
+            onCheckedChange = { onClick() },
+            colors = SwitchDefaults.colors(checkedTrackColor = MaterialTheme.colorScheme.primary),
         )
     }
 }

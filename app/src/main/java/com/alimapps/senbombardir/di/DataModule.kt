@@ -19,6 +19,7 @@ import com.alimapps.senbombardir.data.source.LiveGameDao
 import com.alimapps.senbombardir.data.source.PlayerDao
 import com.alimapps.senbombardir.data.source.PlayerHistoryDao
 import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
+import com.alimapps.senbombardir.data.source.NotificationPermissionStorage
 import com.alimapps.senbombardir.data.source.Prefs
 import com.alimapps.senbombardir.data.source.SoundSettingsStorage
 import com.alimapps.senbombardir.data.source.TeamDao
@@ -49,6 +50,7 @@ val dataModule = module {
 
     single { Prefs(preferences = get<Context>().getSharedPreferences("PREFS", Context.MODE_PRIVATE)) }
     single { HiddenColumnsStorage(preferences = get<Context>().getSharedPreferences("HIDDEN_COLUMNS", Context.MODE_PRIVATE)) }
+    single { NotificationPermissionStorage(preferences = get<Context>().getSharedPreferences("NOTIFICATION_PERMISSION", Context.MODE_PRIVATE)) }
     single { SoundSettingsStorage(preferences = get<Context>().getSharedPreferences("SOUND_SETTINGS", Context.MODE_PRIVATE)) }
 
     single {

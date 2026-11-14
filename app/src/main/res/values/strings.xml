@@ -390,4 +390,10 @@
     <string name="match_timer_channel_name">Матч таймері</string>
     <string name="match_timer_notification_title">Матч жүріп жатыр</string>
     <string name="match_timer_notification_text">Таймер фонда жұмыс істеп тұр</string>
+    <string name="settings_item_notifications">Хабарландырулар</string>
+    <string name="settings_notifications_desc">Қосымша фонда тұрғанда таймер дыбыстары</string>
+    <string name="notification_rationale_title">Таймер хабарландырулары</string>
+    <string name="notification_rationale_message">Хабарландырулар қосымша фонда тұрғанда немесе экран өшіп тұрған кезде де таймер дыбыстары («Бір минут қалды», «Аутқа дейін ойнаймыз») естілуі үшін қажет.</string>
+    <string name="notification_rationale_allow">Рұқсат беру</string>
+    <string name="notification_rationale_later">Қазір емес</string>
 </resources>

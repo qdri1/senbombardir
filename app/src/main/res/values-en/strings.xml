@@ -387,4 +387,10 @@
     <string name="match_timer_channel_name">Match timer</string>
     <string name="match_timer_notification_title">Match in progress</string>
     <string name="match_timer_notification_text">Timer running in background</string>
+    <string name="settings_item_notifications">Notifications</string>
+    <string name="settings_notifications_desc">Timer sounds when the app is in the background</string>
+    <string name="notification_rationale_title">Timer notifications</string>
+    <string name="notification_rationale_message">We use notifications to keep the timer sounds (“One minute remaining”, “Play until the ball is out”) playing even when the app is in the background or the screen is locked.</string>
+    <string name="notification_rationale_allow">Allow</string>
+    <string name="notification_rationale_later">Not now</string>
 </resources>

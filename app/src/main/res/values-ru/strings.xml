@@ -385,4 +385,10 @@
     <string name="match_timer_channel_name">Таймер матча</string>
     <string name="match_timer_notification_title">Идёт матч</string>
     <string name="match_timer_notification_text">Таймер работает в фоне</string>
+    <string name="settings_item_notifications">Уведомления</string>
+    <string name="settings_notifications_desc">Звуки таймера, когда приложение на фоне</string>
+    <string name="notification_rationale_title">Уведомления таймера</string>
+    <string name="notification_rationale_message">Уведомления нужны, чтобы звуки таймера («Осталась одна минута», «Играем до аута») звучали, даже когда приложение свёрнуто или экран заблокирован.</string>
+    <string name="notification_rationale_allow">Разрешить</string>
+    <string name="notification_rationale_later">Не сейчас</string>
 </resources>

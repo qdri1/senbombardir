@@ -2,6 +2,8 @@ package com.alimapps.senbombardir.ui.screen.game
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -59,6 +61,10 @@ import com.alimapps.senbombardir.ui.screen.game.widget.block.SoundsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TimerBlock
 import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
+import com.alimapps.senbombardir.data.source.NotificationPermissionStorage
+import com.alimapps.senbombardir.ui.utils.NotificationRationaleDialog
+import com.alimapps.senbombardir.ui.utils.areNotificationsEnabled
+import com.alimapps.senbombardir.ui.utils.requestNotificationPermissionOrOpenSettings
 import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ChampionsBottomSheet
@@ -80,12 +86,14 @@ fun GameScreen(
     viewModel: GameViewModel,
     navigationResultManager: NavigationResultManager = koinInject(),
     hiddenColumnsStorage: HiddenColumnsStorage = koinInject(),
+    notificationPermissionStorage: NotificationPermissionStorage = koinInject(),
 ) {
     GameScreenContent(
         navController = navController,
         navigationResultManager = navigationResultManager,
         viewModel = viewModel,
         hiddenColumnsStorage = hiddenColumnsStorage,
+        notificationPermissionStorage = notificationPermissionStorage,
         onAction = viewModel::action,
     )
 }
@@ -96,6 +104,7 @@ private fun GameScreenContent(
     navigationResultManager: NavigationResultManager,
     viewModel: GameViewModel,
     hiddenColumnsStorage: HiddenColumnsStorage,
+    notificationPermissionStorage: NotificationPermissionStorage,
     onAction: (GameAction) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -118,6 +127,34 @@ private fun GameScreenContent(
     var playerResultUiModel by remember { mutableStateOf<PlayerResultUiModel?>(null) }
     var teamResultUiModel by remember { mutableStateOf<TeamResultUiModel?>(null) }
     var liveGameResultUiModel by remember { mutableStateOf<LiveGameResultUiModel?>(null) }
+
+    var showNotificationRationale by remember { mutableStateOf(false) }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {}
+
+    LaunchedEffect(Unit) {
+        if (!notificationPermissionStorage.isRationaleShown() && !context.areNotificationsEnabled()) {
+            showNotificationRationale = true
+        }
+    }
+
+    if (showNotificationRationale) {
+        NotificationRationaleDialog(
+            onAllow = {
+                showNotificationRationale = false
+                notificationPermissionStorage.setRationaleShown()
+                context.requestNotificationPermissionOrOpenSettings(
+                    storage = notificationPermissionStorage,
+                    launcher = notificationPermissionLauncher,
+                )
+            },
+            onDismiss = {
+                showNotificationRationale = false
+                notificationPermissionStorage.setRationaleShown()
+            },
+        )
+    }
 
     BackHandler {
         onAction(GameAction.OnBackClicked)
