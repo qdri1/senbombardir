@@ -125,6 +125,12 @@ internal fun PitchCard(
     }
 }
 
+/** Static pitch background (gradient + grass stripes / parquet). Also used by the game cards on HomeScreen. */
+internal fun Modifier.pitchSurfaceBackground(surface: PitchSurface): Modifier {
+    val colors = surface.colors
+    return pitchBackground(dark = colors.dark, mid = colors.mid, deep = colors.deep, surface = surface)
+}
+
 private fun Modifier.pitchBackground(
     dark: Color,
     mid: Color,

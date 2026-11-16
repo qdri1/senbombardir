@@ -8,6 +8,10 @@
     <string name="update_game">Ойынды өңдеу</string>
 
     <string name="game_empty">Сізде әлі ойындар жоқ</string>
+    <string name="game_empty_subtitle">Алғашқы ойынды қосыңыз — командалар мен ойыншыларды қосыңыз, ал Dop Tep есепті, таймерді және статистиканы жүргізеді.</string>
+    <string name="home_teams_count">%d команда</string>
+    <string name="home_updated">Жаңартылды: %s</string>
+    <string name="home_updated_now">Жаңартылды: қазір</string>
     <string name="game_name">Ойын атауы</string>
     <string name="game_time">Матч уақыты (минут)</string>
     <string name="game_format">Ойын форматы</string>

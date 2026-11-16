@@ -9,6 +9,10 @@
     <string name="update_game">Edit game</string>
 
     <string name="game_empty">You do not have any games yet</string>
+    <string name="game_empty_subtitle">Create your first game — add teams and players, and Dop Tep will keep the score, timer and stats.</string>
+    <string name="home_teams_count">%d teams</string>
+    <string name="home_updated">Updated %s</string>
+    <string name="home_updated_now">Updated now</string>
     <string name="game_name">Game name</string>
     <string name="game_time">Match time (minutes)</string>
     <string name="game_format">Game format</string>

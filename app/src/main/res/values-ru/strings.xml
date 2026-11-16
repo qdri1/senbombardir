@@ -9,6 +9,10 @@
     <string name="update_game">Редактировать игру</string>
 
     <string name="game_empty">У вас пока нет игр</string>
+    <string name="game_empty_subtitle">Создайте первую игру — добавьте команды и игроков, и Dop Tep будет вести счёт, таймер и статистику.</string>
+    <string name="home_teams_count">%d команды</string>
+    <string name="home_updated">Обновлено %s</string>
+    <string name="home_updated_now">Обновлено сейчас</string>
     <string name="game_name">Название игры</string>
     <string name="game_time">Время матча в минутах</string>
     <string name="game_format">Формат игры</string>

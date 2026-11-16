@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rounded rectangle with a bulleted list, analogue of SF Symbol "list.bullet.rectangle" -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M4,3H20A3,3 0,0 1,23 6V18A3,3 0,0 1,20 21H4A3,3 0,0 1,1 18V6A3,3 0,0 1,4 3Z
+            M4,4.8H20A1.2,1.2 0,0 1,21.2 6V18A1.2,1.2 0,0 1,20 19.2H4A1.2,1.2 0,0 1,2.8 18V6A1.2,1.2 0,0 1,4 4.8Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M6.5,7.4A1.1,1.1 0,1 0,6.5 9.6A1.1,1.1 0,1 0,6.5 7.4Z
+            M6.5,10.9A1.1,1.1 0,1 0,6.5 13.1A1.1,1.1 0,1 0,6.5 10.9Z
+            M6.5,14.4A1.1,1.1 0,1 0,6.5 16.6A1.1,1.1 0,1 0,6.5 14.4Z
+            M9.2,7.7H18.2A0.8,0.8 0,0 1,18.2 9.3H9.2A0.8,0.8 0,0 1,9.2 7.7Z
+            M9.2,11.2H18.2A0.8,0.8 0,0 1,18.2 12.8H9.2A0.8,0.8 0,0 1,9.2 11.2Z
+            M9.2,14.7H18.2A0.8,0.8 0,0 1,18.2 16.3H9.2A0.8,0.8 0,0 1,9.2 14.7Z" />
+</vector>
