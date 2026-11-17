@@ -1911,26 +1911,32 @@ class GameViewModel(
     }
 
     private fun playGoalSound() {
-        when (selectedLanguage) {
-            AppLanguage.KZ -> when (Random.nextInt(0, 5)) {
-                0 -> playMedia(resId = R.raw.oooi_kandai_gol)
-                1 -> playMedia(resId = R.raw.suiii_full)
-                2 -> playMedia(resId = R.raw.gol_gol_gol)
-                3 -> playMedia(resId = R.raw.satpayev_gol)
-                4 -> playMedia(resId = R.raw.sharip_gol_gol)
-            }
-            AppLanguage.RU -> when (Random.nextInt(0, 4)) {
-                0 -> playMedia(resId = R.raw.suiii_full)
-                1 -> playMedia(resId = R.raw.gol_gol_gol)
-                2 -> playMedia(resId = R.raw.satpayev_gol)
-                3 -> playMedia(resId = R.raw.sharip_gol_gol)
-            }
-            AppLanguage.EN -> when (Random.nextInt(0, 3)) {
-                0 -> playMedia(resId = R.raw.suiii_full)
-                1 -> playMedia(resId = R.raw.gol_gol_gol)
-                2 -> playMedia(resId = R.raw.sharip_gol_gol)
-            }
+        val resId = when (selectedLanguage) {
+            AppLanguage.KZ -> listOf(
+                R.raw.oooi_kandai_gol,
+                R.raw.satpayev_gol,
+                R.raw.sharip_gol_gol,
+                R.raw.suiii_full,
+                R.raw.gol_gol_gol,
+                R.raw.sound_goal_fans,
+            ).random()
+
+            AppLanguage.RU -> listOf(
+                R.raw.satpayev_gol,
+                R.raw.sharip_gol_gol,
+                R.raw.suiii_full,
+                R.raw.gol_gol_gol,
+                R.raw.sound_goal_fans,
+            ).random()
+
+            AppLanguage.EN -> listOf(
+                R.raw.suiii_full,
+                R.raw.gol_gol_gol,
+                R.raw.sound_goal_fans,
+            ).random()
         }
+
+        playMedia(resId = resId)
     }
 
     private fun playDopTepSound() {
