@@ -299,7 +299,7 @@ private fun GameCardHeader(game: GameUiModel) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Text(
@@ -316,16 +316,6 @@ private fun GameCardHeader(game: GameUiModel) {
                 fontSize = 12.sp,
             )
         }
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = game.gameFormat.format,
-            color = Color.White,
-            style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier
-                .clip(RoundedCornerShape(12.dp))
-                .background(Color.White.copy(alpha = 0.15f))
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-        )
     }
 }
 
@@ -338,11 +328,14 @@ private fun GameCardDetails(game: GameUiModel) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        // Chips wrap to the next line when they don't fit (e.g. "100 минут").
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
+            InfoChip(
+                icon = painterResource(id = R.drawable.ic_sports_court),
+                text = game.gameFormat.format,
+            )
             InfoChip(
                 icon = rememberVectorPainter(Icons.Filled.Groups),
                 text = stringResource(id = R.string.home_teams_count, game.teamQuantity.quantity),
@@ -351,22 +344,16 @@ private fun GameCardDetails(game: GameUiModel) {
                 icon = rememberVectorPainter(Icons.Outlined.Timer),
                 text = stringResource(id = R.string.time_in_minutes, game.timeInMinutes),
             )
-            InfoChip(
-                icon = painterResource(id = R.drawable.ic_sports_court),
-                text = stringResource(id = game.pitchSurface.stringRes),
-            )
         }
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_list_bullet_rectangle),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .padding(top = 1.dp)
-                    .size(18.dp),
+                modifier = Modifier.size(18.dp),
             )
             Text(
                 text = when (val gameRule = game.gameRule) {
