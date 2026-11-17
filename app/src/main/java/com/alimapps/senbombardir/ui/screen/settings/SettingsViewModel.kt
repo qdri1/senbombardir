@@ -9,6 +9,9 @@ import com.alimapps.senbombardir.ui.utils.RemoteConfig
 import com.alimapps.senbombardir.ui.utils.debounceEffect
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
@@ -18,10 +21,14 @@ class SettingsViewModel(
     private val _effect = MutableSharedFlow<SettingsEffect>()
     val effect: Flow<SettingsEffect> get() = _effect.debounceEffect()
 
+    private val _isPremium = MutableStateFlow(hasFullVersion())
+    val isPremium: StateFlow<Boolean> = _isPremium.asStateFlow()
+
     fun action(action: SettingsAction) {
         when (action) {
             is SettingsAction.OnSettingsItemClicked -> onSettingsItemClicked(action.item)
             is SettingsAction.OnActivationCodeSubmitted -> onActivationCodeSubmitted(action.code)
+            is SettingsAction.OnScreenResumed -> refreshBillingState()
         }
     }
 
@@ -43,11 +50,19 @@ class SettingsViewModel(
                 billingRepository.setCurrentBillingType(BillingType.Lifetime)
                 billingRepository.setSecretActivated(true)
             }
+            refreshBillingState()
             setEffectSafely(SettingsEffect.ActivationSuccess)
         } else {
             setEffectSafely(SettingsEffect.ActivationError)
         }
     }
+
+    private fun refreshBillingState() {
+        _isPremium.value = hasFullVersion()
+    }
+
+    private fun hasFullVersion(): Boolean =
+        billingRepository.getCurrentBillingType() != BillingType.Limited
 
     private fun setEffectSafely(effect: SettingsEffect) {
         viewModelScope.launch {

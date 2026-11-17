@@ -299,6 +299,7 @@
     <string name="settings_item_telegram">Telegram</string>
     <string name="settings_item_whatsapp">WhatsApp</string>
     <string name="settings_item_activation">Жазылымды басқару</string>
+    <string name="settings_item_activate_full">Толық нұсқаны алу</string>
     <string name="settings_version">Нұсқа</string>
 
     <string name="choose_language">Тілді таңдаңыз</string>

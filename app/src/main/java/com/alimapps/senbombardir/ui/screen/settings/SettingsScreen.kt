@@ -9,6 +9,8 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alimapps.senbombardir.data.source.NotificationPermissionStorage
 import com.alimapps.senbombardir.ui.utils.areNotificationsEnabled
 import com.alimapps.senbombardir.ui.utils.requestNotificationPermissionOrOpenSettings
@@ -87,6 +89,12 @@ private fun SettingsScreenContent(
     val context = LocalContext.current
     var tapCount by remember { mutableIntStateOf(0) }
     var showCodeDialog by remember { mutableStateOf(false) }
+    val isPremium by viewModel.isPremium.collectAsStateWithLifecycle()
+
+    LifecycleResumeEffect(Unit) {
+        onAction(SettingsAction.OnScreenResumed)
+        onPauseOrDispose {}
+    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
@@ -129,7 +137,11 @@ private fun SettingsScreenContent(
         SettingsItemType.entries.forEach { item ->
             SettingsItemContent(
                 painter = painterResource(item.iconRes),
-                text = stringResource(item.stringRes),
+                text = if (item == SettingsItemType.Activation && !isPremium) {
+                    stringResource(R.string.settings_item_activate_full)
+                } else {
+                    stringResource(item.stringRes)
+                },
                 onItemClicked = { onAction(SettingsAction.OnSettingsItemClicked(item)) },
             )
         }

@@ -301,6 +301,7 @@
     <string name="settings_item_telegram">Telegram</string>
     <string name="settings_item_whatsapp">WhatsApp</string>
     <string name="settings_item_activation">Manage subscription</string>
+    <string name="settings_item_activate_full">Upgrade to the full version</string>
     <string name="settings_version">Version</string>
 
     <string name="choose_language">Choose language</string>

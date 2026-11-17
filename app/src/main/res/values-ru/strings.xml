@@ -300,6 +300,7 @@
     <string name="settings_item_telegram">Telegram</string>
     <string name="settings_item_whatsapp">WhatsApp</string>
     <string name="settings_item_activation">Управление подпиской</string>
+    <string name="settings_item_activate_full">Активировать полную версию</string>
     <string name="settings_version">Версия</string>
 
     <string name="choose_language">Выберите язык</string>
