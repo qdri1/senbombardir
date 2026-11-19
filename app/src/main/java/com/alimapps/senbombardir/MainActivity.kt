@@ -37,6 +37,7 @@ import com.alimapps.senbombardir.ui.screen.splash.SplashScreen
 import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager
+import com.alimapps.senbombardir.ui.utils.ONE_DAY_ACCESS_MILLIS
 import com.alimapps.senbombardir.ui.utils.RemoteConfig
 import com.revenuecat.purchases.ProductType
 import org.koin.android.ext.android.inject
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
         RemoteConfig.configureAndActivate()
         val selectedLanguage = languageRepository.getSelectedLanguage()
         selectedLanguage?.let { setLocale(this, it) }
-        billingRepository.checkAndUpdateOnedayExpiration()
+        refreshOneDayAccess()
         checkPurchase()
         // Onboarding (it starts with the language choice) is shown only on a fresh install,
         // or again if it was left halfway (the language is already saved by then).
@@ -200,18 +201,27 @@ class MainActivity : ComponentActivity() {
     private fun initBillingManager() {
         if (billingManager == null) {
             billingManager = BillingManager(this, object : BillingManager.BillingUpdatesListener {
-                override fun onPurchaseSuccess() {
+                override fun onPurchaseSuccess(purchaseTime: Long) {
                     when (selectedActivationPlan) {
                         ActivationPlan.Monthly,
                         ActivationPlan.Yearly -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
                         ActivationPlan.Unlimited -> billingRepository.setCurrentBillingType(BillingType.Lifetime)
                         ActivationPlan.OneDay -> {
-                            billingRepository.setOnedayExpirationDate(System.currentTimeMillis() + 24 * 60 * 60 * 1000L)
+                            val purchasedAt = if (purchaseTime > 0L) purchaseTime else System.currentTimeMillis()
+                            billingRepository.setOnedayExpirationDate(purchasedAt + ONE_DAY_ACCESS_MILLIS)
                             billingRepository.setCurrentBillingType(BillingType.OneDay)
                         }
                         null -> Unit
                     }
                     restartApp()
+                }
+
+                override fun onOneDayPurchaseCheckSuccess(purchaseTime: Long) {
+                    val billingType = billingRepository.getCurrentBillingType()
+                    if (billingType == BillingType.Limited || billingType == BillingType.OneDay) {
+                        billingRepository.setOnedayExpirationDate(purchaseTime + ONE_DAY_ACCESS_MILLIS)
+                        billingRepository.setCurrentBillingType(BillingType.OneDay)
+                    }
                 }
 
                 override fun onPurchaseCheckSuccess(productType: ProductType) {
@@ -229,12 +239,14 @@ class MainActivity : ComponentActivity() {
                             val isSecretActivated = billingRepository.isSecretActivated()
                             if (billingType == BillingType.Lifetime && isSecretActivated.not()) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
+                                billingManager?.checkOneDayPurchase(productId = ActivationPlan.OneDay.productId)
                             }
                         }
                         ProductType.SUBS -> {
                             val billingType = billingRepository.getCurrentBillingType()
                             if (billingType == BillingType.Subscribe) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
+                                billingManager?.checkOneDayPurchase(productId = ActivationPlan.OneDay.productId)
                             }
                         }
                         ProductType.UNKNOWN -> Unit
@@ -285,9 +297,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (billingRepository.checkAndUpdateOnedayExpiration()) {
+        if (refreshOneDayAccess()) {
             restartApp()
         }
+    }
+
+    private fun refreshOneDayAccess(): Boolean {
+        val expired = billingRepository.checkAndUpdateOnedayExpiration()
+        val billingType = billingRepository.getCurrentBillingType()
+        if (billingType == BillingType.Limited || billingType == BillingType.OneDay) {
+            initBillingManager()
+            billingManager?.checkOneDayPurchase(productId = ActivationPlan.OneDay.productId)
+        }
+        return expired
     }
 
     override fun onDestroy() {

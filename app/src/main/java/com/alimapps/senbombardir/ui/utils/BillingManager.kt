@@ -13,6 +13,7 @@ import com.revenuecat.purchases.purchaseWith
 
 private const val REVENUECAT_API_KEY = "goog_cUzqpjmnAOPcoKJDcaILIbIQAbw"
 private const val ENTITLEMENT_ID = "dop_tep_pro"
+const val ONE_DAY_ACCESS_MILLIS = 24 * 60 * 60 * 1000L
 
 class BillingManager(
     context: Context,
@@ -40,7 +41,7 @@ class BillingManager(
     fun launchPurchase(activity: Activity, storeProduct: StoreProduct) {
         Purchases.sharedInstance.purchaseWith(
             purchaseParams = PurchaseParams.Builder(activity, storeProduct).build(),
-            onSuccess = { _, _ -> listener.onPurchaseSuccess() },
+            onSuccess = { transaction, _ -> listener.onPurchaseSuccess(purchaseTime = transaction?.purchaseTime ?: 0L) },
         )
     }
 
@@ -66,8 +67,21 @@ class BillingManager(
         }
     }
 
+    fun checkOneDayPurchase(productId: String) {
+        Purchases.sharedInstance.getCustomerInfoWith { customerInfo ->
+            val latestPurchaseTime = customerInfo.nonSubscriptionTransactions
+                .filter { it.productIdentifier == productId }
+                .maxOfOrNull { it.purchaseDate.time }
+                ?: return@getCustomerInfoWith
+            if (latestPurchaseTime + ONE_DAY_ACCESS_MILLIS > System.currentTimeMillis()) {
+                listener.onOneDayPurchaseCheckSuccess(purchaseTime = latestPurchaseTime)
+            }
+        }
+    }
+
     interface BillingUpdatesListener {
-        fun onPurchaseSuccess()
+        fun onPurchaseSuccess(purchaseTime: Long)
+        fun onOneDayPurchaseCheckSuccess(purchaseTime: Long)
         fun onPurchaseCheckSuccess(productType: ProductType)
         fun onPurchaseCheckNoPurchase(productType: ProductType)
     }
