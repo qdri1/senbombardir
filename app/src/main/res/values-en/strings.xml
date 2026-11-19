@@ -424,4 +424,8 @@
     <string name="onboarding_sample_team_2">T-2</string>
     <string name="onboarding_sample_next_teams">T-1 – T-3</string>
     <string name="onboarding_notification_sample">One minute remaining</string>
+    <string name="restore_purchases">Restore Purchases</string>
+    <string name="restore_success">Purchases restored successfully!</string>
+    <string name="restore_nothing">No active purchases found.</string>
+    <string name="restore_error">Couldn\'t restore purchases.</string>
 </resources>

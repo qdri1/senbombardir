@@ -422,4 +422,8 @@
     <string name="onboarding_sample_team_2">К-2</string>
     <string name="onboarding_sample_next_teams">К-1 – К-3</string>
     <string name="onboarding_notification_sample">Осталась одна минута</string>
+    <string name="restore_purchases">Восстановить покупки</string>
+    <string name="restore_success">Покупки успешно восстановлены!</string>
+    <string name="restore_nothing">Активные покупки не найдены.</string>
+    <string name="restore_error">Не удалось восстановить покупки.</string>
 </resources>

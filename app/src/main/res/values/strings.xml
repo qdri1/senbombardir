@@ -427,4 +427,8 @@
     <string name="onboarding_sample_team_2">К-2</string>
     <string name="onboarding_sample_next_teams">К-1 – К-3</string>
     <string name="onboarding_notification_sample">Бір минут қалды</string>
+    <string name="restore_purchases">Сатып алуларды қалпына келтіру</string>
+    <string name="restore_success">Сатып алулар сәтті қалпына келтірілді!</string>
+    <string name="restore_nothing">Белсенді сатып алулар табылмады.</string>
+    <string name="restore_error">Сатып алуларды қалпына келтіру мүмкін болмады.</string>
 </resources>

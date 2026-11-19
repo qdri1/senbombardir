@@ -52,6 +52,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,6 +72,7 @@ fun ActivationScreen(
     navController: NavController,
     viewModel: ActivationViewModel,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
+    onRestorePurchasesClicked: () -> Unit,
     showOneDay: Boolean = false,
 ) {
     ActivationScreenContent(
@@ -78,6 +80,7 @@ fun ActivationScreen(
         viewModel = viewModel,
         onAction = viewModel::action,
         onActivationPlanSelected = onActivationPlanSelected,
+        onRestorePurchasesClicked = onRestorePurchasesClicked,
         showOneDay = showOneDay,
     )
 }
@@ -88,6 +91,7 @@ private fun ActivationScreenContent(
     viewModel: ActivationViewModel,
     onAction: (ActivationAction) -> Unit,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
+    onRestorePurchasesClicked: () -> Unit,
     showOneDay: Boolean = false,
 ) {
     BackHandler { onAction(ActivationAction.OnBackClicked) }
@@ -105,6 +109,7 @@ private fun ActivationScreenContent(
                     snackbarHostState.showSnackbar(message = context.getString(effect.stringRes))
                 }
                 is ActivationEffect.BuySelectedPlan -> onActivationPlanSelected(effect.plan)
+                is ActivationEffect.RestorePurchases -> onRestorePurchasesClicked()
             }
         }
     }
@@ -524,6 +529,16 @@ private fun PaywallBottomBar(
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline,
                 textAlign = TextAlign.Center,
+            )
+            Text(
+                text = stringResource(R.string.restore_purchases),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { onAction(ActivationAction.RestorePurchasesClicked) }
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
             )
         }
     }

@@ -56,6 +56,7 @@ fun AppNavigation(
     selectedLanguage: AppLanguage?,
     onLanguageSelected: (AppLanguage) -> Unit,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
+    onRestorePurchasesClicked: () -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -177,6 +178,7 @@ fun AppNavigation(
                         navController = navController,
                         viewModel = koinViewModel<ActivationViewModel>(),
                         onActivationPlanSelected = onActivationPlanSelected,
+                        onRestorePurchasesClicked = onRestorePurchasesClicked,
                         showOneDay = true,
                     )
                 }

@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.LocaleList
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -118,6 +119,7 @@ class MainActivity : ComponentActivity() {
                                 selectedActivationPlan = activationPlan
                                 startPurchase(activationPlan)
                             },
+                            onRestorePurchasesClicked = { restorePurchases() },
                         )
                     }
 
@@ -152,6 +154,27 @@ class MainActivity : ComponentActivity() {
                     billingManager?.launchPurchase(this, products.first())
                 }
             }
+        )
+    }
+
+    private fun restorePurchases() {
+        initBillingManager()
+        billingManager?.restorePurchases(
+            subscriptionIds = listOf(ActivationPlan.Monthly.productId, ActivationPlan.Yearly.productId),
+            lifetimeIds = listOf(ActivationPlan.Unlimited.productId),
+            oneDayId = ActivationPlan.OneDay.productId,
+            onResult = { success ->
+                val hasAccess = billingRepository.getCurrentBillingType() != BillingType.Limited
+                val message = when {
+                    !success -> R.string.restore_error
+                    hasAccess -> R.string.restore_success
+                    else -> R.string.restore_nothing
+                }
+                Toast.makeText(this, getString(message), Toast.LENGTH_LONG).show()
+                if (success && hasAccess) {
+                    restartApp()
+                }
+            },
         )
     }
 

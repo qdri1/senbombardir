@@ -6,5 +6,6 @@ sealed interface ActivationAction {
     data object OnBackClicked : ActivationAction
     data object BuyButtonClicked : ActivationAction
     data object ManageSubscriptionsButtonClicked : ActivationAction
+    data object RestorePurchasesClicked : ActivationAction
     class OnActivationPlanItemClicked(val plan: ActivationPlan) : ActivationAction
 }

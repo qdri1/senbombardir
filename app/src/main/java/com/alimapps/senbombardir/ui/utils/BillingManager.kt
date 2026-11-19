@@ -6,7 +6,9 @@ import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.getCustomerInfoWith
+import com.revenuecat.purchases.restorePurchasesWith
 import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.purchaseWith
@@ -47,35 +49,60 @@ class BillingManager(
 
     fun checkPurchase(productIds: List<String>, type: ProductType) {
         Purchases.sharedInstance.getCustomerInfoWith { customerInfo ->
-            val isPurchased = when (type) {
-                ProductType.SUBS -> customerInfo.activeSubscriptions.any { activeId ->
-                    productIds.any { activeId == it || activeId.startsWith("$it:") }
-                }
-                ProductType.INAPP -> {
-                    val hasLifetimeTransaction = customerInfo.nonSubscriptionTransactions.any { it.productIdentifier in productIds }
-                    val isEntitlementActive = customerInfo.activeSubscriptions.isEmpty() && customerInfo.entitlements[ENTITLEMENT_ID]?.isActive == true
-
-                    hasLifetimeTransaction && isEntitlementActive
-                }
-                ProductType.UNKNOWN -> false
-            }
-            if (isPurchased) {
-                listener.onPurchaseCheckSuccess(type)
-            } else {
-                listener.onPurchaseCheckNoPurchase(type)
-            }
+            evaluatePurchase(customerInfo, productIds, type)
         }
     }
 
     fun checkOneDayPurchase(productId: String) {
         Purchases.sharedInstance.getCustomerInfoWith { customerInfo ->
-            val latestPurchaseTime = customerInfo.nonSubscriptionTransactions
-                .filter { it.productIdentifier == productId }
-                .maxOfOrNull { it.purchaseDate.time }
-                ?: return@getCustomerInfoWith
-            if (latestPurchaseTime + ONE_DAY_ACCESS_MILLIS > System.currentTimeMillis()) {
-                listener.onOneDayPurchaseCheckSuccess(purchaseTime = latestPurchaseTime)
+            evaluateOneDayPurchase(customerInfo, productId)
+        }
+    }
+
+    fun restorePurchases(
+        subscriptionIds: List<String>,
+        lifetimeIds: List<String>,
+        oneDayId: String,
+        onResult: (success: Boolean) -> Unit,
+    ) {
+        Purchases.sharedInstance.restorePurchasesWith(
+            onError = { onResult(false) },
+            onSuccess = { customerInfo ->
+                evaluatePurchase(customerInfo, subscriptionIds, ProductType.SUBS)
+                evaluatePurchase(customerInfo, lifetimeIds, ProductType.INAPP)
+                evaluateOneDayPurchase(customerInfo, oneDayId)
+                onResult(true)
+            },
+        )
+    }
+
+    private fun evaluatePurchase(customerInfo: CustomerInfo, productIds: List<String>, type: ProductType) {
+        val isPurchased = when (type) {
+            ProductType.SUBS -> customerInfo.activeSubscriptions.any { activeId ->
+                productIds.any { activeId == it || activeId.startsWith("$it:") }
             }
+            ProductType.INAPP -> {
+                val hasLifetimeTransaction = customerInfo.nonSubscriptionTransactions.any { it.productIdentifier in productIds }
+                val isEntitlementActive = customerInfo.activeSubscriptions.isEmpty() && customerInfo.entitlements[ENTITLEMENT_ID]?.isActive == true
+
+                hasLifetimeTransaction && isEntitlementActive
+            }
+            ProductType.UNKNOWN -> false
+        }
+        if (isPurchased) {
+            listener.onPurchaseCheckSuccess(type)
+        } else {
+            listener.onPurchaseCheckNoPurchase(type)
+        }
+    }
+
+    private fun evaluateOneDayPurchase(customerInfo: CustomerInfo, productId: String) {
+        val latestPurchaseTime = customerInfo.nonSubscriptionTransactions
+            .filter { it.productIdentifier == productId }
+            .maxOfOrNull { it.purchaseDate.time }
+            ?: return
+        if (latestPurchaseTime + ONE_DAY_ACCESS_MILLIS > System.currentTimeMillis()) {
+            listener.onOneDayPurchaseCheckSuccess(purchaseTime = latestPurchaseTime)
         }
     }
 

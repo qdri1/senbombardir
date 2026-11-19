@@ -8,4 +8,5 @@ sealed interface ActivationEffect : DebounceEffect {
     data object OpenGooglePlaySubscriptions : ActivationEffect
     class ShowSnackbar(val stringRes: Int) : ActivationEffect
     class BuySelectedPlan(val plan: ActivationPlan) : ActivationEffect
+    data object RestorePurchases : ActivationEffect
 }

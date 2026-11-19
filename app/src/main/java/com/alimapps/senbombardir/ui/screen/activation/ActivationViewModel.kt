@@ -32,6 +32,7 @@ class ActivationViewModel(
             is ActivationAction.OnBackClicked -> onBackClicked()
             is ActivationAction.BuyButtonClicked -> onBuyButtonClicked()
             is ActivationAction.ManageSubscriptionsButtonClicked -> setEffectSafely(ActivationEffect.OpenGooglePlaySubscriptions)
+            is ActivationAction.RestorePurchasesClicked -> setEffectSafely(ActivationEffect.RestorePurchases)
             is ActivationAction.OnActivationPlanItemClicked -> onActivationPlanItemClicked(action.plan)
         }
     }
