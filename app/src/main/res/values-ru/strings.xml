@@ -426,4 +426,7 @@
     <string name="restore_success">Покупки успешно восстановлены!</string>
     <string name="restore_nothing">Активные покупки не найдены.</string>
     <string name="restore_error">Не удалось восстановить покупки.</string>
+    <string name="purchase_pending">Оплата ожидает подтверждения. Когда она пройдёт, доступ откроется при следующем запуске приложения.</string>
+    <string name="purchase_failed">Покупка не удалась. Попробуйте снова.</string>
+    <string name="billing_message_close">Закрыть</string>
 </resources>

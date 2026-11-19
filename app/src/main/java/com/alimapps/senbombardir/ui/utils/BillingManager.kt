@@ -6,6 +6,7 @@ import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
+import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.getCustomerInfoWith
 import com.revenuecat.purchases.restorePurchasesWith
@@ -43,6 +44,13 @@ class BillingManager(
     fun launchPurchase(activity: Activity, storeProduct: StoreProduct) {
         Purchases.sharedInstance.purchaseWith(
             purchaseParams = PurchaseParams.Builder(activity, storeProduct).build(),
+            onError = { error, userCancelled ->
+                when {
+                    userCancelled -> Unit
+                    error.code == PurchasesErrorCode.PaymentPendingError -> listener.onPurchasePending()
+                    else -> listener.onPurchaseFailed()
+                }
+            },
             onSuccess = { transaction, _ -> listener.onPurchaseSuccess(purchaseTime = transaction?.purchaseTime ?: 0L) },
         )
     }
@@ -108,6 +116,8 @@ class BillingManager(
 
     interface BillingUpdatesListener {
         fun onPurchaseSuccess(purchaseTime: Long)
+        fun onPurchasePending()
+        fun onPurchaseFailed()
         fun onOneDayPurchaseCheckSuccess(purchaseTime: Long)
         fun onPurchaseCheckSuccess(productType: ProductType)
         fun onPurchaseCheckNoPurchase(productType: ProductType)

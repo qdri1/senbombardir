@@ -36,6 +36,7 @@ import com.alimapps.senbombardir.ui.navigation.AppNavigation
 import com.alimapps.senbombardir.ui.screen.onboarding.OnboardingScreen
 import com.alimapps.senbombardir.ui.screen.splash.SplashScreen
 import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
+import com.alimapps.senbombardir.ui.screen.update.BillingMessageDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
 import com.alimapps.senbombardir.ui.utils.BillingManager
 import com.alimapps.senbombardir.ui.utils.ONE_DAY_ACCESS_MILLIS
@@ -55,6 +56,8 @@ class MainActivity : ComponentActivity() {
     private var billingManager: BillingManager? = null
     private var selectedActivationPlan: ActivationPlan? = null
     private var keepSystemSplash = true
+
+    private val billingMessage = mutableStateOf<Int?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val isFirstLaunch = savedInstanceState == null
@@ -81,6 +84,13 @@ class MainActivity : ComponentActivity() {
 
                 var showSplash by rememberSaveable { mutableStateOf(isFirstLaunch) }
                 var showOnboarding by rememberSaveable { mutableStateOf(needsOnboarding) }
+
+                billingMessage.value?.let { message ->
+                    BillingMessageDialog(
+                        message = message,
+                        onDismiss = { billingMessage.value = null },
+                    )
+                }
 
                 if (showUpdateDialog && !showOnboarding && !showSplash) {
                     AppUpdateDialog(
@@ -165,14 +175,13 @@ class MainActivity : ComponentActivity() {
             oneDayId = ActivationPlan.OneDay.productId,
             onResult = { success ->
                 val hasAccess = billingRepository.getCurrentBillingType() != BillingType.Limited
-                val message = when {
-                    !success -> R.string.restore_error
-                    hasAccess -> R.string.restore_success
-                    else -> R.string.restore_nothing
-                }
-                Toast.makeText(this, getString(message), Toast.LENGTH_LONG).show()
-                if (success && hasAccess) {
-                    restartApp()
+                when {
+                    !success -> billingMessage.value = R.string.restore_error
+                    hasAccess -> {
+                        Toast.makeText(this, getString(R.string.restore_success), Toast.LENGTH_LONG).show()
+                        restartApp()
+                    }
+                    else -> billingMessage.value = R.string.restore_nothing
                 }
             },
         )
@@ -239,6 +248,14 @@ class MainActivity : ComponentActivity() {
                     restartApp()
                 }
 
+                override fun onPurchasePending() {
+                    billingMessage.value = R.string.purchase_pending
+                }
+
+                override fun onPurchaseFailed() {
+                    billingMessage.value = R.string.purchase_failed
+                }
+
                 override fun onOneDayPurchaseCheckSuccess(purchaseTime: Long) {
                     val billingType = billingRepository.getCurrentBillingType()
                     if (billingType == BillingType.Limited || billingType == BillingType.OneDay) {
@@ -262,14 +279,12 @@ class MainActivity : ComponentActivity() {
                             val isSecretActivated = billingRepository.isSecretActivated()
                             if (billingType == BillingType.Lifetime && isSecretActivated.not()) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
-                                billingManager?.checkOneDayPurchase(productId = ActivationPlan.OneDay.productId)
                             }
                         }
                         ProductType.SUBS -> {
                             val billingType = billingRepository.getCurrentBillingType()
                             if (billingType == BillingType.Subscribe) {
                                 billingRepository.setCurrentBillingType(BillingType.Limited)
-                                billingManager?.checkOneDayPurchase(productId = ActivationPlan.OneDay.productId)
                             }
                         }
                         ProductType.UNKNOWN -> Unit

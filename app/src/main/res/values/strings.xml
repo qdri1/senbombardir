@@ -431,4 +431,7 @@
     <string name="restore_success">Сатып алулар сәтті қалпына келтірілді!</string>
     <string name="restore_nothing">Белсенді сатып алулар табылмады.</string>
     <string name="restore_error">Сатып алуларды қалпына келтіру мүмкін болмады.</string>
+    <string name="purchase_pending">Төлем растауды күтуде. Төлем өткен соң, толық нұсқа қосымшаны келесі ашқанда қосылады.</string>
+    <string name="purchase_failed">Сатып алу сәтсіз аяқталды. Қайталап көріңіз.</string>
+    <string name="billing_message_close">Жабу</string>
 </resources>

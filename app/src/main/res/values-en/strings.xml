@@ -428,4 +428,7 @@
     <string name="restore_success">Purchases restored successfully!</string>
     <string name="restore_nothing">No active purchases found.</string>
     <string name="restore_error">Couldn\'t restore purchases.</string>
+    <string name="purchase_pending">Your payment is pending. Once it goes through, access will unlock the next time you open the app.</string>
+    <string name="purchase_failed">Purchase failed. Please try again.</string>
+    <string name="billing_message_close">Close</string>
 </resources>
