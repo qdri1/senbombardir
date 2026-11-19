@@ -1,5 +1,7 @@
 package com.alimapps.senbombardir.ui.screen.game.widget.block
 
+import com.alimapps.senbombardir.ui.composable.TableBadgeSize
+import com.alimapps.senbombardir.ui.composable.tableCell
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -75,6 +77,7 @@ fun TeamsResultsBlock(
                         text = (index + 1).toString(),
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier.tableCell(),
                     )
                 }
             }
@@ -97,7 +100,7 @@ fun TeamsResultsBlock(
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(16.dp)
+                                .size(TableBadgeSize)
                                 .background(
                                     color = parseHexColor(teamUiModel.color.hexColor),
                                     shape = RoundedCornerShape(4.dp),
@@ -224,7 +227,7 @@ fun TeamsResultsBlock(
                     style = headerTextStyle,
                 )
                 teamUiModelList.forEach { teamUiModel ->
-                    Row {
+                    Row(modifier = Modifier.tableCell()) {
                         TeamResultValueText(
                             text = teamUiModel.goals.toString(),
                             color = textColor,
@@ -264,6 +267,7 @@ fun TeamsResultsBlock(
                         },
                         color = textColor,
                         style = textStyle,
+                        modifier = Modifier.tableCell(),
                     )
                 }
             }
@@ -302,6 +306,7 @@ private fun TeamResultValueText(
         color = color,
         style = style,
         modifier = Modifier
+            .tableCell()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
