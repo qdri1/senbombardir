@@ -27,10 +27,12 @@ import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.data.repository.LanguageRepository
+import com.alimapps.senbombardir.data.source.OnboardingStorage
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.navigation.AppNavigation
+import com.alimapps.senbombardir.ui.screen.onboarding.OnboardingScreen
 import com.alimapps.senbombardir.ui.screen.splash.SplashScreen
 import com.alimapps.senbombardir.ui.screen.update.AppUpdateDialog
 import com.alimapps.senbombardir.ui.theme.AppTheme
@@ -46,6 +48,7 @@ class MainActivity : ComponentActivity() {
 
     private val languageRepository: LanguageRepository by inject()
     private val billingRepository: BillingRepository by inject()
+    private val onboardingStorage: OnboardingStorage by inject()
 
     private var billingManager: BillingManager? = null
     private var selectedActivationPlan: ActivationPlan? = null
@@ -62,6 +65,10 @@ class MainActivity : ComponentActivity() {
         selectedLanguage?.let { setLocale(this, it) }
         billingRepository.checkAndUpdateOnedayExpiration()
         checkPurchase()
+        // Onboarding (it starts with the language choice) is shown only on a fresh install,
+        // or again if it was left halfway (the language is already saved by then).
+        val needsOnboarding = !onboardingStorage.isCompleted() &&
+            (selectedLanguage == null || onboardingStorage.isStarted())
         setContent {
             AppTheme {
                 var showUpdateDialog by remember {
@@ -71,8 +78,9 @@ class MainActivity : ComponentActivity() {
                 }
 
                 var showSplash by rememberSaveable { mutableStateOf(isFirstLaunch) }
+                var showOnboarding by rememberSaveable { mutableStateOf(needsOnboarding) }
 
-                if (showUpdateDialog && selectedLanguage != null && !showSplash) {
+                if (showUpdateDialog && !showOnboarding && !showSplash) {
                     AppUpdateDialog(
                         onSkip = { showUpdateDialog = false },
                         onUpdate = {
@@ -83,18 +91,34 @@ class MainActivity : ComponentActivity() {
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {
-                    AppNavigation(
-                        showLanguage = selectedLanguage == null && !showSplash,
-                        selectedLanguage = selectedLanguage,
-                        onLanguageSelected = { appLanguage ->
-                            languageRepository.saveLanguage(appLanguage)
-                            setLocale(this@MainActivity, appLanguage)
-                        },
-                        onActivationPlanSelected = { activationPlan ->
-                            selectedActivationPlan = activationPlan
-                            startPurchase(activationPlan)
-                        },
-                    )
+                    // Either the onboarding or the app — never both, so taps can't reach the app underneath.
+                    if (showOnboarding) {
+                        OnboardingScreen(
+                            onLanguageSelected = { appLanguage ->
+                                languageRepository.saveLanguage(appLanguage)
+                                setLocale(this@MainActivity, appLanguage)
+                                // Android 13+ recreates the activity by itself after the locale change;
+                                // older versions need it so the rest of the onboarding is in the new language.
+                                // The onboarding state survives in its ViewModel.
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                                    recreate()
+                                }
+                            },
+                            onFinished = { showOnboarding = false },
+                        )
+                    } else {
+                        AppNavigation(
+                            selectedLanguage = selectedLanguage,
+                            onLanguageSelected = { appLanguage ->
+                                languageRepository.saveLanguage(appLanguage)
+                                setLocale(this@MainActivity, appLanguage)
+                            },
+                            onActivationPlanSelected = { activationPlan ->
+                                selectedActivationPlan = activationPlan
+                                startPurchase(activationPlan)
+                            },
+                        )
+                    }
 
                     AnimatedVisibility(
                         visible = showSplash,

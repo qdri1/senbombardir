@@ -20,7 +20,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -54,7 +53,6 @@ import org.koin.core.parameter.parametersOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(
-    showLanguage: Boolean,
     selectedLanguage: AppLanguage?,
     onLanguageSelected: (AppLanguage) -> Unit,
     onActivationPlanSelected: (ActivationPlan) -> Unit,
@@ -67,10 +65,8 @@ fun AppNavigation(
         BottomNavItem.Settings,
     )
 
-    var showLanguageSheet by rememberSaveable { mutableStateOf(showLanguage) }
-    LaunchedEffect(showLanguage) {
-        if (showLanguage) showLanguageSheet = true
-    }
+    // Language is picked in the onboarding on first launch; here the sheet is only opened from Settings.
+    var showLanguageSheet by rememberSaveable { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Scaffold(

@@ -6,16 +6,8 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.net.toUri
-import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.source.NotificationPermissionStorage
 
 /**
@@ -49,39 +41,4 @@ fun Context.openNotificationSettings() {
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri())
     }
     startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-}
-
-@Composable
-fun NotificationRationaleDialog(
-    onAllow: () -> Unit,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = stringResource(R.string.notification_rationale_title),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        text = {
-            Text(
-                text = stringResource(R.string.notification_rationale_message),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-        },
-        confirmButton = {
-            Button(onClick = onAllow) {
-                Text(text = stringResource(R.string.notification_rationale_allow))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(text = stringResource(R.string.notification_rationale_later))
-            }
-        },
-        containerColor = MaterialTheme.colorScheme.surface,
-    )
 }

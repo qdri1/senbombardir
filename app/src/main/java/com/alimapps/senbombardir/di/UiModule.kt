@@ -6,6 +6,7 @@ import com.alimapps.senbombardir.ui.screen.activation.ActivationViewModel
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
 import com.alimapps.senbombardir.ui.screen.game.GameViewModel
 import com.alimapps.senbombardir.ui.screen.home.HomeViewModel
+import com.alimapps.senbombardir.ui.screen.onboarding.OnboardingViewModel
 import com.alimapps.senbombardir.ui.screen.results.GameResultsViewModel
 import com.alimapps.senbombardir.ui.screen.settings.SettingsViewModel
 import com.alimapps.senbombardir.ui.screen.soundsettings.SoundSettingsViewModel
@@ -79,6 +80,13 @@ val uiModule = module {
     viewModel {
         ActivationViewModel(
             billingRepository = get(),
+        )
+    }
+
+    viewModel {
+        OnboardingViewModel(
+            onboardingStorage = get(),
+            context = get(),
         )
     }
 }
