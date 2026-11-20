@@ -49,6 +49,7 @@ class GameResultsViewModel(
     fun action(action: GameResultsAction) {
         when (action) {
             is GameResultsAction.OnBackClicked -> setEffectSafely(GameResultsEffect.CloseScreen)
+            is GameResultsAction.OnScreenResumed -> refreshBillingType()
             is GameResultsAction.OnClearResultsConfirmationClicked -> onClearResultsConfirmationClicked()
             is GameResultsAction.OnSavePlayerResultClicked -> onSavePlayerResultClicked(action.playerResultUiModel, action.playerResultValue)
             is GameResultsAction.OnFunctionClicked -> onFunctionClicked(action.function)
@@ -56,6 +57,13 @@ class GameResultsViewModel(
             is GameResultsAction.OnRemovePlayerHistoryClicked -> setEffectSafely(GameResultsEffect.ShowRemovePlayerConfirmationBottomSheet(action.playerUiModel))
             is GameResultsAction.OnRemovePlayerHistoryConfirmationClicked -> onRemovePlayerHistoryConfirmationClicked(action.playerUiModel)
             is GameResultsAction.OnSaveTeamResultClicked -> onSaveTeamResultClicked(action.teamResultUiModel, action.teamResultValue)
+        }
+    }
+
+    private fun refreshBillingType() {
+        val uiLimited = billingRepository.getCurrentBillingType() == BillingType.Limited
+        if (uiState.value.uiLimited != uiLimited) {
+            setState(uiState.value.copy(uiLimited = uiLimited))
         }
     }
 

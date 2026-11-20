@@ -179,7 +179,6 @@ class MainActivity : ComponentActivity() {
                     !success -> billingMessage.value = R.string.restore_error
                     hasAccess -> {
                         Toast.makeText(this, getString(R.string.restore_success), Toast.LENGTH_LONG).show()
-                        restartApp()
                     }
                     else -> billingMessage.value = R.string.restore_nothing
                 }
@@ -245,7 +244,7 @@ class MainActivity : ComponentActivity() {
                         }
                         null -> Unit
                     }
-                    restartApp()
+                    Toast.makeText(this@MainActivity, getString(R.string.purchase_success), Toast.LENGTH_LONG).show()
                 }
 
                 override fun onPurchasePending() {

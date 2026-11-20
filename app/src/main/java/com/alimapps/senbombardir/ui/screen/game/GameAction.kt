@@ -10,6 +10,7 @@ import com.alimapps.senbombardir.ui.model.types.TeamOption
 
 sealed interface GameAction {
     data object OnBackClicked : GameAction
+    data object OnScreenResumed : GameAction
     data object OnGoBackConfirmationClicked : GameAction
     data object OnDeleteGameConfirmationClicked : GameAction
     data object OnClearResultsConfirmationClicked : GameAction

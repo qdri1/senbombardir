@@ -26,7 +26,9 @@ class ActivationViewModel(
     val effect: Flow<ActivationEffect> get() = _effect.debounceEffect()
 
     init {
-        fetchActivation()
+        viewModelScope.launch {
+            billingRepository.billingTypeFlow.collect { fetchActivation() }
+        }
     }
 
     fun action(action: ActivationAction) {

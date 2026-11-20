@@ -7,6 +7,7 @@ import com.alimapps.senbombardir.ui.model.types.GameResultsFunction
 
 sealed interface GameResultsAction {
     data object OnBackClicked : GameResultsAction
+    data object OnScreenResumed : GameResultsAction
     data object OnClearResultsConfirmationClicked : GameResultsAction
     class OnSavePlayerResultClicked(
         val playerResultUiModel: PlayerResultUiModel,

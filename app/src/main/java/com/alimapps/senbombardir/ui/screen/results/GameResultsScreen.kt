@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
@@ -80,6 +81,11 @@ private fun GameResultsScreenContent(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+
+    LifecycleResumeEffect(Unit) {
+        onAction(GameResultsAction.OnScreenResumed)
+        onPauseOrDispose {}
+    }
 
     var hiddenOptions by remember { mutableStateOf(hiddenColumnsStorage.load(viewModel.gameId)) }
     var showCustomizeColumns by remember { mutableStateOf(false) }

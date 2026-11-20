@@ -351,7 +351,7 @@
     <string name="activation_oneday_time_remaining">Оставшееся время</string>
     <string name="activation_oneday_hours_abbr">ч</string>
     <string name="activation_oneday_minutes_abbr">мин</string>
-    <string name="activation_oneday_not_subscription">Это разовая покупка, а не подписка. Доступ истечёт автоматически без дополнительных платежей.</string>
+    <string name="activation_oneday_not_subscription">Доступ истечёт автоматически без дополнительных платежей.</string>
     <string name="paywall_title">Dop Tep Premium</string>
     <string name="paywall_subtitle">Статистика игроков, озвучка голов, лучшие игроки и чемпионы — без ограничений</string>
     <string name="paywall_feature_champions">Чемпионы и звания</string>
@@ -431,6 +431,7 @@
     <string name="onboarding_notification_sample">Осталась одна минута</string>
     <string name="restore_purchases">Восстановить покупки</string>
     <string name="restore_success">Покупки успешно восстановлены!</string>
+    <string name="purchase_success">Оплата прошла успешно!</string>
     <string name="restore_nothing">Активные покупки не найдены.</string>
     <string name="restore_error">Не удалось восстановить покупки.</string>
     <string name="purchase_pending">Оплата ожидает подтверждения. Когда она пройдёт, доступ откроется при следующем запуске приложения.</string>

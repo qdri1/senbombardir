@@ -353,7 +353,7 @@
     <string name="activation_oneday_time_remaining">Time remaining</string>
     <string name="activation_oneday_hours_abbr">h</string>
     <string name="activation_oneday_minutes_abbr">min</string>
-    <string name="activation_oneday_not_subscription">This is a one-time purchase, not a subscription. Access expires automatically without additional payments.</string>
+    <string name="activation_oneday_not_subscription">Access expires automatically without additional payments.</string>
     <string name="paywall_title">Dop Tep Premium</string>
     <string name="paywall_subtitle">Player stats, goal voice-overs, best players and champions — no limits</string>
     <string name="paywall_feature_champions">Champions and titles</string>
@@ -433,6 +433,7 @@
     <string name="onboarding_notification_sample">One minute remaining</string>
     <string name="restore_purchases">Restore Purchases</string>
     <string name="restore_success">Purchases restored successfully!</string>
+    <string name="purchase_success">Payment successful!</string>
     <string name="restore_nothing">No active purchases found.</string>
     <string name="restore_error">Couldn\'t restore purchases.</string>
     <string name="purchase_pending">Your payment is pending. Once it goes through, access will unlock the next time you open the app.</string>

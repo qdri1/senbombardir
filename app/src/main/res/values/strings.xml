@@ -329,8 +329,8 @@
     <string name="activation_desc_5">Қызықты тарихи футбол дыбыстары.</string>
 
     <string name="activation_plan_title">Тарифті таңдаңыз</string>
-    <string name="activation_plan_1">Ай сайын</string>
-    <string name="activation_plan_2">Жыл сайын</string>
+    <string name="activation_plan_1">Айлық</string>
+    <string name="activation_plan_2">Жылдық</string>
     <string name="activation_plan_3">Өмір бойы</string>
     <string name="activation_plan_button">Сатып алу</string>
     <string name="activation_plan_desc_subscribe">Жазылым</string>
@@ -350,7 +350,7 @@
     <string name="activation_oneday_time_remaining">Қалған уақыт</string>
     <string name="activation_oneday_hours_abbr">сағ</string>
     <string name="activation_oneday_minutes_abbr">мин</string>
-    <string name="activation_oneday_not_subscription">Бұл бір реттік сатып алу, жазылым емес. Қолжетімділік қосымша төлемдерсіз автоматты түрде аяқталады.</string>
+    <string name="activation_oneday_not_subscription">Қолжетімділік қосымша төлемдерсіз автоматты түрде аяқталады.</string>
     <string name="paywall_title">Dop Tep Premium</string>
     <string name="paywall_subtitle">Ойыншылар статистикасы, голдарды дыбыстау, үздік ойыншылар мен чемпиондар — бәрі шектеусіз</string>
     <string name="paywall_feature_champions">Чемпиондар мен атақтар</string>
@@ -436,6 +436,7 @@
     <string name="onboarding_notification_sample">Бір минут қалды</string>
     <string name="restore_purchases">Сатып алуларды қалпына келтіру</string>
     <string name="restore_success">Сатып алулар сәтті қалпына келтірілді!</string>
+    <string name="purchase_success">Төлем сәтті өтті!</string>
     <string name="restore_nothing">Белсенді сатып алулар табылмады.</string>
     <string name="restore_error">Сатып алуларды қалпына келтіру мүмкін болмады.</string>
     <string name="purchase_pending">Төлем растауды күтуде. Төлем өткен соң, толық нұсқа қосымшаны келесі ашқанда қосылады.</string>

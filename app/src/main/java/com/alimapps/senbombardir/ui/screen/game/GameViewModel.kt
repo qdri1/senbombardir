@@ -160,6 +160,7 @@ class GameViewModel(
     fun action(action: GameAction) {
         when (action) {
             is GameAction.OnBackClicked -> onBackClicked()
+            is GameAction.OnScreenResumed -> setBillingType()
             is GameAction.OnGoBackConfirmationClicked -> setEffectSafely(GameEffect.CloseScreen)
             is GameAction.OnDeleteGameConfirmationClicked -> onDeleteGameConfirmationClicked()
             is GameAction.OnClearResultsConfirmationClicked -> onClearResultsConfirmationClicked()
@@ -369,13 +370,6 @@ class GameViewModel(
                 uiLimited = uiLimited,
             )
         )
-    }
-
-    private fun showLimitPaywallIfNeeded() {
-        if (uiState.value.uiLimited && limitPaywallShownThisSession.not()) {
-            limitPaywallShownThisSession = true
-            setEffectSafely(GameEffect.OpenActivationScreen)
-        }
     }
 
     private fun onBackClicked() {
@@ -1097,7 +1091,6 @@ class GameViewModel(
             }
         }
         setBillingType()
-        showLimitPaywallIfNeeded()
     }
 
     private fun finishTeam3Game(
@@ -1157,7 +1150,6 @@ class GameViewModel(
         updatePlayersBlock()
         updateLiveGameBlock()
         setBillingType()
-        showLimitPaywallIfNeeded()
     }
 
     private fun finishTeam4Game(
@@ -1249,7 +1241,6 @@ class GameViewModel(
         updatePlayersBlock()
         updateLiveGameBlock()
         setBillingType()
-        showLimitPaywallIfNeeded()
     }
 
     private suspend fun finishGameRuleTeam3WinnerStay(
@@ -2091,8 +2082,4 @@ class GameViewModel(
         gameCount = gameCount,
         lastLeftTeamId = liveGameRepository.getLastLeftTeamId(gameId),
     )
-
-    companion object {
-        private var limitPaywallShownThisSession = false
-    }
 }

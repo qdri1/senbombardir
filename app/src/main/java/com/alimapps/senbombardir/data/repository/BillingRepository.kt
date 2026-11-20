@@ -2,12 +2,20 @@ package com.alimapps.senbombardir.data.repository
 
 import com.alimapps.senbombardir.data.source.Prefs
 import com.alimapps.senbombardir.domain.model.BillingType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class BillingRepository(
     private val prefs: Prefs,
 ) {
 
-    fun getCurrentBillingType(): BillingType {
+    private val _billingTypeFlow = MutableStateFlow(readBillingType())
+    val billingTypeFlow: StateFlow<BillingType> = _billingTypeFlow.asStateFlow()
+
+    fun getCurrentBillingType(): BillingType = readBillingType()
+
+    private fun readBillingType(): BillingType {
         val billingType = prefs.billingType
 
         return BillingType.entries.find {
@@ -17,6 +25,7 @@ class BillingRepository(
     
     fun setCurrentBillingType(billingType: BillingType) {
         prefs.billingType = billingType.name
+        _billingTypeFlow.value = billingType
     }
 
     fun isSecretActivated(): Boolean = prefs.isSecretActivated
