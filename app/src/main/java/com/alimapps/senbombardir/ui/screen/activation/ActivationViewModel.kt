@@ -6,6 +6,8 @@ import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.utils.debounceEffect
+import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.awaitCustomerInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +51,26 @@ class ActivationViewModel(
                 onedayExpirationDate = if (billingType == BillingType.OneDay) billingRepository.getOnedayExpirationDate() else null,
             )
         )
+        if (billingType == BillingType.Subscribe) {
+            fetchSubscriptionPlan()
+        }
+    }
+
+    private fun fetchSubscriptionPlan() = viewModelScope.launch {
+        if (!Purchases.isConfigured) return@launch
+        val activeSubscriptions = runCatching { Purchases.sharedInstance.awaitCustomerInfo() }
+            .getOrNull()
+            ?.activeSubscriptions
+            ?: return@launch
+
+        fun isActive(plan: ActivationPlan) = activeSubscriptions.any { it == plan.productId || it.startsWith("${plan.productId}:") }
+
+        val plan = when {
+            isActive(ActivationPlan.Yearly) -> ActivationPlan.Yearly
+            isActive(ActivationPlan.Monthly) -> ActivationPlan.Monthly
+            else -> null
+        }
+        _uiState.update { it.copy(subscriptionPlan = plan) }
     }
 
     private fun onBackClicked() {

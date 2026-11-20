@@ -340,6 +340,12 @@
     <string name="activation_plan_activated_button">Жазылымды басқару</string>
     <string name="activation_plan_badge_save">Үнемдеу %d%%</string>
     <string name="activation_lifetime_description">Өмір бойы қолжетімділік</string>
+    <string name="activation_plan_subscription">Жазылым</string>
+    <string name="activation_plan_subscription_monthly">Айлық жазылым</string>
+    <string name="activation_plan_subscription_yearly">Жылдық жазылым</string>
+    <string name="activation_lifetime_subtitle">Бір рет төленді — барлық мүмкіндіктер мәңгі қолжетімді.</string>
+    <string name="activation_subscribe_title">Жазылым белсенді</string>
+    <string name="activation_subscribe_subtitle">Автоматты түрде ұзартылады. Жазылымнан кез келген уақытта бас тартуға болады.</string>
     <string name="activation_plan_4">1 күн</string>
     <string name="activation_oneday_time_remaining">Қалған уақыт</string>
     <string name="activation_oneday_hours_abbr">сағ</string>

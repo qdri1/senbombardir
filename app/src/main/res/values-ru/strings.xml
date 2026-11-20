@@ -341,6 +341,12 @@
     <string name="activation_plan_activated_button">Управление подпиской</string>
     <string name="activation_plan_badge_save">Экономия %d%%</string>
     <string name="activation_lifetime_description">Пожизненный доступ</string>
+    <string name="activation_plan_subscription">Подписка</string>
+    <string name="activation_plan_subscription_monthly">Ежемесячная подписка</string>
+    <string name="activation_plan_subscription_yearly">Ежегодная подписка</string>
+    <string name="activation_lifetime_subtitle">Оплачено один раз — все функции доступны навсегда.</string>
+    <string name="activation_subscribe_title">Подписка активна</string>
+    <string name="activation_subscribe_subtitle">Продлевается автоматически. Отменить подписку можно в любой момент.</string>
     <string name="activation_plan_4">1 день</string>
     <string name="activation_oneday_time_remaining">Оставшееся время</string>
     <string name="activation_oneday_hours_abbr">ч</string>

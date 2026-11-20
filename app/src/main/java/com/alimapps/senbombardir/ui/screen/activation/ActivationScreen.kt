@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -54,6 +53,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.alimapps.senbombardir.ui.utils.ONE_DAY_ACCESS_MILLIS
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.filled.Autorenew
+import androidx.compose.material.icons.filled.AllInclusive
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -126,41 +136,12 @@ private fun ActivationScreenContent(
                 showOneDay = showOneDay,
             )
         } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-            ) {
-                ActivatedTopBar(onAction = onAction)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    ActivatedContent(uiState = uiState, onAction = onAction)
-                }
-            }
+            ActivatedContent(
+                uiState = uiState,
+                onAction = onAction,
+                modifier = Modifier.padding(paddingValues),
+            )
         }
-    }
-}
-
-@Composable
-private fun ActivatedTopBar(onAction: (ActivationAction) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = Icons.Filled.ArrowBack,
-            contentDescription = null,
-            modifier = Modifier
-                .clip(CircleShape)
-                .clickable { onAction(ActivationAction.OnBackClicked) },
-        )
     }
 }
 
@@ -548,49 +529,138 @@ private fun PaywallBottomBar(
 private fun ActivatedContent(
     uiState: ActivationUiState,
     onAction: (ActivationAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        ActivatedHero(
+            billingType = uiState.billingType,
+            subscriptionPlan = uiState.subscriptionPlan,
+            onAction = onAction,
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(16.dp),
+        ) {
+            ActivatedStatusCard(uiState = uiState, onAction = onAction)
+
+            Text(
+                text = stringResource(R.string.activation_text_title),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(top = 12.dp),
+            )
+
+            PaywallFeaturesCard()
+        }
+    }
+}
+
+@Composable
+private fun ActivatedHero(
+    billingType: BillingType,
+    subscriptionPlan: ActivationPlan?,
+    onAction: (ActivationAction) -> Unit,
+) {
+    val planRes = when (billingType) {
+        BillingType.Lifetime -> R.string.activation_plan_3
+        BillingType.Subscribe -> when (subscriptionPlan) {
+            ActivationPlan.Monthly -> R.string.activation_plan_subscription_monthly
+            ActivationPlan.Yearly -> R.string.activation_plan_subscription_yearly
+            else -> R.string.activation_plan_subscription
+        }
+        BillingType.OneDay -> R.string.activation_plan_4
+        else -> null
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .background(Brush.verticalGradient(colors = listOf(PaywallGreenDark, PaywallGreen)))
+            .padding(top = 8.dp),
     ) {
-        Text(
-            text = stringResource(id = R.string.activation_plan_activated_text),
-            color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.displayLarge,
-            textAlign = TextAlign.Center,
-        )
-        if (uiState.billingType == BillingType.Lifetime) {
-            Text(
-                text = stringResource(R.string.activation_lifetime_description),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 8.dp),
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(8.dp)
+                .size(40.dp)
+                .clip(CircleShape)
+                .clickable { onAction(ActivationAction.OnBackClicked) },
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = null,
+                tint = Color.White.copy(alpha = 0.9f),
             )
         }
-        if (uiState.billingType == BillingType.OneDay) {
-            OnedayRemainingView(
-                expirationDate = uiState.onedayExpirationDate,
-                modifier = Modifier.padding(top = 16.dp),
-            )
-        }
-        if (uiState.billingType == BillingType.Subscribe) {
-            Button(
-                onClick = { onAction(ActivationAction.ManageSubscriptionsButtonClicked) },
-                contentPadding = PaddingValues(
-                    horizontal = 24.dp,
-                    vertical = 16.dp
-                ),
-                modifier = Modifier.padding(top = 24.dp)
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .padding(top = 24.dp, bottom = 28.dp),
+        ) {
+            Box {
+                Image(
+                    painter = painterResource(R.drawable.app_logo),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(width = 2.dp, color = Color.White.copy(alpha = 0.3f), shape = RoundedCornerShape(20.dp)),
+                )
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .offset(x = 10.dp, y = 10.dp)
+                        .size(32.dp)
+                        .background(PaywallGreenDark, CircleShape),
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Verified,
+                        contentDescription = null,
+                        tint = PaywallGold,
+                        modifier = Modifier.size(28.dp),
+                    )
+                }
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.padding(top = 4.dp),
             ) {
                 Text(
-                    text = stringResource(id = R.string.activation_plan_activated_button),
+                    text = stringResource(R.string.paywall_title),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                )
+                Text(
+                    text = stringResource(R.string.activation_plan_activated_text),
                     style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White.copy(alpha = 0.85f),
+                    textAlign = TextAlign.Center,
+                )
+            }
+
+            if (planRes != null) {
+                Text(
+                    text = stringResource(planRes),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(PaywallGold)
+                        .padding(horizontal = 14.dp, vertical = 6.dp),
                 )
             }
         }
@@ -598,7 +668,92 @@ private fun ActivatedContent(
 }
 
 @Composable
-private fun OnedayRemainingView(expirationDate: Long?, modifier: Modifier = Modifier) {
+private fun ActivatedStatusCard(
+    uiState: ActivationUiState,
+    onAction: (ActivationAction) -> Unit,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(16.dp),
+    ) {
+        when (uiState.billingType) {
+            BillingType.Lifetime -> ActivatedStatusHeader(
+                icon = Icons.Filled.AllInclusive,
+                titleRes = R.string.activation_lifetime_description,
+                subtitleRes = R.string.activation_lifetime_subtitle,
+            )
+            BillingType.Subscribe -> {
+                ActivatedStatusHeader(
+                    icon = Icons.Filled.Autorenew,
+                    titleRes = R.string.activation_subscribe_title,
+                    subtitleRes = R.string.activation_subscribe_subtitle,
+                )
+                Button(
+                    onClick = { onAction(ActivationAction.ManageSubscriptionsButtonClicked) },
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PaywallGreen,
+                        contentColor = Color.White,
+                    ),
+                    contentPadding = PaddingValues(vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = stringResource(R.string.activation_plan_activated_button),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+            BillingType.OneDay -> OnedayRemainingView(expirationDate = uiState.onedayExpirationDate)
+            else -> Unit
+        }
+    }
+}
+
+@Composable
+private fun ActivatedStatusHeader(
+    icon: ImageVector,
+    titleRes: Int,
+    subtitleRes: Int,
+) {
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(44.dp)
+                .background(PaywallGreen.copy(alpha = 0.12f), CircleShape),
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = PaywallGreen,
+                modifier = Modifier.size(22.dp),
+            )
+        }
+        Column(
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(
+                text = stringResource(titleRes),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                text = stringResource(subtitleRes),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.outline,
+            )
+        }
+    }
+}
+
+@Composable
+private fun OnedayRemainingView(expirationDate: Long?) {
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
 
     LaunchedEffect(Unit) {
@@ -611,32 +766,52 @@ private fun OnedayRemainingView(expirationDate: Long?, modifier: Modifier = Modi
     val remaining = if (expirationDate != null) maxOf(0L, expirationDate - now) else 0L
     val hours = (remaining / 3_600_000L).toInt()
     val minutes = ((remaining % 3_600_000L) / 60_000L).toInt()
+    val progress = (remaining.toFloat() / ONE_DAY_ACCESS_MILLIS).coerceIn(0f, 1f)
     val hAbbr = stringResource(R.string.activation_oneday_hours_abbr)
     val minAbbr = stringResource(R.string.activation_oneday_minutes_abbr)
 
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.activation_oneday_time_remaining),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.titleMedium,
-        )
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Schedule,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(16.dp),
+            )
+            Text(
+                text = stringResource(R.string.activation_oneday_time_remaining),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelLarge,
+            )
+        }
         Text(
             text = "$hours $hAbbr $minutes $minAbbr",
-            color = MaterialTheme.colorScheme.primary,
+            color = PaywallGreen,
             style = MaterialTheme.typography.displayLarge,
+            fontSize = 34.sp,
         )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .clip(CircleShape)
+                .background(PaywallGreen.copy(alpha = 0.12f)),
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(progress)
+                    .fillMaxHeight()
+                    .clip(CircleShape)
+                    .background(PaywallGreen),
+            )
+        }
         Text(
             text = stringResource(R.string.activation_oneday_not_subscription),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 4.dp),
+            color = MaterialTheme.colorScheme.outline,
+            style = MaterialTheme.typography.labelSmall,
         )
     }
 }
@@ -679,6 +854,7 @@ private fun openGooglePlaySubscriptions(context: Context) {
         Toast.makeText(context, context.getString(R.string.google_play_not_installed), Toast.LENGTH_LONG).show()
     }
 }
+
 private fun calculatePerMonth(yearlyPrice: String?): String? {
     val yearly = extractNumericValue(yearlyPrice) ?: return null
     if (yearly <= 0) return null
