@@ -15,6 +15,7 @@
     <string name="home_updated_now">Обновлено сейчас</string>
     <string name="game_name">Название игры</string>
     <string name="game_time">Время матча в минутах</string>
+    <string name="game_time_hint">Длительность одного матча. Например, если поле арендовано на 2 часа, а каждый ваш матч идёт 7 минут, укажите 7.</string>
     <string name="game_format">Формат игры</string>
 
     <string name="game_rules">Правила игры</string>

@@ -42,6 +42,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -112,6 +113,7 @@ private fun AddGameScreenContent(
     val snackbarHostState = remember { SnackbarHostState() }
     var showColorsBottomSheet by remember { mutableStateOf(false) }
     var showRulesBottomSheet by remember { mutableStateOf(false) }
+    var showTimeInfoDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
@@ -189,15 +191,28 @@ private fun AddGameScreenContent(
                     .padding(16.dp)
             )
 
-            TextFieldWidget(
-                value = viewModel.timeInMinuteFieldState.value,
-                onValueChange = { value -> onAction(AddGameAction.OnTimeTextValueChanged(value)) },
-                hint = stringResource(id = R.string.game_time),
-                keyboardType = KeyboardType.Decimal,
-                imeAction = ImeAction.Done,
+            Row(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 4.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextFieldWidget(
+                    value = viewModel.timeInMinuteFieldState.value,
+                    onValueChange = { value -> onAction(AddGameAction.OnTimeTextValueChanged(value)) },
+                    hint = stringResource(id = R.string.game_time),
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(onClick = { showTimeInfoDialog = true }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Info,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
 
             Column(
                 modifier = Modifier
@@ -377,7 +392,7 @@ private fun AddGameScreenContent(
                 )
                 TextButton(
                     onClick = { showRulesBottomSheet = true },
-                    colors = ButtonDefaults.textButtonColors(contentColor = parseHexColor("#FFA500")),
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
                     modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
                 ) {
                     Icon(
@@ -398,6 +413,34 @@ private fun AddGameScreenContent(
                 onAction = onAction,
             )
         }
+    }
+
+    if (showTimeInfoDialog) {
+        AlertDialog(
+            onDismissRequest = { showTimeInfoDialog = false },
+            title = {
+                Text(
+                    text = stringResource(id = R.string.game_time),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            },
+            text = {
+                Text(
+                    text = stringResource(id = R.string.game_time_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showTimeInfoDialog = false }) {
+                    Text(
+                        text = stringResource(id = R.string.billing_message_close),
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
+            },
+            containerColor = MaterialTheme.colorScheme.surface,
+        )
     }
 
     if (showRulesBottomSheet) {

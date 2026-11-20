@@ -15,6 +15,7 @@
     <string name="home_updated_now">Updated now</string>
     <string name="game_name">Game name</string>
     <string name="game_time">Match time (minutes)</string>
+    <string name="game_time_hint">Length of a single match. For example, if you booked the pitch for 2 hours and each of your matches lasts 7 minutes, enter 7.</string>
     <string name="game_format">Game format</string>
 
     <string name="game_rules">Game rules</string>

@@ -14,6 +14,7 @@
     <string name="home_updated_now">Жаңартылды: қазір</string>
     <string name="game_name">Ойын атауы</string>
     <string name="game_time">Матч уақыты (минут)</string>
+    <string name="game_time_hint">Бір матчтың ұзақтығы. Мысалы, алаң 2 сағатқа жалға алынып, әр матчыңыз 7 минут болса, 7 деп көрсетіңіз.</string>
     <string name="game_format">Ойын форматы</string>
 
     <string name="game_rules">Ойын ережелері</string>
