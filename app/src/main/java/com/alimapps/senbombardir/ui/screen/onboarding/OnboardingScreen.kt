@@ -612,7 +612,7 @@ private fun FeatureBullet(
         )
         if (isPro) {
             Text(
-                text = "PRO",
+                text = "PREMIUM",
                 color = MaterialTheme.colorScheme.onPrimary,
                 style = MaterialTheme.typography.labelSmall,
                 fontSize = 11.sp,

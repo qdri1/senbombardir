@@ -408,14 +408,14 @@
     <string name="onboarding_welcome_title">Ваш футбол — как настоящий матч</string>
     <string name="onboarding_welcome_subtitle">Dop Tep — помощник для футбола с друзьями. Вы собираете команды, а приложение ведёт счёт и таймер, само определяет, кто играет следующим, считает статистику команд и игроков и озвучивает голы.</string>
     <string name="onboarding_rotation_title">Приложение само определяет, кто играет следующим</string>
-    <string name="onboarding_rotation_subtitle">Выберите правила — Dop Tep сам ведёт очередь команд, счёт и серии побед.</string>
+    <string name="onboarding_rotation_subtitle">Вы выбираете правила и введёте счёт, а Dop Tep сам ведёт очередь команд.</string>
     <string name="onboarding_rotation_bullet_rules">Победитель остаётся, ровно 2 игры или каждый с каждым — выберите свои правила для 3 и 4 команд</string>
     <string name="onboarding_rotation_bullet_timer">Таймер работает, даже когда телефон в кармане</string>
     <string name="onboarding_rotation_bullet_voice">Голосовое уведомление «Осталась одна минута» и «Играем до аута»</string>
     <string name="onboarding_stats_title">Кто лучший — решают цифры</string>
     <string name="onboarding_stats_subtitle">Вы введёте счёт, а таблицы команд и игроков заполняются сами.</string>
-    <string name="onboarding_stats_bullet_teams">Таблица команд: очки, победы, ничьи и разница забитых/пропущенных мячей</string>
-    <string name="onboarding_stats_bullet_best">Лучшие игроки — бомбардир, лучший ассистент, лучший сейв и отбор определяет само приложение</string>
+    <string name="onboarding_stats_bullet_teams">Таблица команд: очки, выигрыши, ничьи и поражения</string>
+    <string name="onboarding_stats_bullet_best">Лучшие игроки — бомбардир, лучший ассист и сейв определяет само приложение</string>
     <string name="onboarding_stats_bullet_champions">Чемпионы — команда-победитель и звание для каждого игрока по итогам игры</string>
     <string name="onboarding_sounds_title">Как на стадионе</string>
     <string name="onboarding_sounds_subtitle">Dop Tep озвучивает автора гола по имени и включает звуки празднования. Нажмите и послушайте.</string>
