@@ -32,11 +32,13 @@ class BillingManager(
     fun queryProducts(
         productIds: List<String>,
         type: ProductType,
+        onError: () -> Unit = {},
         onResult: (List<StoreProduct>) -> Unit,
     ) {
         Purchases.sharedInstance.getProductsWith(
             productIds = productIds,
             type = type,
+            onError = { onError() },
             onGetStoreProducts = { products -> onResult(products) },
         )
     }
@@ -46,7 +48,7 @@ class BillingManager(
             purchaseParams = PurchaseParams.Builder(activity, storeProduct).build(),
             onError = { error, userCancelled ->
                 when {
-                    userCancelled -> Unit
+                    userCancelled -> listener.onPurchaseCancelled()
                     error.code == PurchasesErrorCode.PaymentPendingError -> listener.onPurchasePending()
                     else -> listener.onPurchaseFailed()
                 }
@@ -117,6 +119,7 @@ class BillingManager(
     interface BillingUpdatesListener {
         fun onPurchaseSuccess(purchaseTime: Long)
         fun onPurchasePending()
+        fun onPurchaseCancelled()
         fun onPurchaseFailed()
         fun onOneDayPurchaseCheckSuccess(purchaseTime: Long)
         fun onPurchaseCheckSuccess(productType: ProductType)

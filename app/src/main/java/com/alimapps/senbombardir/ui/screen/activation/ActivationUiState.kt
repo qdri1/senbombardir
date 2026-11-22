@@ -12,4 +12,5 @@ data class ActivationUiState(
     val onedayPrice: String? = null,
     val onedayExpirationDate: Long? = null,
     val subscriptionPlan: ActivationPlan? = null,
+    val isPurchasing: Boolean = false,
 )

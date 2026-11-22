@@ -29,6 +29,11 @@ class ActivationViewModel(
         viewModelScope.launch {
             billingRepository.billingTypeFlow.collect { fetchActivation() }
         }
+        viewModelScope.launch {
+            billingRepository.isPurchaseInProgress.collect { inProgress ->
+                _uiState.update { it.copy(isPurchasing = inProgress) }
+            }
+        }
     }
 
     fun action(action: ActivationAction) {

@@ -150,6 +150,7 @@ class MainActivity : ComponentActivity() {
 
     private fun startPurchase(activationPlan: ActivationPlan) {
         initBillingManager()
+        billingRepository.setPurchaseInProgress(true)
         val productType = when (activationPlan) {
             ActivationPlan.Monthly,
             ActivationPlan.Yearly -> ProductType.SUBS
@@ -159,9 +160,16 @@ class MainActivity : ComponentActivity() {
         billingManager?.queryProducts(
             productIds = listOf(activationPlan.productId),
             type = productType,
+            onError = {
+                billingRepository.setPurchaseInProgress(false)
+                billingMessage.value = R.string.purchase_failed
+            },
             onResult = { products ->
                 if (products.isNotEmpty()) {
                     billingManager?.launchPurchase(this, products.first())
+                } else {
+                    billingRepository.setPurchaseInProgress(false)
+                    billingMessage.value = R.string.purchase_failed
                 }
             }
         )
@@ -169,11 +177,13 @@ class MainActivity : ComponentActivity() {
 
     private fun restorePurchases() {
         initBillingManager()
+        billingRepository.setPurchaseInProgress(true)
         billingManager?.restorePurchases(
             subscriptionIds = listOf(ActivationPlan.Monthly.productId, ActivationPlan.Yearly.productId),
             lifetimeIds = listOf(ActivationPlan.Unlimited.productId),
             oneDayId = ActivationPlan.OneDay.productId,
             onResult = { success ->
+                billingRepository.setPurchaseInProgress(false)
                 val hasAccess = billingRepository.getCurrentBillingType() != BillingType.Limited
                 when {
                     !success -> billingMessage.value = R.string.restore_error
@@ -233,6 +243,7 @@ class MainActivity : ComponentActivity() {
         if (billingManager == null) {
             billingManager = BillingManager(this, object : BillingManager.BillingUpdatesListener {
                 override fun onPurchaseSuccess(purchaseTime: Long) {
+                    billingRepository.setPurchaseInProgress(false)
                     when (selectedActivationPlan) {
                         ActivationPlan.Monthly,
                         ActivationPlan.Yearly -> billingRepository.setCurrentBillingType(BillingType.Subscribe)
@@ -248,10 +259,16 @@ class MainActivity : ComponentActivity() {
                 }
 
                 override fun onPurchasePending() {
+                    billingRepository.setPurchaseInProgress(false)
                     billingMessage.value = R.string.purchase_pending
                 }
 
+                override fun onPurchaseCancelled() {
+                    billingRepository.setPurchaseInProgress(false)
+                }
+
                 override fun onPurchaseFailed() {
+                    billingRepository.setPurchaseInProgress(false)
                     billingMessage.value = R.string.purchase_failed
                 }
 

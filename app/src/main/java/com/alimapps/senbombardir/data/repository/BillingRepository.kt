@@ -13,6 +13,13 @@ class BillingRepository(
     private val _billingTypeFlow = MutableStateFlow(readBillingType())
     val billingTypeFlow: StateFlow<BillingType> = _billingTypeFlow.asStateFlow()
 
+    private val _isPurchaseInProgress = MutableStateFlow(false)
+    val isPurchaseInProgress: StateFlow<Boolean> = _isPurchaseInProgress.asStateFlow()
+
+    fun setPurchaseInProgress(value: Boolean) {
+        _isPurchaseInProgress.value = value
+    }
+
     fun getCurrentBillingType(): BillingType = readBillingType()
 
     private fun readBillingType(): BillingType {
