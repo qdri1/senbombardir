@@ -43,6 +43,10 @@ import com.alimapps.senbombardir.utils.empty
 import com.alimapps.senbombardir.utils.orDefault
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.analyticsValue
 import kotlinx.coroutines.launch
 
 private const val DEFAULT_TIME_IN_MINUTES = 7
@@ -60,6 +64,7 @@ class AddGameViewModel(
     private val teamHistoryRepository: TeamHistoryRepository,
     private val playerRepository: PlayerRepository,
     private val playerHistoryRepository: PlayerHistoryRepository,
+    private val analytics: Analytics,
 ) : ViewModel() {
 
     private val _screenStateType = mutableStateOf(ScreenStateType.Add)
@@ -326,6 +331,15 @@ class AddGameViewModel(
             isLive = false,
         )
         liveGameRepository.saveLiveGame(liveGameModel)
+
+        analytics.track(
+            AnalyticsEvent.GAME_CREATED,
+            AnalyticsParam.TEAM_QUANTITY to gameModel.teamQuantity,
+            AnalyticsParam.GAME_FORMAT to gameModel.format,
+            AnalyticsParam.MATCH_MINUTES to gameModel.timeInMinutes,
+            AnalyticsParam.RULE to rule.lowercase(),
+            AnalyticsParam.PITCH_SURFACE to pitchSurfaceState.value.analyticsValue,
+        )
 
         setEffect(AddGameEffect.CloseScreen)
     }

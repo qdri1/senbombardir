@@ -31,7 +31,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavType
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameScreen
 import com.alimapps.senbombardir.ui.screen.add.game.AddGameViewModel
@@ -172,11 +174,14 @@ fun AppNavigation(
                 composable(NavigationItem.SoundSettings.route) {
                     SoundSettingsScreen(navController = navController)
                 }
-                composable(NavigationItem.Activation.route) {
-                    val fromSettings = navController.previousBackStackEntry?.destination?.route == BottomNavItem.Settings.route
+                composable(
+                    route = NavigationItem.Activation.route,
+                    arguments = listOf(navArgument("source") { type = NavType.StringType; nullable = true }),
+                ) { backStackEntry ->
+                    val source = backStackEntry.arguments?.getString("source") ?: "unknown"
                     ActivationScreen(
                         navController = navController,
-                        viewModel = koinViewModel<ActivationViewModel>(),
+                        viewModel = koinViewModel<ActivationViewModel> { parametersOf(source) },
                         onActivationPlanSelected = onActivationPlanSelected,
                         onRestorePurchasesClicked = onRestorePurchasesClicked,
                         showOneDay = true,

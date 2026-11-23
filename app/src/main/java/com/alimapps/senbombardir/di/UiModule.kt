@@ -40,6 +40,7 @@ val uiModule = module {
             teamHistoryRepository = get(),
             playerRepository = get(),
             playerHistoryRepository = get(),
+            analytics = get(),
         )
     }
 
@@ -57,6 +58,7 @@ val uiModule = module {
             billingRepository = get(),
             soundSettingsRepository = get(),
             hiddenColumnsStorage = get(),
+            analytics = get(),
             context = get(),
         )
     }
@@ -68,6 +70,7 @@ val uiModule = module {
             playerHistoryRepository = get(),
             playerRepository = get(),
             billingRepository = get(),
+            analytics = get(),
         )
     }
 
@@ -77,15 +80,18 @@ val uiModule = module {
         )
     }
 
-    viewModel {
+    viewModel { (source: String) ->
         ActivationViewModel(
+            source = source,
             billingRepository = get(),
+            analytics = get(),
         )
     }
 
     viewModel {
         OnboardingViewModel(
             onboardingStorage = get(),
+            analytics = get(),
             context = get(),
         )
     }

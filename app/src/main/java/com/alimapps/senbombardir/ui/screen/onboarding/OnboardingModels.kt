@@ -29,8 +29,7 @@ sealed interface OnboardingAction {
     data object OnBackClicked : OnboardingAction
     class OnLanguageSelected(val language: AppLanguage) : OnboardingAction
     data object OnVoiceDemoClicked : OnboardingAction
-    /** The system permission dialog was answered (either way) or the user tapped "Not now". */
-    data object OnNotificationsAnswered : OnboardingAction
+    class OnNotificationsAnswered(val granted: Boolean) : OnboardingAction
 }
 
 sealed interface OnboardingEffect : DebounceEffect {

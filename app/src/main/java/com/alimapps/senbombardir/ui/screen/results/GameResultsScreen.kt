@@ -1,12 +1,12 @@
 package com.alimapps.senbombardir.ui.screen.results
 
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,23 +37,23 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.alimapps.senbombardir.R
+import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
 import com.alimapps.senbombardir.ui.model.BestPlayerUiModel
+import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.model.PlayerResultUiModel
 import com.alimapps.senbombardir.ui.model.PlayerUiModel
 import com.alimapps.senbombardir.ui.model.TeamResultUiModel
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
 import com.alimapps.senbombardir.ui.screen.game.widget.block.PlayersResultsBlock
 import com.alimapps.senbombardir.ui.screen.game.widget.block.TeamsResultsBlock
-import com.alimapps.senbombardir.data.source.HiddenColumnsStorage
-import com.alimapps.senbombardir.ui.model.types.TeamOption
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.BestPlayersBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ChampionsBottomSheet
-import com.alimapps.senbombardir.ui.model.ChampionsUiModel
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.ConfirmationBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.CustomizeColumnsBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.PlayerResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.game.widget.bottomsheet.TeamResultBottomSheet
 import com.alimapps.senbombardir.ui.screen.results.widget.GameResultsFunctionsBlock
+import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
@@ -101,7 +101,7 @@ private fun GameResultsScreenContent(
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is GameResultsEffect.CloseScreen -> navController.navigateUp()
-                is GameResultsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
+                is GameResultsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.createRoute(AnalyticsSource.RESULTS))
                 is GameResultsEffect.ShowClearResultsConfirmationBottomSheet -> showClearResultsConfirmation = true
                 is GameResultsEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
                 is GameResultsEffect.ShowChampionsBottomSheet -> champions = effect.champions

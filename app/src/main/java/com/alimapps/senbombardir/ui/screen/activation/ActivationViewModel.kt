@@ -6,6 +6,10 @@ import com.alimapps.senbombardir.data.repository.BillingRepository
 import com.alimapps.senbombardir.domain.model.ActivationPlan
 import com.alimapps.senbombardir.domain.model.BillingType
 import com.alimapps.senbombardir.ui.utils.debounceEffect
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.analyticsValue
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.awaitCustomerInfo
 import kotlinx.coroutines.flow.Flow
@@ -16,8 +20,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ActivationViewModel(
+    private val source: String,
     private val billingRepository: BillingRepository,
+    private val analytics: Analytics,
 ) : ViewModel() {
+
+    private var isPaywallViewTracked = false
 
     private val _uiState = MutableStateFlow(ActivationUiState())
     val uiState: StateFlow<ActivationUiState> = _uiState
@@ -40,7 +48,10 @@ class ActivationViewModel(
         when (action) {
             is ActivationAction.OnBackClicked -> onBackClicked()
             is ActivationAction.BuyButtonClicked -> onBuyButtonClicked()
-            is ActivationAction.ManageSubscriptionsButtonClicked -> setEffectSafely(ActivationEffect.OpenGooglePlaySubscriptions)
+            is ActivationAction.ManageSubscriptionsButtonClicked -> {
+                analytics.track(AnalyticsEvent.MANAGE_SUBSCRIPTION_TAPPED)
+                setEffectSafely(ActivationEffect.OpenGooglePlaySubscriptions)
+            }
             is ActivationAction.RestorePurchasesClicked -> setEffectSafely(ActivationEffect.RestorePurchases)
             is ActivationAction.OnActivationPlanItemClicked -> onActivationPlanItemClicked(action.plan)
         }
@@ -48,6 +59,10 @@ class ActivationViewModel(
 
     private fun fetchActivation() = viewModelScope.launch {
         val billingType = billingRepository.getCurrentBillingType()
+        if (billingType == BillingType.Limited && !isPaywallViewTracked) {
+            isPaywallViewTracked = true
+            analytics.track(AnalyticsEvent.PAYWALL_VIEWED, AnalyticsParam.SOURCE to source)
+        }
         setState(
             uiState.value.copy(
                 billingType = billingType,
@@ -85,10 +100,14 @@ class ActivationViewModel(
     }
 
     private fun onBuyButtonClicked() {
+        analytics.track(AnalyticsEvent.PURCHASE_STARTED, AnalyticsParam.PLAN to uiState.value.selectedPlan.analyticsValue)
         setEffectSafely(ActivationEffect.BuySelectedPlan(uiState.value.selectedPlan))
     }
 
     private fun onActivationPlanItemClicked(plan: ActivationPlan) {
+        if (plan != uiState.value.selectedPlan) {
+            analytics.track(AnalyticsEvent.PLAN_SELECTED, AnalyticsParam.PLAN to plan.analyticsValue)
+        }
         setState(uiState.value.copy(selectedPlan = plan))
     }
 

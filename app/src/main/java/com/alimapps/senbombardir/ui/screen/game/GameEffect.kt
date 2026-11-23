@@ -25,7 +25,7 @@ sealed interface GameEffect : DebounceEffect {
     data object ShowFinishGameConfirmationBottomSheet : GameEffect
     data object ShowGoBackConfirmationBottomSheet : GameEffect
     data object ShowGameInfoBottomSheet : GameEffect
-    data object OpenActivationScreen : GameEffect
+    class OpenActivationScreen(val source: String) : GameEffect
     class ShowBestPlayersBottomSheet(val bestPlayers: List<BestPlayerUiModel>) : GameEffect
     class ShowChampionsBottomSheet(val champions: ChampionsUiModel) : GameEffect
     class ShowGameHistoryBottomSheet(val gameHistory: List<GameHistoryEntryUiModel>) : GameEffect

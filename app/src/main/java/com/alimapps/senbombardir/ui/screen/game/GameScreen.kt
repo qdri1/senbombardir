@@ -161,7 +161,7 @@ private fun GameScreenContent(
                 is GameEffect.ShowFinishGameConfirmationBottomSheet -> showFinishGameConfirmation = true
                 is GameEffect.ShowGoBackConfirmationBottomSheet -> showGoBackConfirmation = true
                 is GameEffect.ShowGameInfoBottomSheet -> showGameInfo = true
-                is GameEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
+                is GameEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.createRoute(effect.source))
                 is GameEffect.ShowBestPlayersBottomSheet -> bestPlayers = effect.bestPlayers
                 is GameEffect.ShowChampionsBottomSheet -> champions = effect.champions
                 is GameEffect.ShowGameHistoryBottomSheet -> gameHistory = effect.gameHistory

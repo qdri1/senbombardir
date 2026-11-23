@@ -95,6 +95,9 @@ dependencies {
     // --- RevenueCat ---
     implementation("com.revenuecat.purchases:purchases:10.7.0")
 
+    // --- Amplitude (product analytics) ---
+    implementation("com.amplitude:analytics-android:1.36.0")
+
     // --- Room Database ---
     implementation("androidx.room:room-runtime:2.8.3")
     implementation("androidx.room:room-ktx:2.8.3")

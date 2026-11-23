@@ -63,6 +63,7 @@ import org.koin.androidx.compose.koinViewModel
 import androidx.core.net.toUri
 import com.alimapps.senbombardir.GOOGLE_PLAY_URL
 import com.alimapps.senbombardir.ui.navigation.NavigationItem
+import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
 import com.alimapps.senbombardir.ui.utils.RemoteConfig
 
 @Composable
@@ -102,7 +103,7 @@ private fun SettingsScreenContent(
                 is SettingsEffect.ShowSelectLanguage -> onLanguageClick()
                 is SettingsEffect.Share -> openShareIntent(context)
                 is SettingsEffect.OpenPlayMarket -> openPlayMarket(context)
-                is SettingsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.route)
+                is SettingsEffect.OpenActivationScreen -> navController.navigate(NavigationItem.Activation.createRoute(AnalyticsSource.SETTINGS))
                 is SettingsEffect.ActivationSuccess -> {
                     showCodeDialog = false
                     Toast.makeText(context, context.getString(R.string.activation_code_success), Toast.LENGTH_SHORT).show()

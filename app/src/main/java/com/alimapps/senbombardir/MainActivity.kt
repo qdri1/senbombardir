@@ -43,6 +43,14 @@ import com.alimapps.senbombardir.ui.utils.ONE_DAY_ACCESS_MILLIS
 import com.alimapps.senbombardir.ui.utils.RemoteConfig
 import com.revenuecat.purchases.ProductType
 import org.koin.android.ext.android.inject
+import androidx.lifecycle.lifecycleScope
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
+import com.alimapps.senbombardir.utils.analytics.analyticsValue
+import com.revenuecat.purchases.Purchases
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.alimapps.senbombardir"
@@ -52,6 +60,7 @@ class MainActivity : ComponentActivity() {
     private val languageRepository: LanguageRepository by inject()
     private val billingRepository: BillingRepository by inject()
     private val onboardingStorage: OnboardingStorage by inject()
+    private val analytics: Analytics by inject()
 
     private var billingManager: BillingManager? = null
     private var selectedActivationPlan: ActivationPlan? = null
@@ -70,6 +79,7 @@ class MainActivity : ComponentActivity() {
         selectedLanguage?.let { setLocale(this, it) }
         refreshOneDayAccess()
         checkPurchase()
+        setupAnalytics(selectedLanguage)
         // Onboarding (it starts with the language choice) is shown only on a fresh install,
         // or again if it was left halfway (the language is already saved by then).
         val needsOnboarding = !onboardingStorage.isCompleted() &&
@@ -108,6 +118,7 @@ class MainActivity : ComponentActivity() {
                         OnboardingScreen(
                             onLanguageSelected = { appLanguage ->
                                 languageRepository.saveLanguage(appLanguage)
+                                trackLanguageSelected(appLanguage, AnalyticsSource.ONBOARDING)
                                 setLocale(this@MainActivity, appLanguage)
                                 // Android 13+ recreates the activity by itself after the locale change;
                                 // older versions need it so the rest of the onboarding is in the new language.
@@ -123,6 +134,7 @@ class MainActivity : ComponentActivity() {
                             selectedLanguage = selectedLanguage,
                             onLanguageSelected = { appLanguage ->
                                 languageRepository.saveLanguage(appLanguage)
+                                trackLanguageSelected(appLanguage, AnalyticsSource.SETTINGS)
                                 setLocale(this@MainActivity, appLanguage)
                             },
                             onActivationPlanSelected = { activationPlan ->
@@ -163,6 +175,7 @@ class MainActivity : ComponentActivity() {
             onError = {
                 billingRepository.setPurchaseInProgress(false)
                 billingMessage.value = R.string.purchase_failed
+                trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "products_error")
             },
             onResult = { products ->
                 if (products.isNotEmpty()) {
@@ -170,6 +183,7 @@ class MainActivity : ComponentActivity() {
                 } else {
                     billingRepository.setPurchaseInProgress(false)
                     billingMessage.value = R.string.purchase_failed
+                    trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "product_not_found")
                 }
             }
         )
@@ -185,6 +199,14 @@ class MainActivity : ComponentActivity() {
             onResult = { success ->
                 billingRepository.setPurchaseInProgress(false)
                 val hasAccess = billingRepository.getCurrentBillingType() != BillingType.Limited
+                analytics.track(
+                    AnalyticsEvent.RESTORE_PURCHASES_TAPPED,
+                    AnalyticsParam.RESULT to when {
+                        !success -> "error"
+                        hasAccess -> "restored"
+                        else -> "nothing"
+                    },
+                )
                 when {
                     !success -> billingMessage.value = R.string.restore_error
                     hasAccess -> {
@@ -239,6 +261,35 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun setupAnalytics(selectedLanguage: AppLanguage?) {
+        // RevenueCat is configured in initBillingManager() (called by checkPurchase() above).
+        if (Purchases.isConfigured) {
+            analytics.setUserId(Purchases.sharedInstance.appUserID)
+        }
+        selectedLanguage?.let { analytics.setLanguage(it.code) }
+        analytics.setOnboardingCompleted(onboardingStorage.isCompleted())
+        lifecycleScope.launch {
+            billingRepository.billingTypeFlow.collect { analytics.setBillingType(it) }
+        }
+    }
+
+    private fun trackLanguageSelected(language: AppLanguage, source: String) {
+        analytics.setLanguage(language.code)
+        analytics.track(
+            AnalyticsEvent.LANGUAGE_SELECTED,
+            AnalyticsParam.LANGUAGE to language.code,
+            AnalyticsParam.SOURCE to source,
+        )
+    }
+
+    private fun trackPurchaseResult(event: String, reason: String? = null) {
+        analytics.track(
+            event,
+            AnalyticsParam.PLAN to selectedActivationPlan?.analyticsValue,
+            AnalyticsParam.REASON to reason,
+        )
+    }
+
     private fun initBillingManager() {
         if (billingManager == null) {
             billingManager = BillingManager(this, object : BillingManager.BillingUpdatesListener {
@@ -256,20 +307,24 @@ class MainActivity : ComponentActivity() {
                         null -> Unit
                     }
                     Toast.makeText(this@MainActivity, getString(R.string.purchase_success), Toast.LENGTH_LONG).show()
+                    trackPurchaseResult(AnalyticsEvent.PURCHASE_COMPLETED)
                 }
 
                 override fun onPurchasePending() {
                     billingRepository.setPurchaseInProgress(false)
                     billingMessage.value = R.string.purchase_pending
+                    trackPurchaseResult(AnalyticsEvent.PURCHASE_PENDING)
                 }
 
                 override fun onPurchaseCancelled() {
                     billingRepository.setPurchaseInProgress(false)
+                    trackPurchaseResult(AnalyticsEvent.PURCHASE_CANCELLED)
                 }
 
                 override fun onPurchaseFailed() {
                     billingRepository.setPurchaseInProgress(false)
                     billingMessage.value = R.string.purchase_failed
+                    trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "billing_error")
                 }
 
                 override fun onOneDayPurchaseCheckSuccess(purchaseTime: Long) {

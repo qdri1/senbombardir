@@ -26,6 +26,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
+import com.alimapps.senbombardir.utils.analytics.analyticsValue
 import kotlinx.coroutines.launch
 
 class GameResultsViewModel(
@@ -34,6 +39,7 @@ class GameResultsViewModel(
     private val playerHistoryRepository: PlayerHistoryRepository,
     private val playerRepository: PlayerRepository,
     private val billingRepository: BillingRepository,
+    private val analytics: Analytics,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GameResultsUiState())
@@ -43,6 +49,7 @@ class GameResultsViewModel(
     val effect: Flow<GameResultsEffect> get() = _effect.debounceEffect()
 
     init {
+        analytics.track(AnalyticsEvent.RESULTS_VIEWED)
         fetchGameHistory()
     }
 
@@ -174,6 +181,12 @@ class GameResultsViewModel(
     }
 
     private fun onFunctionClicked(function: GameResultsFunction) {
+        analytics.track(
+            AnalyticsEvent.FUNCTION_OPENED,
+            AnalyticsParam.FUNCTION to function.analyticsValue,
+            AnalyticsParam.LOCKED to uiState.value.uiLimited,
+            AnalyticsParam.SOURCE to AnalyticsSource.RESULTS,
+        )
         when (function) {
             GameResultsFunction.Champions -> onChampionsClicked()
             GameResultsFunction.BestPlayers -> onBestPlayersClicked()

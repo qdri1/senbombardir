@@ -73,6 +73,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Locale
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
+import com.alimapps.senbombardir.utils.analytics.analyticsValue
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import kotlin.random.Random
@@ -90,8 +95,12 @@ class GameViewModel(
     private val billingRepository: BillingRepository,
     private val soundSettingsRepository: SoundSettingsRepository,
     private val hiddenColumnsStorage: HiddenColumnsStorage,
+    private val analytics: Analytics,
     private val context: Context,
 ) : ViewModel(), TextToSpeech.OnInitListener {
+
+    private var isGameOpenedTracked = false
+    private var isLimitReachedTracked = false
 
     private val _uiState = MutableStateFlow(GameUiState())
     val uiState: StateFlow<GameUiState> = _uiState
@@ -172,7 +181,10 @@ class GameViewModel(
             is GameAction.OnLeftTeamOptionSelected -> onLeftTeamOptionSelected(action.option)
             is GameAction.OnRightTeamOptionSelected -> onRightTeamOptionSelected(action.option)
             is GameAction.OnTeamChangeIconClicked -> onTeamChangeIconClicked()
-            is GameAction.OnDopClicked -> playDopTepSound()
+            is GameAction.OnDopClicked -> {
+                analytics.track(AnalyticsEvent.SOUND_PLAYED, AnalyticsParam.SOUND to GameSounds.DopTep.analyticsValue)
+                playDopTepSound()
+            }
             is GameAction.OnLeftTeamChangeClicked -> onLeftTeamChangeClicked(action.teamId)
             is GameAction.OnRightTeamChangeClicked -> onRightTeamChangeClicked(action.teamId)
             is GameAction.OnOptionPlayersSelected -> onOptionPlayersSelected(action.teamId, action.playerUiModel, action.option)
@@ -260,6 +272,14 @@ class GameViewModel(
                 setNextPlayingTeamsUiModelList()
                 setTimerValue()
                 setBillingType()
+                if (!isGameOpenedTracked) {
+                    isGameOpenedTracked = true
+                    analytics.track(
+                        AnalyticsEvent.GAME_OPENED,
+                        AnalyticsParam.TEAM_QUANTITY to gameUiModel.teamQuantity.quantity,
+                        AnalyticsParam.MATCHES_PLAYED to liveGameUiModel?.gameCount,
+                    )
+                }
             }
         }
     }
@@ -370,6 +390,14 @@ class GameViewModel(
                 uiLimited = uiLimited,
             )
         )
+        if (uiLimited && !isLimitReachedTracked) {
+            isLimitReachedTracked = true
+            analytics.track(
+                AnalyticsEvent.LIMIT_REACHED,
+                AnalyticsParam.TEAM_QUANTITY to teamQuantity?.quantity,
+                AnalyticsParam.MATCHES_PLAYED to gameCount,
+            )
+        }
     }
 
     private fun onBackClicked() {
@@ -788,6 +816,7 @@ class GameViewModel(
     }
 
     private fun onOptionPlayersSelected(teamId: Long, playerUiModel: PlayerUiModel, option: TeamOption) = viewModelScope.launch {
+        analytics.track(AnalyticsEvent.GAME_ACTION_RECORDED, AnalyticsParam.TYPE to option.analyticsValue)
         when (option) {
             TeamOption.Goal -> {
                 uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -962,6 +991,7 @@ class GameViewModel(
     }
 
     private fun onOptionPlayersAutoGoalSelected(teamId: Long, text: String) = viewModelScope.launch {
+        analytics.track(AnalyticsEvent.GAME_ACTION_RECORDED, AnalyticsParam.TYPE to "own_goal")
         uiState.value.liveGameUiModel?.let { liveGameUiModel ->
             when (teamId) {
                 liveGameUiModel.leftTeamId -> {
@@ -1027,6 +1057,12 @@ class GameViewModel(
     }
 
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
+        analytics.track(
+            AnalyticsEvent.MATCH_STARTED,
+            AnalyticsParam.MATCH_NUMBER to liveGameUiModel.gameCount + 1,
+            AnalyticsParam.TEAM_QUANTITY to uiState.value.gameUiModel?.teamQuantity?.quantity,
+            AnalyticsParam.LIMITED to uiState.value.uiLimited,
+        )
         if (isSoundEnabled(GameSoundSetting.StartMatch)) {
             playMedia(resId = R.raw.start_match, free = true)
         }
@@ -1045,6 +1081,15 @@ class GameViewModel(
             playMedia(resId = getFinishMatchResId(), free = true)
         }
         pendingGameDurationSeconds = currentElapsedSeconds()
+        uiState.value.liveGameUiModel?.let { liveGameUiModel ->
+            analytics.track(
+                AnalyticsEvent.MATCH_FINISHED,
+                AnalyticsParam.MATCH_NUMBER to liveGameUiModel.gameCount + 1,
+                AnalyticsParam.RESULT to if (liveGameUiModel.isLeftTeamWin || liveGameUiModel.isRightTeamWin) "win" else "draw",
+                AnalyticsParam.DURATION_SEC to pendingGameDurationSeconds,
+                AnalyticsParam.LIMITED to uiState.value.uiLimited,
+            )
+        }
         resetTimer()
         uiState.value.gameUiModel?.let { gameUiModel ->
             uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -1943,6 +1988,7 @@ class GameViewModel(
         soundSettingsRepository.isEnabled(setting)
 
     private fun onSoundClicked(sound: GameSounds) {
+        analytics.track(AnalyticsEvent.SOUND_PLAYED, AnalyticsParam.SOUND to sound.analyticsValue)
         if (sound == GameSounds.DopTep) {
             playDopTepSound()
         } else {
@@ -1951,6 +1997,12 @@ class GameViewModel(
     }
 
     private fun onFunctionClicked(function: GameFunction) {
+        analytics.track(
+            AnalyticsEvent.FUNCTION_OPENED,
+            AnalyticsParam.FUNCTION to function.analyticsValue,
+            AnalyticsParam.LOCKED to uiState.value.uiLimited,
+            AnalyticsParam.SOURCE to AnalyticsSource.GAME,
+        )
         when (function) {
             GameFunction.BestPlayers -> onBestPlayersClicked()
             GameFunction.Champions -> onChampionsClicked()
@@ -1970,7 +2022,11 @@ class GameViewModel(
             return
         }
 
-        setEffectSafely(GameEffect.OpenActivationScreen)
+        setEffectSafely(
+            GameEffect.OpenActivationScreen(
+                source = if (uiState.value.uiLimited) AnalyticsSource.LIMIT else AnalyticsSource.GAME,
+            )
+        )
     }
 
     private fun playMedia(@RawRes resId: Int, free: Boolean = false) = Handler(Looper.getMainLooper()).post {

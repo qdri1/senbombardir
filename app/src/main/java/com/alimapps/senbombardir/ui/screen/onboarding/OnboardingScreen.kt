@@ -98,8 +98,8 @@ fun OnboardingScreen(
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) {
-        onAction(OnboardingAction.OnNotificationsAnswered)
+    ) { granted ->
+        onAction(OnboardingAction.OnNotificationsAnswered(granted = granted))
     }
 
     LaunchedEffect(Unit) {
@@ -168,10 +168,10 @@ fun OnboardingScreen(
                     notificationPermissionStorage.setPermissionRequested()
                     notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 } else {
-                    onAction(OnboardingAction.OnNotificationsAnswered)
+                    onAction(OnboardingAction.OnNotificationsAnswered(granted = true))
                 }
             },
-            onSkipNotificationsClick = { onAction(OnboardingAction.OnNotificationsAnswered) },
+            onSkipNotificationsClick = { onAction(OnboardingAction.OnNotificationsAnswered(granted = false)) },
         )
     }
 }

@@ -13,6 +13,10 @@ import com.alimapps.senbombardir.data.source.OnboardingStorage
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import com.alimapps.senbombardir.ui.utils.areNotificationsEnabled
 import com.alimapps.senbombardir.ui.utils.debounceEffect
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.analyticsValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -28,6 +32,7 @@ import java.util.UUID
 
 class OnboardingViewModel(
     private val onboardingStorage: OnboardingStorage,
+    private val analytics: Analytics,
     private val context: Context,
 ) : ViewModel() {
 
@@ -50,13 +55,33 @@ class OnboardingViewModel(
     private var voiceDemoJob: Job? = null
     private var isFinished = false
 
+    init {
+        // "Started" is saved when the language is picked, so a recreated activity doesn't count it twice.
+        if (!onboardingStorage.isStarted()) {
+            analytics.track(AnalyticsEvent.ONBOARDING_STARTED)
+            trackStepViewed()
+        }
+    }
+
+    private fun trackStepViewed() {
+        val state = uiState.value
+        analytics.track(
+            AnalyticsEvent.ONBOARDING_STEP_VIEWED,
+            AnalyticsParam.STEP to state.step.analyticsValue,
+            AnalyticsParam.INDEX to state.stepIndex,
+        )
+    }
+
     fun action(action: OnboardingAction) {
         when (action) {
             is OnboardingAction.OnContinueClicked -> onContinueClicked()
             is OnboardingAction.OnBackClicked -> onBackClicked()
             is OnboardingAction.OnLanguageSelected -> onLanguageSelected(action.language)
             is OnboardingAction.OnVoiceDemoClicked -> playVoiceDemo()
-            is OnboardingAction.OnNotificationsAnswered -> finish()
+            is OnboardingAction.OnNotificationsAnswered -> {
+                analytics.track(AnalyticsEvent.NOTIFICATION_PERMISSION_RESULT, AnalyticsParam.GRANTED to action.granted)
+                finish()
+            }
         }
     }
 
@@ -69,6 +94,7 @@ class OnboardingViewModel(
         }
         stopAudio()
         _uiState.update { it.copy(stepIndex = it.stepIndex + 1) }
+        trackStepViewed()
     }
 
     private fun onBackClicked() {
@@ -87,6 +113,8 @@ class OnboardingViewModel(
         isFinished = true
         stopAudio()
         onboardingStorage.setCompleted()
+        analytics.track(AnalyticsEvent.ONBOARDING_COMPLETED)
+        analytics.setOnboardingCompleted(true)
         viewModelScope.launch { _effect.emit(OnboardingEffect.Finish) }
     }
 
