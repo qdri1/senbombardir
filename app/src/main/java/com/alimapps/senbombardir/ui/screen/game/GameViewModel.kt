@@ -182,7 +182,7 @@ class GameViewModel(
             is GameAction.OnRightTeamOptionSelected -> onRightTeamOptionSelected(action.option)
             is GameAction.OnTeamChangeIconClicked -> onTeamChangeIconClicked()
             is GameAction.OnDopClicked -> {
-                analytics.track(AnalyticsEvent.SOUND_PLAYED, AnalyticsParam.SOUND to GameSounds.DopTep.analyticsValue)
+                trackGameEvent(AnalyticsEvent.SOUND_PLAYED, AnalyticsParam.SOUND to GameSounds.DopTep.analyticsValue)
                 playDopTepSound()
             }
             is GameAction.OnLeftTeamChangeClicked -> onLeftTeamChangeClicked(action.teamId)
@@ -274,10 +274,10 @@ class GameViewModel(
                 setBillingType()
                 if (!isGameOpenedTracked) {
                     isGameOpenedTracked = true
-                    analytics.track(
+                    trackGameEvent(
                         AnalyticsEvent.GAME_OPENED,
-                        AnalyticsParam.TEAM_QUANTITY to gameUiModel.teamQuantity.quantity,
                         AnalyticsParam.MATCHES_PLAYED to liveGameUiModel?.gameCount,
+                        AnalyticsParam.LIMITED to uiState.value.uiLimited,
                     )
                 }
             }
@@ -392,9 +392,8 @@ class GameViewModel(
         )
         if (uiLimited && !isLimitReachedTracked) {
             isLimitReachedTracked = true
-            analytics.track(
+            trackGameEvent(
                 AnalyticsEvent.LIMIT_REACHED,
-                AnalyticsParam.TEAM_QUANTITY to teamQuantity?.quantity,
                 AnalyticsParam.MATCHES_PLAYED to gameCount,
             )
         }
@@ -816,7 +815,7 @@ class GameViewModel(
     }
 
     private fun onOptionPlayersSelected(teamId: Long, playerUiModel: PlayerUiModel, option: TeamOption) = viewModelScope.launch {
-        analytics.track(AnalyticsEvent.GAME_ACTION_RECORDED, AnalyticsParam.TYPE to option.analyticsValue)
+        trackGameEvent(AnalyticsEvent.GAME_ACTION_RECORDED, AnalyticsParam.TYPE to option.analyticsValue)
         when (option) {
             TeamOption.Goal -> {
                 uiState.value.liveGameUiModel?.let { liveGameUiModel ->
@@ -991,7 +990,7 @@ class GameViewModel(
     }
 
     private fun onOptionPlayersAutoGoalSelected(teamId: Long, text: String) = viewModelScope.launch {
-        analytics.track(AnalyticsEvent.GAME_ACTION_RECORDED, AnalyticsParam.TYPE to "own_goal")
+        trackGameEvent(AnalyticsEvent.GAME_ACTION_RECORDED, AnalyticsParam.TYPE to "own_goal")
         uiState.value.liveGameUiModel?.let { liveGameUiModel ->
             when (teamId) {
                 liveGameUiModel.leftTeamId -> {
@@ -1057,10 +1056,9 @@ class GameViewModel(
     }
 
     private fun startGame(liveGameUiModel: LiveGameUiModel) {
-        analytics.track(
+        trackGameEvent(
             AnalyticsEvent.MATCH_STARTED,
             AnalyticsParam.MATCH_NUMBER to liveGameUiModel.gameCount + 1,
-            AnalyticsParam.TEAM_QUANTITY to uiState.value.gameUiModel?.teamQuantity?.quantity,
             AnalyticsParam.LIMITED to uiState.value.uiLimited,
         )
         if (isSoundEnabled(GameSoundSetting.StartMatch)) {
@@ -1082,7 +1080,7 @@ class GameViewModel(
         }
         pendingGameDurationSeconds = currentElapsedSeconds()
         uiState.value.liveGameUiModel?.let { liveGameUiModel ->
-            analytics.track(
+            trackGameEvent(
                 AnalyticsEvent.MATCH_FINISHED,
                 AnalyticsParam.MATCH_NUMBER to liveGameUiModel.gameCount + 1,
                 AnalyticsParam.RESULT to if (liveGameUiModel.isLeftTeamWin || liveGameUiModel.isRightTeamWin) "win" else "draw",
@@ -1988,7 +1986,7 @@ class GameViewModel(
         soundSettingsRepository.isEnabled(setting)
 
     private fun onSoundClicked(sound: GameSounds) {
-        analytics.track(AnalyticsEvent.SOUND_PLAYED, AnalyticsParam.SOUND to sound.analyticsValue)
+        trackGameEvent(AnalyticsEvent.SOUND_PLAYED, AnalyticsParam.SOUND to sound.analyticsValue)
         if (sound == GameSounds.DopTep) {
             playDopTepSound()
         } else {
@@ -1997,7 +1995,7 @@ class GameViewModel(
     }
 
     private fun onFunctionClicked(function: GameFunction) {
-        analytics.track(
+        trackGameEvent(
             AnalyticsEvent.FUNCTION_OPENED,
             AnalyticsParam.FUNCTION to function.analyticsValue,
             AnalyticsParam.LOCKED to uiState.value.uiLimited,
@@ -2043,6 +2041,21 @@ class GameViewModel(
         mediaPlayer.setMediaItem(mediaItem)
         mediaPlayer.prepare()
         mediaPlayer.play()
+    }
+
+    private fun trackGameEvent(event: String, vararg params: Pair<String, Any?>) {
+        analytics.track(event, *gameContextParams(), *params)
+    }
+
+    private fun gameContextParams(): Array<Pair<String, Any?>> {
+        val game = uiState.value.gameUiModel ?: return emptyArray()
+        return arrayOf(
+            AnalyticsParam.TEAM_QUANTITY to game.teamQuantity.quantity,
+            AnalyticsParam.GAME_FORMAT to game.gameFormat.format,
+            AnalyticsParam.RULE to (game.gameRule as? Enum<*>)?.name?.lowercase(),
+            AnalyticsParam.MATCH_MINUTES to game.timeInMinutes,
+            AnalyticsParam.PITCH_SURFACE to game.pitchSurface.analyticsValue,
+        )
     }
 
     private fun setState(state: GameUiState) {
