@@ -439,4 +439,11 @@
     <string name="purchase_pending">Your payment is pending. Once it goes through, access will unlock the next time you open the app.</string>
     <string name="purchase_failed">Purchase failed. Please try again.</string>
     <string name="billing_message_close">Close</string>
+    <string name="language_request_question">Missing your language?</string>
+    <string name="language_request_button">Request it</string>
+    <string name="language_request_dialog_title">Which language should we add?</string>
+    <string name="language_request_hint">For example, Uzbek</string>
+    <string name="language_request_send">Send</string>
+    <string name="language_request_cancel">Cancel</string>
+    <string name="language_request_thanks">Thank you! We will consider your request.</string>
 </resources>

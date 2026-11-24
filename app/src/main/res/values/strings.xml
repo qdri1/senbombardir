@@ -442,4 +442,11 @@
     <string name="purchase_pending">Төлем растауды күтуде. Төлем өткен соң, толық нұсқа қосымшаны келесі ашқанда қосылады.</string>
     <string name="purchase_failed">Сатып алу сәтсіз аяқталды. Қайталап көріңіз.</string>
     <string name="billing_message_close">Жабу</string>
+    <string name="language_request_question">Сіздің тіліңіз жоқ па?</string>
+    <string name="language_request_button">Қосуды сұрау</string>
+    <string name="language_request_dialog_title">Қай тілді қосайық?</string>
+    <string name="language_request_hint">Мысалы, Өзбек тілі</string>
+    <string name="language_request_send">Жіберу</string>
+    <string name="language_request_cancel">Бас тарту</string>
+    <string name="language_request_thanks">Рақмет! Сұрауыңызды ескереміз.</string>
 </resources>

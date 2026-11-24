@@ -29,6 +29,7 @@ sealed interface OnboardingAction {
     data object OnBackClicked : OnboardingAction
     class OnLanguageSelected(val language: AppLanguage) : OnboardingAction
     data object OnVoiceDemoClicked : OnboardingAction
+    class OnLanguageRequested(val language: String) : OnboardingAction
     class OnNotificationsAnswered(val granted: Boolean) : OnboardingAction
 }
 

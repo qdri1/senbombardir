@@ -78,6 +78,11 @@ class OnboardingViewModel(
             is OnboardingAction.OnBackClicked -> onBackClicked()
             is OnboardingAction.OnLanguageSelected -> onLanguageSelected(action.language)
             is OnboardingAction.OnVoiceDemoClicked -> playVoiceDemo()
+            is OnboardingAction.OnLanguageRequested -> analytics.track(
+                AnalyticsEvent.LANGUAGE_REQUESTED,
+                AnalyticsParam.LANGUAGE to action.language,
+                AnalyticsParam.SOURCE to "onboarding",
+            )
             is OnboardingAction.OnNotificationsAnswered -> {
                 analytics.track(AnalyticsEvent.NOTIFICATION_PERMISSION_RESULT, AnalyticsParam.GRANTED to action.granted)
                 finish()

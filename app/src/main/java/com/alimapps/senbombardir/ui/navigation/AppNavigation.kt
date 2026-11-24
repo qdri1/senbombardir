@@ -50,6 +50,11 @@ import com.alimapps.senbombardir.ui.screen.settings.SettingsScreen
 import com.alimapps.senbombardir.ui.screen.soundsettings.SoundSettingsScreen
 import com.alimapps.senbombardir.utils.orDefault
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import com.alimapps.senbombardir.utils.analytics.Analytics
+import com.alimapps.senbombardir.utils.analytics.AnalyticsEvent
+import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
+import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
 import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +66,7 @@ fun AppNavigation(
     onRestorePurchasesClicked: () -> Unit,
 ) {
     val navController = rememberNavController()
+    val analytics: Analytics = koinInject()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val bottomNavItems = listOf(
@@ -197,7 +203,14 @@ fun AppNavigation(
                     onLanguageSelected = { language ->
                         onLanguageSelected(language)
                         showLanguageSheet = false
-                    }
+                    },
+                    onLanguageRequested = { language ->
+                        analytics.track(
+                            AnalyticsEvent.LANGUAGE_REQUESTED,
+                            AnalyticsParam.LANGUAGE to language,
+                            AnalyticsParam.SOURCE to AnalyticsSource.SETTINGS,
+                        )
+                    },
                 )
             }
         }

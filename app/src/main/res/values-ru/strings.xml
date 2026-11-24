@@ -437,4 +437,11 @@
     <string name="purchase_pending">Оплата ожидает подтверждения. Когда она пройдёт, доступ откроется при следующем запуске приложения.</string>
     <string name="purchase_failed">Покупка не удалась. Попробуйте снова.</string>
     <string name="billing_message_close">Закрыть</string>
+    <string name="language_request_question">Нет вашего языка?</string>
+    <string name="language_request_button">Попросить добавить</string>
+    <string name="language_request_dialog_title">Какой язык добавить?</string>
+    <string name="language_request_hint">Например, Узбекский</string>
+    <string name="language_request_send">Отправить</string>
+    <string name="language_request_cancel">Отмена</string>
+    <string name="language_request_thanks">Спасибо! Мы учтём ваш запрос.</string>
 </resources>

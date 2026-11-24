@@ -55,6 +55,7 @@ object AnalyticsEvent {
     const val ONBOARDING_STEP_VIEWED = "onboarding_step_viewed"
     const val ONBOARDING_COMPLETED = "onboarding_completed"
     const val LANGUAGE_SELECTED = "language_selected"
+    const val LANGUAGE_REQUESTED = "language_requested"
     const val NOTIFICATION_PERMISSION_RESULT = "notification_permission_result"
 
     // Games

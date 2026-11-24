@@ -30,7 +30,8 @@ fun LanguageBottomSheet(
     sheetState: SheetState,
     selectedLanguage: AppLanguage?,
     onDismiss: () -> Unit,
-    onLanguageSelected: (AppLanguage) -> Unit
+    onLanguageSelected: (AppLanguage) -> Unit,
+    onLanguageRequested: (String) -> Unit,
 ) {
     ModalBottomSheet(
         sheetState = sheetState,
@@ -74,6 +75,12 @@ fun LanguageBottomSheet(
                     }
                 }
             }
+
+            LanguageRequestBlock(
+                texts = localizedLanguageRequestTexts(),
+                onSubmit = onLanguageRequested,
+                modifier = Modifier.padding(top = 8.dp, start = 16.dp, end = 16.dp),
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
         }

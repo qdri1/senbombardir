@@ -77,6 +77,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.alimapps.senbombardir.R
 import com.alimapps.senbombardir.data.source.NotificationPermissionStorage
+import com.alimapps.senbombardir.ui.screen.language.LanguageRequestBlock
+import com.alimapps.senbombardir.ui.screen.language.LanguageRequestTexts
 import com.alimapps.senbombardir.domain.model.AppLanguage
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.compose.koinViewModel
@@ -142,6 +144,7 @@ fun OnboardingScreen(
             when (uiState.steps[index]) {
                 OnboardingStep.Language -> LanguageStep(
                     selectedLanguage = uiState.selectedLanguage,
+                    onLanguageRequested = { language -> onAction(OnboardingAction.OnLanguageRequested(language)) },
                     onLanguageClick = { language ->
                         onAction(OnboardingAction.OnLanguageSelected(language))
                         onLanguageSelected(language)
@@ -298,6 +301,7 @@ private val languages = listOf(
 @Composable
 private fun LanguageStep(
     selectedLanguage: AppLanguage?,
+    onLanguageRequested: (String) -> Unit,
     onLanguageClick: (AppLanguage) -> Unit,
 ) {
     StepScroll {
@@ -325,6 +329,20 @@ private fun LanguageStep(
                 onClick = { onLanguageClick(language) },
             )
         }
+        // No language is chosen yet, so the block is in Russian and English (like the subtitle above).
+        LanguageRequestBlock(
+            texts = LanguageRequestTexts(
+                question = "Нет вашего языка? · Missing your language?",
+                button = "Попросить добавить · Request it",
+                dialogTitle = "Какой язык добавить? · Which language should we add?",
+                hint = "Например, Узбекский · e.g. Uzbek",
+                send = "Отправить · Send",
+                cancel = "Отмена · Cancel",
+                thanks = "Отправлено · Sent",
+            ),
+            onSubmit = onLanguageRequested,
+            modifier = Modifier.padding(top = 8.dp),
+        )
     }
 }
 
