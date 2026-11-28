@@ -29,12 +29,21 @@ class MatchTimerService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // Must be called for every startForegroundService(), even if a stop was requested meanwhile.
         startAsForeground()
+        isRunning = true
+        if (isStopRequested) {
+            // stop() came before the service got here: stop now that startForeground() was called.
+            isStopRequested = false
+            stopSelf()
+            return START_NOT_STICKY
+        }
         acquireWakeLock()
         return START_NOT_STICKY
     }
 
     override fun onDestroy() {
+        isRunning = false
         releaseWakeLock()
         super.onDestroy()
     }
@@ -106,15 +115,32 @@ class MatchTimerService : Service() {
         private const val WAKE_LOCK_TAG = "doptep:match_timer"
         private const val MAX_DURATION_MS = 3 * 60 * 60 * 1000L // 3h safety cap
 
+        /** The service has called startForeground() and is not destroyed yet. Main thread only. */
+        private var isRunning = false
+
+        /** stop() was called while the service was still starting. Main thread only. */
+        private var isStopRequested = false
+
         fun start(context: Context) {
             if (context.areNotificationsEnabled().not()) {
                 return
             }
+            isStopRequested = false
             ContextCompat.startForegroundService(context, Intent(context, MatchTimerService::class.java))
         }
 
+        /**
+         * Stopping a service started with startForegroundService() before it called startForeground()
+         * crashes the app (ForegroundServiceDidNotStartInTimeException) — e.g. a quick pause / resume of the
+         * timer or leaving the game right after the start. So a stop that comes too early is postponed until
+         * the service is up (see onStartCommand).
+         */
         fun stop(context: Context) {
-            context.stopService(Intent(context, MatchTimerService::class.java))
+            if (isRunning) {
+                context.stopService(Intent(context, MatchTimerService::class.java))
+            } else {
+                isStopRequested = true
+            }
         }
     }
 }
