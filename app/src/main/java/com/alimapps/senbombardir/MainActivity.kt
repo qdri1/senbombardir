@@ -50,6 +50,7 @@ import com.alimapps.senbombardir.utils.analytics.AnalyticsParam
 import com.alimapps.senbombardir.utils.analytics.AnalyticsSource
 import com.alimapps.senbombardir.utils.analytics.analyticsValue
 import com.revenuecat.purchases.Purchases
+import com.revenuecat.purchases.PurchasesError
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -172,10 +173,10 @@ class MainActivity : ComponentActivity() {
         billingManager?.queryProducts(
             productIds = listOf(activationPlan.productId),
             type = productType,
-            onError = {
+            onError = { error ->
                 billingRepository.setPurchaseInProgress(false)
                 billingMessage.value = R.string.purchase_failed
-                trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "products_error")
+                trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "products_error", error = error)
             },
             onResult = { products ->
                 if (products.isNotEmpty()) {
@@ -196,7 +197,7 @@ class MainActivity : ComponentActivity() {
             subscriptionIds = listOf(ActivationPlan.Monthly.productId, ActivationPlan.Yearly.productId),
             lifetimeIds = listOf(ActivationPlan.Unlimited.productId),
             oneDayId = ActivationPlan.OneDay.productId,
-            onResult = { success ->
+            onResult = { success, error ->
                 billingRepository.setPurchaseInProgress(false)
                 val hasAccess = billingRepository.getCurrentBillingType() != BillingType.Limited
                 analytics.track(
@@ -206,6 +207,7 @@ class MainActivity : ComponentActivity() {
                         hasAccess -> "restored"
                         else -> "nothing"
                     },
+                    *errorParams(error),
                 )
                 when {
                     !success -> billingMessage.value = R.string.restore_error
@@ -282,11 +284,22 @@ class MainActivity : ComponentActivity() {
         )
     }
 
-    private fun trackPurchaseResult(event: String, reason: String? = null) {
+    private fun trackPurchaseResult(event: String, reason: String? = null, error: PurchasesError? = null) {
         analytics.track(
             event,
             AnalyticsParam.PLAN to selectedActivationPlan?.analyticsValue,
             AnalyticsParam.REASON to reason,
+            *errorParams(error),
+        )
+    }
+
+    /** RevenueCat error code (e.g. StoreProblemError) and the underlying Google Play message, to find why it failed. */
+    private fun errorParams(error: PurchasesError?): Array<Pair<String, Any?>> {
+        if (error == null) return emptyArray()
+        val message = (error.underlyingErrorMessage ?: error.message).take(200)
+        return arrayOf(
+            AnalyticsParam.ERROR_CODE to error.code.name,
+            AnalyticsParam.ERROR_MESSAGE to message,
         )
     }
 
@@ -321,10 +334,10 @@ class MainActivity : ComponentActivity() {
                     trackPurchaseResult(AnalyticsEvent.PURCHASE_CANCELLED)
                 }
 
-                override fun onPurchaseFailed() {
+                override fun onPurchaseFailed(error: PurchasesError) {
                     billingRepository.setPurchaseInProgress(false)
                     billingMessage.value = R.string.purchase_failed
-                    trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "billing_error")
+                    trackPurchaseResult(AnalyticsEvent.PURCHASE_FAILED, reason = "billing_error", error = error)
                 }
 
                 override fun onOneDayPurchaseCheckSuccess(purchaseTime: Long) {

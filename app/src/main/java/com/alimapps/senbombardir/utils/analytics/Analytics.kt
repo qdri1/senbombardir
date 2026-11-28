@@ -104,6 +104,9 @@ object AnalyticsParam {
     const val LIMITED = "limited"
     const val PLAN = "plan"
     const val REASON = "reason"
+    /** purchase_failed / restore_purchases_tapped: RevenueCat error code and the store's message, to find the cause. */
+    const val ERROR_CODE = "error_code"
+    const val ERROR_MESSAGE = "error_message"
 }
 
 /** Values of the `source` param of `paywall_viewed`, `function_opened`, `language_selected`. */

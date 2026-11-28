@@ -6,6 +6,7 @@ import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
+import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.PurchasesErrorCode
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.getCustomerInfoWith
@@ -32,13 +33,13 @@ class BillingManager(
     fun queryProducts(
         productIds: List<String>,
         type: ProductType,
-        onError: () -> Unit = {},
+        onError: (PurchasesError) -> Unit = {},
         onResult: (List<StoreProduct>) -> Unit,
     ) {
         Purchases.sharedInstance.getProductsWith(
             productIds = productIds,
             type = type,
-            onError = { onError() },
+            onError = { error -> onError(error) },
             onGetStoreProducts = { products -> onResult(products) },
         )
     }
@@ -50,7 +51,7 @@ class BillingManager(
                 when {
                     userCancelled -> listener.onPurchaseCancelled()
                     error.code == PurchasesErrorCode.PaymentPendingError -> listener.onPurchasePending()
-                    else -> listener.onPurchaseFailed()
+                    else -> listener.onPurchaseFailed(error)
                 }
             },
             onSuccess = { transaction, _ -> listener.onPurchaseSuccess(purchaseTime = transaction?.purchaseTime ?: 0L) },
@@ -73,15 +74,15 @@ class BillingManager(
         subscriptionIds: List<String>,
         lifetimeIds: List<String>,
         oneDayId: String,
-        onResult: (success: Boolean) -> Unit,
+        onResult: (success: Boolean, error: PurchasesError?) -> Unit,
     ) {
         Purchases.sharedInstance.restorePurchasesWith(
-            onError = { onResult(false) },
+            onError = { error -> onResult(false, error) },
             onSuccess = { customerInfo ->
                 evaluatePurchase(customerInfo, subscriptionIds, ProductType.SUBS)
                 evaluatePurchase(customerInfo, lifetimeIds, ProductType.INAPP)
                 evaluateOneDayPurchase(customerInfo, oneDayId)
-                onResult(true)
+                onResult(true, null)
             },
         )
     }
@@ -120,7 +121,7 @@ class BillingManager(
         fun onPurchaseSuccess(purchaseTime: Long)
         fun onPurchasePending()
         fun onPurchaseCancelled()
-        fun onPurchaseFailed()
+        fun onPurchaseFailed(error: PurchasesError)
         fun onOneDayPurchaseCheckSuccess(purchaseTime: Long)
         fun onPurchaseCheckSuccess(productType: ProductType)
         fun onPurchaseCheckNoPurchase(productType: ProductType)
