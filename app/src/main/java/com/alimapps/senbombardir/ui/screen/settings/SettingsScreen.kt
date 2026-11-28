@@ -185,6 +185,7 @@ private fun SettingsScreenContent(
                     if (tapCount >= 7) {
                         tapCount = 0
                         showCodeDialog = true
+                        onAction(SettingsAction.OnActivationCodeDialogOpened)
                     }
                 }
         )

@@ -44,6 +44,10 @@ class Analytics(application: Application) {
         amplitude.identify(Identify().set(UserProperty.LANGUAGE, languageCode))
     }
 
+    fun setSecretActivated(activated: Boolean) {
+        amplitude.identify(Identify().set(UserProperty.SECRET_ACTIVATED, activated))
+    }
+
     fun setOnboardingCompleted(completed: Boolean) {
         amplitude.identify(Identify().set(UserProperty.ONBOARDING_COMPLETED, completed))
     }
@@ -79,6 +83,10 @@ object AnalyticsEvent {
     const val PURCHASE_PENDING = "purchase_pending"
     const val RESTORE_PURCHASES_TAPPED = "restore_purchases_tapped"
     const val MANAGE_SUBSCRIPTION_TAPPED = "manage_subscription_tapped"
+
+    // Secret activation code (7 taps on the version in Settings). The code itself is never sent.
+    const val ACTIVATION_CODE_DIALOG_OPENED = "activation_code_dialog_opened"
+    const val ACTIVATION_CODE_SUBMITTED = "activation_code_submitted"
 }
 
 object AnalyticsParam {
@@ -122,6 +130,7 @@ private object UserProperty {
     const val BILLING_TYPE = "billing_type"
     const val LANGUAGE = "language"
     const val ONBOARDING_COMPLETED = "onboarding_completed"
+    const val SECRET_ACTIVATED = "secret_activated"
 }
 
 val BillingType.analyticsValue: String

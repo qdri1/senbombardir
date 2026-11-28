@@ -28,6 +28,7 @@ val uiModule = module {
     viewModel {
         SettingsViewModel(
             billingRepository = get(),
+            analytics = get(),
         )
     }
 

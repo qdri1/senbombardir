@@ -270,6 +270,8 @@ class MainActivity : ComponentActivity() {
         }
         selectedLanguage?.let { analytics.setLanguage(it.code) }
         analytics.setOnboardingCompleted(onboardingStorage.isCompleted())
+        // Also marks users who entered the secret code before analytics existed.
+        analytics.setSecretActivated(billingRepository.isSecretActivated())
         lifecycleScope.launch {
             billingRepository.billingTypeFlow.collect { analytics.setBillingType(it) }
         }
